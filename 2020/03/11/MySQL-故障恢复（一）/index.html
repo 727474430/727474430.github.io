@@ -215,7 +215,7 @@
 </ul>
 <p>小明 11:00 接到告警通知，Master 节点出现异常，因为基于 MyCat 做了故障切换，目前服务应该可以正常 <br> 使用。因为此时 Slave1 节点可以负责读写工作。半分钟后 Master 节点重启成功，MySQL 自动启动后，线上 <br> 服务开始报错，排查日志后发现，此时主从数据库数据已不同步，导致报错。</p>
 <div aligh="center">
-    <img src="/.com//wangliang/Documents/ 王亮 /blog/source/_posts/MySQL- 故障恢复（一）/MySQL.png" srcset="/img/loading.gif" width="100%">
+    <img src="http://qiniu.raindrop-wl.cn/MySQL.png" srcset="/img/loading.gif" width="100%">
 </div>
 
 <p><strong>note:</strong> 线上环境 MySQL 架构为一主两从，使用 MyCat 作为中间件配置读写分离。</p>
@@ -379,7 +379,7 @@ mysql&gt; show slave status \G;
 <hr>
 <h5 id="总结"><a href="# 总结" class="headerlink" title="总结"></a>总结 </h5><p> 经过上面一系列到操作，最终恢复了数据和主从架构。虽然此方法可以恢复数据，但是前提是至少有一台 MySQL 节 <br> 点数据是未丢失到，只有满足这个前提，才能使用这种简单粗暴到方法。</p>
 <div aligh="center">
-    <img src="/.com//wangliang/Documents/ 王亮 /blog/source/_posts/MySQL- 故障恢复（一）/over.png" srcset="/img/loading.gif" width="100%">
+    <img src="http://qiniu.raindrop-wl.cn/over.png" srcset="/img/loading.gif" width="100%">
 </div>
 
             <hr>

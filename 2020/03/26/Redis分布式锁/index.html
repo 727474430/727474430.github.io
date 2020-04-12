@@ -281,10 +281,10 @@ redis&gt; get order:stock
 50</code></pre>
 <p><code>使用 Jmeter 模拟 200 并发，对创建订单接口进行访问，如果程序正常，应该在创建 50 个订单后，返回库存不足</code></p>
 <div aligh="center">
-    <img src="/.com//wangliang/Documents/ 王亮 /blog/source/_posts/Redis 分布式锁 /jmeter-200c.png" srcset="/img/loading.gif" width="100%">
+    <img src="http://qiniu.raindrop-wl.cn/jmeter-200c.png" srcset="/img/loading.gif" width="100%">
 </div>
 <div aligh="center">
-    <img src="/.com//wangliang/Documents/ 王亮 /blog/source/_posts/Redis 分布式锁 /jmeter-create-order.png" srcset="/img/loading.gif" width="100%">
+    <img src="http://qiniu.raindrop-wl.cn/jmeter-create-order.png" srcset="/img/loading.gif" width="100%">
 </div>
 
 <p><code>查看结果，所有请求都成功了。但是我们可以看到日志中存在严重的重复扣减库存，这在真实环境是可怕的问题。同时查看最后一个请 求返回都结果，显示当前库存为 46 远比我们都预期差的多</code></p>
@@ -303,10 +303,10 @@ redis&gt; get order:stock
 2020-03-28 20:38:01.169  c.r.r.lock.controller.OrderController    : 开始创建订单...........
 2020-03-28 20:38:01.158  c.r.r.lock.controller.OrderController    : 扣减前库存数: 49</code></pre>
 <div aligh="center">
-    <img src="/.com//wangliang/Documents/ 王亮 /blog/source/_posts/Redis 分布式锁 /jmeter-result-01.png" srcset="/img/loading.gif" width="100%">
+    <img src="http://qiniu.raindrop-wl.cn/jmeter-result-01.png" srcset="/img/loading.gif" width="100%">
 </div>
 <div aligh="center">
-    <img src="/.com//wangliang/Documents/ 王亮 /blog/source/_posts/Redis 分布式锁 /jmeter-result-tree-01.png" srcset="/img/loading.gif" width="100%">
+    <img src="http://qiniu.raindrop-wl.cn/jmeter-result-tree-01.png" srcset="/img/loading.gif" width="100%">
 </div>
 
 <hr>
@@ -354,10 +354,10 @@ redis&gt; get order:stock
 50</code></pre>
 <p><code>使用 Jmeter 模拟 200 并发，对创建订单接口进行访问，如果程序正常，应该在创建 50 个订单后，返回库存不足</code></p>
 <div aligh="center">
-    <img src="/.com//wangliang/Documents/ 王亮 /blog/source/_posts/Redis 分布式锁 /jmeter-200c.png" srcset="/img/loading.gif" width="100%">
+    <img src="http://qiniu.raindrop-wl.cn/jmeter-200c.png" srcset="/img/loading.gif" width="100%">
 </div>
 <div aligh="center">
-    <img src="/.com//wangliang/Documents/ 王亮 /blog/source/_posts/Redis 分布式锁 /jmeter-create-order.png" srcset="/img/loading.gif" width="100%">
+    <img src="http://qiniu.raindrop-wl.cn/jmeter-create-order.png" srcset="/img/loading.gif" width="100%">
 </div>
 
 <p><code>查看结果，所有请求都成功了。查看响应结果也正常，无重复扣减库存，在扣减了 50 个库存后，正常返回无库存</code></p>
@@ -386,7 +386,7 @@ redis&gt; get order:stock
 2020-03-28 20:26:56.843  c.r.r.lock.controller.OrderController    : 开始创建订单...........
 2020-03-28 20:26:56.845  c.r.r.lock.controller.OrderController    : 订单创建失败，库存不足！</code></pre>
 <div aligh="center">
-    <img src="/.com//wangliang/Documents/ 王亮 /blog/source/_posts/Redis 分布式锁 /jmeter-result-02.png" srcset="/img/loading.gif" width="100%">
+    <img src="http://qiniu.raindrop-wl.cn/jmeter-result-02.png" srcset="/img/loading.gif" width="100%">
 </div>
 
 <hr>
@@ -421,10 +421,10 @@ redis&gt; get order:stock
 50</code></pre>
 <p><code>使用 Jmeter 模拟 200 并发，访问 Nginx 入口，对两个节点进行负载均衡。如果程序正常，应该在创建 50 个订单后，返回库存不足</code></p>
 <div aligh="center">
-    <img src="/.com//wangliang/Documents/ 王亮 /blog/source/_posts/Redis 分布式锁 /jmeter-200c.png" srcset="/img/loading.gif" width="100%">
+    <img src="http://qiniu.raindrop-wl.cn/jmeter-200c.png" srcset="/img/loading.gif" width="100%">
 </div>
 <div aligh="center">
-    <img src="/.com//wangliang/Documents/ 王亮 /blog/source/_posts/Redis 分布式锁 /jmeter-create-order-nginx.png" srcset="/img/loading.gif" width="100%">
+    <img src="http://qiniu.raindrop-wl.cn/jmeter-create-order-nginx.png" srcset="/img/loading.gif" width="100%">
 </div>
 
 <p><code>查看结果，所有请求都成功了。查看响应结发现存在重复扣减库存情况</code></p>
@@ -461,7 +461,7 @@ redis&gt; get order:stock
 2020-03-28 21:00:04.162  c.r.r.lock.controller.OrderController    : 开始创建订单...........
 2020-03-28 21:00:04.164  c.r.r.lock.controller.OrderController    : 订单创建失败，库存不足！</code></pre>
 <div aligh="center">
-    <img src="/.com//wangliang/Documents/ 王亮 /blog/source/_posts/Redis 分布式锁 /jmeter-result-02.png" srcset="/img/loading.gif" width="100%">
+    <img src="http://qiniu.raindrop-wl.cn/jmeter-result-02.png" srcset="/img/loading.gif" width="100%">
 </div>
 
 <hr>
@@ -530,7 +530,7 @@ server:
   port: 8081</code></pre>
 <p><code>使用 Jmeter 模拟 5s 1000 并发，对创建订单接口进行访问</code></p>
 <div aligh="center">
-    <img src="/.com//wangliang/Documents/ 王亮 /blog/source/_posts/Redis 分布式锁 /jmeter-1000c.png" srcset="/img/loading.gif" width="100%">
+    <img src="http://qiniu.raindrop-wl.cn/jmeter-1000c.png" srcset="/img/loading.gif" width="100%">
 </div>
 
 <p><code>查看结果，所有请求都成功了。查看响应结发现没有重复扣减库存情况，说明 redis.setnx 可以保证分布式下的并发安全问题</code></p>
@@ -733,7 +733,7 @@ public class OrderController {
 <blockquote>
 <p>流程图如下:</p>
 <div aligh="center">
-   <img src="/.com//wangliang/Documents/ 王亮 /blog/source/_posts/Redis 分布式锁 /Redis-lock.png" srcset="/img/loading.gif" width="100%">
+   <img src="http://qiniu.raindrop-wl.cn/Redis-lock.png" srcset="/img/loading.gif" width="100%">
 </div>
 </blockquote>
 <pre><code class="java">@Slf4j
@@ -793,7 +793,7 @@ public class OrderController {
 <blockquote>
 <p>Redisson: Redisson 是一个 Redis Java 客户端，具有内存数据网格的特性。<br>它提供了更方便和最简单的方式与 Redis 的工作。<br>Redisson 对象提供了关注点分离，这允许您将重点放在数据建模和应用程序逻辑上。</p>
 <div aligh="center">
-   <img src="/.com//wangliang/Documents/ 王亮 /blog/source/_posts/Redis 分布式锁 /redisson-logo.png" srcset="/img/loading.gif" width="100%">
+   <img src="http://qiniu.raindrop-wl.cn/redisson-logo.png" srcset="/img/loading.gif" width="100%">
 </div>
 </blockquote>
 <ul>

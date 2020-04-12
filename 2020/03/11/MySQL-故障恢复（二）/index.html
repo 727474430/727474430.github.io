@@ -215,7 +215,7 @@
 </ul>
 <p>小明 11:00 接到告警通知，Master 节点出现异常，因为基于 MyCat 做了故障切换，目前服务应该可以正常 <br> 使用。因为此时 Slave1 节点可以负责读写工作。就在庆幸架构做的好时，接到用户反馈，线上服务已不可用<br>，排查后发现数据库被删。此时小明内心一万只草泥马飘过。</p>
 <div aligh="center">
-    <img src="/.com//wangliang/Documents/ 王亮 /blog/source/_posts/MySQL- 故障恢复（一）/MySQL.png" srcset="/img/loading.gif" width="100%">
+    <img src="http://qiniu.raindrop-wl.cn/MySQL.png" srcset="/img/loading.gif" width="100%">
 </div>
 
 <p><strong>note:</strong> 线上环境 MySQL 架构为一主两从，使用 MyCat 作为中间件配置读写分离。</p>
@@ -372,12 +372,12 @@ DELIMITER ;
 <li><p><strong>查找删除语句所在 position</strong></p>
 <p><code>show binlog events in &#39;mysql-bin.000001&#39;\G;</code></p>
 <div aligh="center">
-    <img src="/.com//wangliang/Documents/ 王亮 /blog/source/_posts/MySQL- 故障恢复（一）/pos1.png" srcset="/img/loading.gif" width="100%">
+    <img src="http://qiniu.raindrop-wl.cn/pos1.png" srcset="/img/loading.gif" width="100%">
 </div>
 
 <p><code>mysqlbinlog -v mysql-bin.000001</code></p>
  <div aligh="center">
-     <img src="/.com//wangliang/Documents/ 王亮 /blog/source/_posts/MySQL- 故障恢复（一）/pos1.png" srcset="/img/loading.gif" width="100%" ">
+     <img src="http://qiniu.raindrop-wl.cn/pos2.png" srcset="/img/loading.gif" width="100%" ">
  </div>
 </li>
 <li><p><strong>创建数据库</strong></p>
@@ -497,7 +497,7 @@ select * from user;
 <li>当然，我们在日常数据库管理中，还是要按职能分配权限。不要以公司规模小、业务量不大、数据不多为接口给自己带来不必要的麻烦！</li>
 </ul>
 <div aligh="center">
-    <img src="/.com//wangliang/Documents/ 王亮 /blog/source/_posts/MySQL- 故障恢复（一）/over.png" srcset="/img/loading.gif" width="100%">
+    <img src="http://qiniu.raindrop-wl.cn/over.png" srcset="/img/loading.gif" width="100%">
 </div>
 
             <hr>
