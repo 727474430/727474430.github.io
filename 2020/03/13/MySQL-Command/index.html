@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="description" content="雨下不停-日记">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  <title>MySQL-Command ~ Raindrop Blog</title>
+
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css"  >
+<link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css"  >
+<link rel="stylesheet" href="/lib/mdbootstrap/css/mdb.min.css"  >
+<link rel="stylesheet" href="/lib/github-markdown/github-markdown.min.css"  >
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css"  >
+
+<link rel="stylesheet" href="/css/main.css"  >
+
+
+  <link rel="stylesheet" href="/lib/fancybox/jquery.fancybox.min.css"  >
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Raindrop Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/luas/">Lua</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/javas/">Java</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/golangs/">Golang</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/clojures/">Clojure</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/dockers/">Docker</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" false
+         style="background: url('/img/default.png')no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  星期五, 三月 13日 2020, 11:02 晚上
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    2.3k 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      12 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <center> <font face="黑体" size="6">MySQL-Command</font> </center>
+
+<hr>
+<a id="more"></a>
+
+<h5 id="Other-Related"><a href="#Other-Related" class="headerlink" title="Other Related"></a>Other Related</h5><table>
+<thead>
+<tr>
+<th> 命令 </th>
+<th> 含义 </th>
+<th> 常用 </th>
+</tr>
+</thead>
+<tbody><tr>
+<td>show processlist</td>
+<td> 查看当前链接此数据库的进程信息 </td>
+<td>show processlist</td>
+</tr>
+<tr>
+<td>show profile</td>
+<td> 查询当前会话中最后一条语句执行的资源使用情况，如果显示空，表示未开始 profile，开启 profile set profling=1</td>
+<td>profile</td>
+</tr>
+<tr>
+<td>show profiles</td>
+<td> 以列表形式展示服务器中最近执行的语句资源使用情况，显示记录数量由 profiling_history_size 控制，默认 15 条 </td>
+<td>profiles</td>
+</tr>
+<tr>
+<td>show profile cpu,swaps for query queryId</td>
+<td> 查询指定 query 语句的指定资源使用情况（这里是 CPU、SWAPS）</td>
+<td>show profile cpu,swaps for query 1</td>
+</tr>
+<tr>
+<td>show variables like ‘%engine%’</td>
+<td> 查看 MySQL 默认引擎 </td>
+<td>show variables like ‘%engine%’</td>
+</tr>
+<tr>
+<td>show variables like ‘%query_cache%’</td>
+<td> 查看 是否开启查询缓存 <code>have_query_cache</code> 是否支持缓存 <code>query_cache_type</code> 是否开启缓存 </td>
+<td>show variables like ‘%query_cache%’</td>
+</tr>
+<tr>
+<td>show variables like ‘%buffer_pool%’</td>
+<td> 查看页内存信息 </td>
+<td>show variables like ‘%buffer_pool%’</td>
+</tr>
+</tbody></table>
+<ul>
+<li><code>show processlist</code></li>
+</ul>
+<pre><code class="mysql">show processlist;
++------+------+-----------------+------+---------+------+----------+------------------+
+| Id   | User | Host            | db   | Command | Time | State    | Info             |
++------+------+-----------------+------+---------+------+----------+------------------+
+| 1175 | root | localhost:49797 | test | Query   | 0    | starting | show processlist |
+| 1182 | root | localhost:50587 | test | Query   | 0    | &lt;null&gt;   | CALL batchInsert |
+| 1183 | root | localhost:50629 | test | Sleep   | 294  |          | &lt;null&gt;           |
++------+------+-----------------+------+---------+------+----------+------------------+</code></pre>
+<ul>
+<li><code>show profile</code></li>
+</ul>
+<pre><code class="mysql">show profile;
++----------------------+----------+
+| Status               | Duration |
++----------------------+----------+
+| starting             | 0.000031 |
+| checking permissions | 0.000003 |
+| Opening tables       | 0.001230 |
+| init                 | 0.000017 |
+| System lock          | 0.000004 |
+| optimizing           | 0.000003 |
+| statistics           | 0.000008 |
+| preparing            | 0.000014 |
+| executing            | 0.000003 |
+| Sending data         | 1.645334 |
+| end                  | 0.000004 |
+| query end            | 0.000009 |
+| closing tables       | 0.000004 |
+| freeing items        | 0.000032 |
+| cleaning up          | 0.000028 |
++----------------------+----------+
+
+# 通过 query_id 查询
+show profile cpu, swaps for query 1;
++----------------+----------+----------+------------+-------+
+| Status         | Duration | CPU_user | CPU_system | Swaps |
++----------------+----------+----------+------------+-------+
+| starting       | 0.000517 | 0.000227 | 0.000333   | 0     |
+| query end      | 0.000003 | 0.000002 | 0.000002   | 0     |
+| closing tables | 0.000002 | 0.000001 | 0.000000   | 0     |
+| freeing items  | 0.000014 | 0.000003 | 0.000012   | 0     |
+| cleaning up    | 0.000005 | 0.000004 | 0.000000   | 0     |
++----------------+----------+----------+------------+-------+</code></pre>
+<ul>
+<li><code>show profiles</code></li>
+</ul>
+<pre><code class="mysql">show profiles;
++----------+--------------+-----------------------------------+
+| Query_ID | Duration     | Query                             |
++----------+--------------+-----------------------------------+
+| 1        |     0.000844 | show variables like &#39;profiling%&#39;  |
+| 2        |     0.00387  | select * from score               |
+| 3        |     1.646724 | select count(*) from user         |
++----------+--------------+-----------------------------------+</code></pre>
+<ul>
+<li><code>show variables</code></li>
+</ul>
+<pre><code class="mysql">show variables like &#39;%engine%&#39;;
++----------------------------------+--------+
+| Variable_name                    | Value  |
++----------------------------------+--------+
+| default_storage_engine           | InnoDB |
+| default_tmp_storage_engine       | InnoDB |
+| disabled_storage_engines         |        |
+| internal_tmp_disk_storage_engine | InnoDB |
++----------------------------------+--------+
+
+show variables like &#39;%query_cache%&#39;;
++------------------------------+---------+
+| Variable_name                | Value   |
++------------------------------+---------+
+| have_query_cache             | YES     |
+| query_cache_limit            | 1048576 |
+| query_cache_min_res_unit     | 4096    |
+| query_cache_size             | 1048576 |
+| query_cache_type             | OFF     |
+| query_cache_wlock_invalidate | OFF     |
++------------------------------+---------+
+
+show variables like &#39;%buffer_pool%&#39;;
++-------------------------------------+----------------+
+| Variable_name                       | Value          |
++-------------------------------------+----------------+
+| innodb_buffer_pool_chunk_size       | 134217728      |
+| innodb_buffer_pool_dump_at_shutdown | ON             |
+| innodb_buffer_pool_dump_now         | OFF            |
+| innodb_buffer_pool_dump_pct         | 25             |
+| innodb_buffer_pool_filename         | ib_buffer_pool |
+| innodb_buffer_pool_instances        | 1              |
+| innodb_buffer_pool_load_abort       | OFF            |
+| innodb_buffer_pool_load_at_startup  | ON             |
+| innodb_buffer_pool_load_now         | OFF            |
+| innodb_buffer_pool_size             | 134217728      |
++-------------------------------------+----------------+</code></pre>
+<hr>
+<h5 id="Table-Related"><a href="#Table-Related" class="headerlink" title="Table Related"></a>Table Related</h5><table>
+<thead>
+<tr>
+<th> 命令 </th>
+<th> 含义 </th>
+<th> 常用 </th>
+</tr>
+</thead>
+<tbody><tr>
+<td>describe <code>tableName</code> / desc <code>tableName</code></td>
+<td> 查看表的详情信息 </td>
+<td>describe user; / desc user;</td>
+</tr>
+<tr>
+<td>show create table <code>tableName</code></td>
+<td> 查看表的创建语句 </td>
+<td>show create table user;</td>
+</tr>
+<tr>
+<td>create table <code>tableName</code> (<code>column</code> type desc)</td>
+<td> 创建表 </td>
+<td>create table <code>user</code> (id int primary key)</td>
+</tr>
+<tr>
+<td>drop table <code>tableName</code></td>
+<td> 删除表 </td>
+<td>drop table <code>user</code></td>
+</tr>
+</tbody></table>
+<ul>
+<li><code>describe table</code></li>
+</ul>
+<pre><code class="mysql">describe user;
++-------+--------------+------+-----+---------+----------------+
+| Field | Type         | Null | Key | Default | Extra          |
++-------+--------------+------+-----+---------+----------------+
+| id    | int(11)      | NO   | PRI | NULL    | auto_increment |
+| name  | varchar(32)  | NO   |     | NULL    |                |
+| age   | varchar(32)  | NO   |     | NULL    |                |
+| city  | varchar(32)  | NO   |     | NULL    |                |
+| tmp   | varchar(255) | YES  |     | NULL    |                |
++-------+--------------+------+-----+---------+----------------+
+
+# desc 等价于 describe
+desc user;
++-------+--------------+------+-----+---------+----------------+
+| Field | Type         | Null | Key | Default | Extra          |
++-------+--------------+------+-----+---------+----------------+
+| id    | int(11)      | NO   | PRI | NULL    | auto_increment |
+| name  | varchar(32)  | NO   |     | NULL    |                |
+| age   | varchar(32)  | NO   |     | NULL    |                |
+| city  | varchar(32)  | NO   |     | NULL    |                |
+| tmp   | varchar(255) | YES  |     | NULL    |                |
++-------+--------------+------+-----+---------+----------------+</code></pre>
+<ul>
+<li><code>show create table</code></li>
+</ul>
+<pre><code class="mysql">show create table user;
++-------+------------------------------------------------------------+
+| Table | Create Table                                               |
++-------+------------------------------------------------------------+
+| user  | CREATE TABLE `user` (                                      |
+|  `id` int(11) NOT NULL AUTO_INCREMENT,                             |
+|  `name` varchar(32) CHARACTER SET utf8 NOT NULL,                   |
+|  `age` varchar(32) CHARACTER SET utf8 NOT NULL,                    |
+|  `city` varchar(32) CHARACTER SET utf8 NOT NULL,                   |
+|  `tmp` varchar(255) DEFAULT NULL,                                  |
+|  PRIMARY KEY (`id`)                                                |
+| ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1           |
++-------+------------------------------------------------------------+
+1 row in set (0.00 sec)</code></pre>
+<ul>
+<li><code>create table</code></li>
+</ul>
+<pre><code class="mysql">CREATE TABLE `user` (`id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) CHARACTER SET utf8 NOT NULL,
+  `age` varchar(32) CHARACTER SET utf8 NOT NULL,
+  PRIMARY KEY (`id`)
+);</code></pre>
+<ul>
+<li><code>drop table</code></li>
+</ul>
+<pre><code class="mysql">drop table user;
+Query OK, 0 rows affected (0.05 sec)
+
+select * from user;
+ERROR 1146 (42S02): Table &#39;backup.user&#39; doesn&#39;t exist</code></pre>
+<hr>
+<h5 id="Binlog-Related"><a href="#Binlog-Related" class="headerlink" title="Binlog Related"></a>Binlog Related</h5><table>
+<thead>
+<tr>
+<th> 命令 </th>
+<th> 含义 </th>
+<th> 常用 </th>
+</tr>
+</thead>
+<tbody><tr>
+<td>show variables like</td>
+<td> 查询变量相关配置信息 </td>
+<td>show variables like ‘%log_bin%’</td>
+</tr>
+<tr>
+<td>show binlog events in ‘binlogfile’\G;</td>
+<td> 查询 binlog 文件格式化后内容 </td>
+<td></td>
+</tr>
+<tr>
+<td>mysqlbinlog -v binlogFile</td>
+<td> 查询 binlog 文件内容 </td>
+<td>mysqlbinlog -v mysql-bin.000001</td>
+</tr>
+</tbody></table>
+<ul>
+<li><code>show variable binlog</code></li>
+</ul>
+<pre><code class="mysql">show variables like &#39;%log_bin%&#39;;
++---------------------------------+--------------------------------+
+| Variable_name                   | Value                          |
++---------------------------------+--------------------------------+
+| log_bin                         | ON                             |
+| log_bin_basename                | /var/lib/mysql/mysql-bin       |
+| log_bin_index                   | /var/lib/mysql/mysql-bin.index |
+| log_bin_trust_function_creators | OFF                            |
+| log_bin_use_v1_row_events       | OFF                            |
+| sql_log_bin                     | ON                             |
++---------------------------------+--------------------------------+</code></pre>
+<ul>
+<li><code>show binlog events</code></li>
+</ul>
+<pre><code class="mysql"># 查看当前 binlog 文件
+show master status \G;
+*************************** 1. row ***************************
+             File: mysql-bin.000001
+         Position: 10178
+     Binlog_Do_DB: backup
+ Binlog_Ignore_DB:
+Executed_Gtid_Set:
+
+# 查询 binlog 详情
+show binlog events in &#39;mysql-bin.000001&#39;\G;
+...
+*************************** 44. row ***************************
+   Log_name: mysql-bin.000001
+        Pos: 2848
+ Event_type: Table_map
+  Server_id: 1
+End_log_pos: 2906
+       Info: table_id: 143 (backup.user)
+*************************** 45. row ***************************
+   Log_name: mysql-bin.000001
+        Pos: 2906
+ Event_type: Write_rows
+  Server_id: 1
+End_log_pos: 2951
+       Info: table_id: 143 flags: STMT_END_F
+*************************** 46. row ***************************
+   Log_name: mysql-bin.000001
+        Pos: 2951
+ Event_type: Xid
+  Server_id: 1
+End_log_pos: 2982
+       Info: COMMIT /* xid=808 */
+*************************** 47. row ***************************
+   Log_name: mysql-bin.000001
+        Pos: 2982
+ Event_type: Anonymous_Gtid
+  Server_id: 1
+End_log_pos: 3047
+       Info: SET @@SESSION.GTID_NEXT= &#39;ANONYMOUS&#39;
+*************************** 48. row ***************************
+   Log_name: mysql-bin.000001
+        Pos: 3047
+ Event_type: Query
+  Server_id: 1
+End_log_pos: 3145
+       Info: drop database backup
+...</code></pre>
+<ul>
+<li><code>mysqlbinlog -v</code></li>
+</ul>
+<pre><code class="bash">...
+# at 2906
+#200313 14:03:59 server id 1  end_log_pos 2951 CRC32 0x17496f50         Write_rows: table id 143 flags: STMT_END_F
+BINLOG &#39;
+z5JrXhMBAAAAOgAAAFoLAAAAAI8AAAAAAAEABmJhY2t1cAAEdXNlcgAEAw8PDwZgAGAAYAAAj7jc
+TQ==
+z5JrXh4BAAAALQAAAIcLAAAAAI8AAAAAAAEAAgAE//ARAAAAAAI0MABQb0kX
+&#39;/*!*/;
+### INSERT INTO `backup`.`user`
+### SET
+###   @1=17
+###   @2=&#39;&#39;
+###   @3=&#39;40&#39;
+###   @4=&#39;&#39;
+# at 2951
+#200313 14:03:59 server id 1  end_log_pos 2982 CRC32 0x76e6e0db         Xid = 808
+COMMIT/*!*/;
+# at 2982
+#200313 14:04:38 server id 1  end_log_pos 3047 CRC32 0x00bc8281         Anonymous_GTID  last_committed=10       sequence_number=11      rbr_only=no
+SET @@SESSION.GTID_NEXT= &#39;ANONYMOUS&#39;/*!*/;
+# at 3047
+#200313 14:04:38 server id 1  end_log_pos 3145 CRC32 0xbc32a2d6         Query   thread_id=41    exec_time=0     error_code=0
+SET TIMESTAMP=1584108278/*!*/;
+SET @@session.pseudo_thread_id=41/*!*/;
+drop database backup
+/*!*/;
+# at 3145
+#200313 14:06:59 server id 1  end_log_pos 3192 CRC32 0x68a2c9ea         Rotate to mysql-bin.000002  pos: 4
+SET @@SESSION.GTID_NEXT= &#39;AUTOMATIC&#39; /* added by mysqlbinlog */ /*!*/;
+DELIMITER ;
+# End of log file
+/*!50003 SET COMPLETION_TYPE=@OLD_COMPLETION_TYPE*/;
+/*!50530 SET @@SESSION.PSEUDO_SLAVE_MODE=0*/;
+...
+</code></pre>
+<hr>
+<h5 id="Index-Related"><a href="#Index-Related" class="headerlink" title="Index Related"></a>Index Related</h5><table>
+<thead>
+<tr>
+<th> 命令 </th>
+<th> 含义 </th>
+<th> 常用 </th>
+</tr>
+</thead>
+<tbody><tr>
+<td>show index from tableName</td>
+<td> 查看表的索引信息 </td>
+<td>show index from user;</td>
+</tr>
+<tr>
+<td>alter table <code>tableName</code> add primary key (<code>column</code>)</td>
+<td> 添加主键索引 </td>
+<td>alter table user add primary key (<code>id</code>);</td>
+</tr>
+<tr>
+<td>alter table <code>tableName</code> add unique (<code>column</code>)</td>
+<td> 添加唯一索引 </td>
+<td>alter table user add unique (<code>name</code>);</td>
+</tr>
+<tr>
+<td>alter table <code>tableName</code> add fulltext (<code>column</code>)</td>
+<td> 添加全文索引 </td>
+<td>alter table user add fulltext (<code>name</code>);</td>
+</tr>
+<tr>
+<td>alter table <code>tableName</code> add index <code>indexName</code> (<code>column</code>)</td>
+<td> 添加普通索引 </td>
+<td>alter table user add index idx_name (<code>name</code>);</td>
+</tr>
+<tr>
+<td>alter table <code>tableName</code> add index <code>indexName</code> (<code>column1</code>, <code>column2</code>, …)</td>
+<td> 添加联合索引 </td>
+<td>alter table user add index idx_name (<code>name</code>,<code>age</code>,<code>sex</code>);</td>
+</tr>
+<tr>
+<td>alter table <code>tableName</code> add constraint FK_ID foreign key (<code>column</code>) references tableName (<code>column</code>)</td>
+<td> 添加外建 </td>
+<td>alter table user add constraint FK_SID foreign key (<code>sid</code>) references score (<code>id</code>);</td>
+</tr>
+<tr>
+<td>alter table <code>tableName</code> drop primary key</td>
+<td> 删除主键 </td>
+<td>alter table user drop primary key;</td>
+</tr>
+<tr>
+<td>alter table <code>tableName</code> drop index <code>indexName</code></td>
+<td> 删除索引（包含唯一索引）</td>
+<td>alter table user drop index <code>name</code>;</td>
+</tr>
+<tr>
+<td>alter table <code>tableName</code> drop foreign key FK_ID</td>
+<td> 删除外建 </td>
+<td>alter table user drop foreign key FK_SID;</td>
+</tr>
+</tbody></table>
+<ul>
+<li><code>show index</code></li>
+</ul>
+<pre><code class="mysql">show index from student;
++---------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| Table   | Non_unique | Key_name | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment |
++---------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| student |          0 | PRIMARY  |            1 | std_id      | A         |           2 |     NULL | NULL   |      | BTREE      |         |               |
++---------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+</code></pre>
+<ul>
+<li><code>alter table add</code></li>
+</ul>
+<pre><code class="mysql">-- 添加主键索引，注意查看 Key 字段
+desc student;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| std_id   | int(11)     | NO   |     | NULL    |       |
+| std_name | varchar(32) | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+
+alter table student add primary key (`std_id`);
+Query OK, 0 rows affected (0.11 sec)
+
+desc student;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| std_id   | int(11)     | NO   | PRI | NULL    |       |
+| std_name | varchar(32) | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+
+-- 添加唯一索引，注意查看 Key 字段
+alter table student add unique (`std_name`);
+Query OK, 0 rows affected (0.05 sec)
+
+desc student;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| std_id   | int(11)     | NO   | PRI | NULL    |       |
+| std_name | varchar(32) | YES  | UNI | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+
+-- 添加普通索引，注意查看 Key 字段
+alter table student add index idx_std_name (`std_name`);
+Query OK, 0 rows affected (0.04 sec)
+
+desc student;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| std_id   | int(11)     | NO   | PRI | NULL    |       |
+| std_name | varchar(32) | YES  | MUL | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+
+-- 添加复合索引
+show index from student;
++---------+------------+-------------+--------------+-------------+
+| Table   | Non_unique | Key_name    | Seq_in_index | Column_name |
++---------+------------+-------------+--------------+-------------+
+| student |          0 | PRIMARY     |            1 | std_id      |
+| student |          1 | idx_id_name |            1 | std_id      |
+| student |          1 | idx_id_name |            2 | std_name    |
++---------+------------+-------------+--------------+-------------+</code></pre>
+<ul>
+<li><code>alter table drop</code></li>
+</ul>
+<pre><code class="mysql">-- 删除主键索引，注意查看 Key 字段
+desc student;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| std_id   | int(11)     | NO   | PRI | NULL    |       |
+| std_name | varchar(32) | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+
+alter table student drop primary key;
+Query OK, 3 rows affected (0.08 sec)
+
+desc student;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| std_id   | int(11)     | NO   | MUL | NULL    |       |
+| std_name | varchar(32) | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+
+-- 删除索引（包含唯一索引），注意查看 Key 字段
+desc student;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| std_id   | int(11)     | NO   | PRI | NULL    |       |
+| std_name | varchar(32) | YES  | MUL | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+
+alter table student drop index idx_stu_name;
+Query OK, 0 rows affected (0.03 sec)
+
+desc student;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| std_id   | int(11)     | NO   | PRI | NULL    |       |
+| std_name | varchar(32) | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+</code></pre>
+<hr>
+<h5 id="Join-Search-Related"><a href="#Join-Search-Related" class="headerlink" title="Join Search Related"></a>Join Search Related</h5><table>
+<thead>
+<tr>
+<th> 命令 </th>
+<th> 含义 </th>
+<th> 常用 </th>
+</tr>
+</thead>
+<tbody><tr>
+<td>join</td>
+<td> 内链接（只查询两张表关联字段相等的记录）</td>
+<td>select u.name, s.score from user u join score s on u.sid = s.id;</td>
+</tr>
+<tr>
+<td>inner join</td>
+<td> 内链接（只查询两张表关联字段相等的记录）</td>
+<td>select u.name, s.score from user u inner join score s on u.sid = s.id;</td>
+</tr>
+<tr>
+<td>left join</td>
+<td> 左链接（以左表为主，两张表关联字段相等则显示右表数据，否则补 null）</td>
+<td>select u.name, s.score from user u left join score s on u.sid = s.id;</td>
+</tr>
+<tr>
+<td>left outer join</td>
+<td> 左链接（以左表为主，两张表关联字段相等则显示右表数据，否则补 null）</td>
+<td>select u.name, s.score from user u left outer join score s on u.sid = s.id;</td>
+</tr>
+<tr>
+<td>right join</td>
+<td> 右链接（以右表为主，两张表关联字段相等则显示左表数据，否则补 null）</td>
+<td>select u.name, s.score from user u right join score s on u.sid = s.id;</td>
+</tr>
+<tr>
+<td>right outer join</td>
+<td> 右链接（以右表为主，两张表关联字段相等则显示左表数据，否则补 null）</td>
+<td>select u.name, s.score from user u right outer join score s on u.sid = s.id;</td>
+</tr>
+<tr>
+<td>full join</td>
+<td> 全链接（将查询两张表的全部记录）</td>
+<td>select u.name, s.score from user u full join score s on u.sid = s.id;</td>
+</tr>
+</tbody></table>
+<ul>
+<li> 准备数据 </li>
+</ul>
+<pre><code class="mysql">select * from user;
++----+----------+
+| id | name     |
++----+----------+
+| 1  | zhangsan |
+| 2  | lisi     |
+| 3  | wangwu   |
++----+----------+
+
+select * from score;
++----+-------+-----+
+| id | score | uid |
++----+-------+-----+
+| 1  | 80    | 1   |
+| 2  | 88    | 2   |
+| 3  | 100   | 4   |
++----+-------+-----+</code></pre>
+<ul>
+<li> 内链接 </li>
+</ul>
+<pre><code class="mysql">select u.name, s.score from `user` u join score s on u.id = s.uid;
++----------+-------+
+| name     | score |
++----------+-------+
+| zhangsan | 80    |
+| lisi     | 88    |
++----------+-------+
+
+select u.name, s.score from `user` u inner join score s on u.id = s.uid;
++----------+-------+
+| name     | score |
++----------+-------+
+| zhangsan | 80    |
+| lisi     | 88    |
++----------+-------+</code></pre>
+<ul>
+<li> 左链接 </li>
+</ul>
+<pre><code class="mysql">select u.name, s.score from`user`u left join score s on u.id = s.uid;
++----------+--------+
+| name     | score  |
++----------+--------+
+| zhangsan | 80     |
+| lisi     | 88     |
+| wangwu   | &lt;null&gt; |
++----------+--------+
+
+select u.name, s.score from`user`u left outer join score s on u.id = s.uid;
++----------+--------+
+| name     | score  |
++----------+--------+
+| zhangsan | 80     |
+| lisi     | 88     |
+| wangwu   | &lt;null&gt; |
++----------+--------+</code></pre>
+<ul>
+<li> 右链接 </li>
+</ul>
+<pre><code class="mysql">select u.name, s.score from `user` u right join score s on u.id = s.uid;
++----------+-------+
+| name     | score |
++----------+-------+
+| zhangsan | 80    |
+| lisi     | 88    |
+| &lt;null&gt;   | 100   |
++----------+-------+
+
+select u.name, s.score from `user` u right outer join score s on u.id = s.uid;
++----------+-------+
+| name     | score |
++----------+-------+
+| zhangsan | 80    |
+| lisi     | 88    |
+| &lt;null&gt;   | 100   |
++----------+-------+</code></pre>
+<ul>
+<li> 全链接 </li>
+</ul>
+<pre><code class="mysql">select u.name,s.score from `user` u left join score s on u.id = s.uid union select u.name, s.score from user u right join score s on u.id = s.uid;
++----------+--------+
+| name     | score  |
++----------+--------+
+| zhangsan | 80     |
+| lisi     | 88     |
+| wangwu   | &lt;null&gt; |
+| &lt;null&gt;   | 100    |
++----------+--------+</code></pre>
+<p><strong>note</strong>: MySQL 不支持 full join 需要使用 union 方式代替 </p>
+<hr>
+<div aligh="center">
+    <img src="/.com//wangliang/Documents/ 王亮 /blog/source/_posts/MySQL- 故障恢复（一）/join-search.png" srcset="/img/loading.gif" width="100%">
+</div>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+              <span>
+                <i class="iconfont icon-inbox"></i>
+                
+                  <a class="hover-with-bg" href="/categories/MySQL">MySQL</a>
+                  &nbsp;
+                
+              </span>&nbsp;&nbsp;
+            
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv"></span>总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv"></span>总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="/lib/jquery/jquery.min.js" ></script>
+<script src="/lib/popper/popper.min.js" ></script>
+<script src="/lib/bootstrap/js/bootstrap.min.js" ></script>
+<script src="/lib/mdbootstrap/js/mdb.min.js" ></script>
+<script src="/js/main.js" ></script>
+
+
+  <script src="/js/lazyload.js" ></script>
+
+
+
+  
+    <script src="/lib/tocbot/tocbot.min.js" ></script>
+  
+  <script src="/js/post.js" ></script>
+
+
+
+  <script src="/lib/smoothscroll/SmoothScroll.min.js" ></script>
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+
+  
+
+  
+
+  <!-- cnzz Analytics -->
+  
+
+
+
+  <script src="/lib/prettify/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="/lib/typed/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "MySQL-Command&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="/lib/anchor/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="/lib/fancybox/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

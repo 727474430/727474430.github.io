@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="description" content="雨下不停-日记">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  <title>MySQL- 优化 ~ Raindrop Blog</title>
+
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css"  >
+<link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css"  >
+<link rel="stylesheet" href="/lib/mdbootstrap/css/mdb.min.css"  >
+<link rel="stylesheet" href="/lib/github-markdown/github-markdown.min.css"  >
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css"  >
+
+<link rel="stylesheet" href="/css/main.css"  >
+
+
+  <link rel="stylesheet" href="/lib/fancybox/jquery.fancybox.min.css"  >
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Raindrop Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/luas/">Lua</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/javas/">Java</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/golangs/">Golang</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/clojures/">Clojure</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/dockers/">Docker</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" false
+         style="background: url('/img/default.png')no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  星期三, 三月 18日 2020, 11:11 晚上
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    1.1k 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      5 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <center> <font face="黑体" size="6">MySQL- 优化</font> </center>
+
+<hr>
+<a id="more"></a>
+
+<h5 id="MySQL-Count- 优化"><a href="#MySQL-Count- 优化" class="headerlink" title="MySQL Count 优化"></a>MySQL Count 优化 </h5><p> 从 user 表中查询 id 大于 10 的所以用户。InnoDB 存储引擎会进行逐行扫描，如果表中数据较多则会有性能问题</p>
+<pre><code class="mysql">select count(*) from user where id &gt; 10;
++----------+
+| count(*) |
++----------+
+| 6597266  |
++----------+
+1 row in set
+Time: 1.292s</code></pre>
+<p>如果现将所有行数 count 出来，再见去 id &lt;= 10 的记录，速度就会快一些</p>
+<pre><code class="mysql">select (select count(*) - (select count(*) from user where id &lt;= 10) from user) as count;
++---------+
+| count   |
++---------+
+| 6597266 |
++---------+</code></pre>
+<h5 id="MySQL-Limit- 优化"><a href="#MySQL-Limit- 优化" class="headerlink" title="MySQL Limit 优化"></a>MySQL Limit 优化</h5><p>limit 常用来进行分页，但是在偏移量很大的时候则会有性能问题</p>
+<p>如下偏移量 100w 时，会先扫描 100w 数据后，在返回后面的 10 条记录，查询数据的效率会有所影响</p>
+<pre><code class="mysql">select * from user order by id limit 1000000, 10;
++---------+--------------+---------+
+| id      | name         | score   |
++---------+--------------+---------+
+| 1000001 | user-999998  | 999998  |
+| 1000002 | user-999999  | 999999  |
+| 1000003 | user-1000000 | 1000000 |
+| 1000004 | user-1000001 | 1000001 |
+| 1000005 | user-1000002 | 1000002 |
+| 1000006 | user-1000003 | 1000003 |
+| 1000007 | user-1000004 | 1000004 |
+| 1000008 | user-1000005 | 1000005 |
+| 1000009 | user-1000006 | 1000006 |
+| 1000010 | user-1000007 | 1000007 |
++---------+--------------+---------+
+10 rows in set
+Time: 0.207s</code></pre>
+<p>那么如果我们的 id 是自增或递增的，那么我们可以保存上次的偏移量，利用 id 的索引优势跳过前 100w 数据的扫描</p>
+<pre><code class="mysql">select * from user where id &gt; 1000000 order by id limit 10;
++---------+--------------+---------+
+| id      | name         | score   |
++---------+--------------+---------+
+| 1000001 | user-999998  | 999998  |
+| 1000002 | user-999999  | 999999  |
+| 1000003 | user-1000000 | 1000000 |
+| 1000004 | user-1000001 | 1000001 |
+| 1000005 | user-1000002 | 1000002 |
+| 1000006 | user-1000003 | 1000003 |
+| 1000007 | user-1000004 | 1000004 |
+| 1000008 | user-1000005 | 1000005 |
+| 1000009 | user-1000006 | 1000006 |
+| 1000010 | user-1000007 | 1000007 |
++---------+--------------+---------+
+10 rows in set
+Time: 0.014s</code></pre>
+<h5 id="MySQL-Group-By- 优化"><a href="#MySQL-Group-By- 优化" class="headerlink" title="MySQL Group By 优化"></a>MySQL Group By 优化 </h5><p> 查询 user 表并使用 score 字段进行分组，默认 score 字段没有索引，通过执行计划显示查询语句使用了临时表和非主键字段排序，所以进行了全表扫描</p>
+<pre><code class="mysql">explain select * from user group by score limit 500000, 10;
++----+-------------+-------+------------+------+---------------+--------+---------+--------+---------+----------+---------------------------------+
+| id | select_type | table | partitions | type | possible_keys | key    | key_len | ref    | rows    | filtered | Extra                           |
++----+-------------+-------+------------+------+---------------+--------+---------+--------+---------+----------+---------------------------------+
+| 1  | SIMPLE      | user  | &lt;null&gt;     | ALL  | &lt;null&gt;        | &lt;null&gt; | &lt;null&gt;  | &lt;null&gt; | 6591199 | 100.0    | Using temporary; Using filesort |
++----+-------------+-------+------------+------+---------------+--------+---------+--------+---------+----------+---------------------------------+</code></pre>
+<p>下面我们为 score 字段添加索引，我们可以看到仅仅扫描了 limit 锁需要的 5000010 条数据</p>
+<pre><code class="mysql">alter table `user` add index idx_score (`score`);
+
+desc user;
++-------+--------------+------+-----+---------+----------------+
+| Field | Type         | Null | Key | Default | Extra          |
++-------+--------------+------+-----+---------+----------------+
+| id    | int(11)      | NO   | PRI | &lt;null&gt;  | auto_increment |
+| name  | varchar(32)  | NO   |     | &lt;null&gt;  |                |
+| score | varchar(255) | YES  | MUL | &lt;null&gt;  |                |
++-------+--------------+------+-----+---------+----------------+
+
+explain select * from user group by score limit 500000, 10;
++----+-------------+-------+------------+-------+---------------+-----------+---------+--------+---------+----------+--------+
+| id | select_type | table | partitions | type  | possible_keys | key       | key_len | ref    | rows    | filtered | Extra  |
++----+-------------+-------+------------+-------+---------------+-----------+---------+--------+---------+----------+--------+
+| 1  | SIMPLE      | user  | &lt;null&gt;     | index | idx_score     | idx_score | 258     | &lt;null&gt; | 5000010 | 100.0    | &lt;null&gt; |
++----+-------------+-------+------------+-------+---------------+-----------+---------+--------+---------+----------+--------+</code></pre>
+<p>下面我们来使用覆盖索引，我们可以看到 extra 字段的只为 using index 代表我们使用到了覆盖索引。那么此时这条查询语句是不需要回表的，所以也会提升部分效率</p>
+<pre><code class="mysql">explain select score from user group by score limit 5000000, 10;
++----+-------------+-------+------------+-------+---------------+-----------+---------+--------+---------+----------+-------------+
+| id | select_type | table | partitions | type  | possible_keys | key       | key_len | ref    | rows    | filtered | Extra       |
++----+-------------+-------+------------+-------+---------------+-----------+---------+--------+---------+----------+-------------+
+| 1  | SIMPLE      | user  | &lt;null&gt;     | index | idx_score     | idx_score | 258     | &lt;null&gt; | 5000010 | 100.0    | Using index |
++----+-------------+-------+------------+-------+---------------+-----------+---------+--------+---------+----------+-------------+</code></pre>
+<p>下面我们在使用主键 id 作为分组条件，查看执行计划后，我们看到使用了 PRIMARY 主键索引</p>
+<pre><code class="mysql">explain select * from user group by id limit 5000000, 10;
++----+-------------+-------+------------+-------+-------------------+---------+---------+--------+---------+----------+--------+
+| id | select_type | table | partitions | type  | possible_keys     | key     | key_len | ref    | rows    | filtered | Extra  |
++----+-------------+-------+------------+-------+-------------------+---------+---------+--------+---------+----------+--------+
+| 1  | SIMPLE      | user  | &lt;null&gt;     | index | PRIMARY,idx_score | PRIMARY | 4       | &lt;null&gt; | 5000010 | 100.0    | &lt;null&gt; |
++----+-------------+-------+------------+-------+-------------------+---------+---------+--------+---------+----------+--------+</code></pre>
+<p>下面我们在使用主键 id 作为分组条件前提下，加上使用覆盖索引，查看执行计划后，我们看到 extra 字段值为 using index 代表覆盖索引，没有回表操作</p>
+<pre><code class="mysql">explain select id from user group by id limit 5000000, 10;
++----+-------------+-------+------------+-------+-------------------+---------+---------+--------+---------+----------+-------------+
+| id | select_type | table | partitions | type  | possible_keys     | key     | key_len | ref    | rows    | filtered | Extra       |
++----+-------------+-------+------------+-------+-------------------+---------+---------+--------+---------+----------+-------------+
+| 1  | SIMPLE      | user  | &lt;null&gt;     | index | PRIMARY,idx_score | PRIMARY | 4       | &lt;null&gt; | 5085756 | 100.0    | Using index |
++----+-------------+-------+------------+-------+-------------------+---------+---------+--------+---------+----------+-------------+</code></pre>
+<p>最后来对比以上全部 Group By 语句的执行效率</p>
+<pre><code class="bash">
+# 无索引
+mysql&gt; select * from user group by score limit 5000000, 10
+... 结果大于 1 分钟
+
+# score 字段索引
+mysql&gt; select * from user group by score limit 5000000, 10;
++---------+--------------+---------+
+| id      | name         | score   |
++---------+--------------+---------+
+| 5500002 | user-5499999 | 5499999 |
+| 58      | user-55      | 55      |
+| 553     | user-550     | 550     |
+| 5503    | user-5500    | 5500    |
+| 55003   | user-55000   | 55000   |
+| 550003  | user-550000  | 550000  |
+| 5500003 | user-5500000 | 5500000 |
+| 5500004 | user-5500001 | 5500001 |
+| 5500005 | user-5500002 | 5500002 |
+| 5500006 | user-5500003 | 5500003 |
++---------+--------------+---------+
+10 rows in set
+Time: 46.519s
+
+# score 字段索引并使用覆盖索引
+mysql&gt; select score from user group by score limit 5000000, 10;
++---------+
+| score   |
++---------+
+| 5499999 |
+| 55      |
+| 550     |
+| 5500    |
+| 55000   |
+| 550000  |
+| 5500000 |
+| 5500001 |
+| 5500002 |
+| 5500003 |
++---------+
+10 rows in set
+Time: 1.013s
+
+# 主键 id 分组
+mysql&gt; select * from user group by id limit 5000000, 10;
++---------+--------------+---------+
+| id      | name         | score   |
++---------+--------------+---------+
+| 5000001 | user-4999998 | 4999998 |
+| 5000002 | user-4999999 | 4999999 |
+| 5000003 | user-5000000 | 5000000 |
+| 5000004 | user-5000001 | 5000001 |
+| 5000005 | user-5000002 | 5000002 |
+| 5000006 | user-5000003 | 5000003 |
+| 5000007 | user-5000004 | 5000004 |
+| 5000008 | user-5000005 | 5000005 |
+| 5000009 | user-5000006 | 5000006 |
+| 5000010 | user-5000007 | 5000007 |
++---------+--------------+---------+
+10 rows in set
+Time: 1.238s
+
+# 主键 id 分组并使用覆盖索引
+mysql&gt; select id from user group by id limit 5000000, 10;
++---------+
+| id      |
++---------+
+| 5000001 |
+| 5000002 |
+| 5000003 |
+| 5000004 |
+| 5000005 |
+| 5000006 |
+| 5000007 |
+| 5000008 |
+| 5000009 |
+| 5000010 |
++---------+
+10 rows in set
+Time: 0.940s</code></pre>
+<p><strong>note:</strong> 需要 sql_mode 去掉 ONLY_FULL_GROUP_BY</p>
+<hr>
+<p><strong>引用：</strong><br><a href="https://database.51cto.com/art/201910/604945.htm" target="_blank" rel="noopener">MySQL 性能优化之骨灰级高阶神器</a></p>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+              <span>
+                <i class="iconfont icon-inbox"></i>
+                
+                  <a class="hover-with-bg" href="/categories/MySQL">MySQL</a>
+                  &nbsp;
+                
+              </span>&nbsp;&nbsp;
+            
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv"></span>总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv"></span>总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="/lib/jquery/jquery.min.js" ></script>
+<script src="/lib/popper/popper.min.js" ></script>
+<script src="/lib/bootstrap/js/bootstrap.min.js" ></script>
+<script src="/lib/mdbootstrap/js/mdb.min.js" ></script>
+<script src="/js/main.js" ></script>
+
+
+  <script src="/js/lazyload.js" ></script>
+
+
+
+  
+    <script src="/lib/tocbot/tocbot.min.js" ></script>
+  
+  <script src="/js/post.js" ></script>
+
+
+
+  <script src="/lib/smoothscroll/SmoothScroll.min.js" ></script>
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+
+  
+
+  
+
+  <!-- cnzz Analytics -->
+  
+
+
+
+  <script src="/lib/prettify/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="/lib/typed/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "MySQL- 优化&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="/lib/anchor/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="/lib/fancybox/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

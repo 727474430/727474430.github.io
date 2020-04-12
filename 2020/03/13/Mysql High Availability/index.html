@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="description" content="雨下不停-日记">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  <title>Mysql High Availability ~ Raindrop Blog</title>
+
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css"  >
+<link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css"  >
+<link rel="stylesheet" href="/lib/mdbootstrap/css/mdb.min.css"  >
+<link rel="stylesheet" href="/lib/github-markdown/github-markdown.min.css"  >
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css"  >
+
+<link rel="stylesheet" href="/css/main.css"  >
+
+
+  <link rel="stylesheet" href="/lib/fancybox/jquery.fancybox.min.css"  >
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Raindrop Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/luas/">Lua</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/javas/">Java</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/golangs/">Golang</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/clojures/">Clojure</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/dockers/">Docker</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" false
+         style="background: url('/img/default.png')no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  星期五, 三月 13日 2020, 11:12 晚上
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    5k 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      24 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <center> <font face="黑体" size="6">Mysql + Keepalived 主主热备，搭建高可用集群 </font> </center>
+
+<a id="more"></a>
+
+<h3 id="在 -Mysql- 集群部署方案中有很多种组合方式，如 - 主从复制、主主热备、一主多从、多主一从（多源复制）等 - 无论哪种部署方案，都是为了提高 -Mysql- 服务的性能或可用性为目的 - 那么最终使用哪种部署方案，还是要根据需求场景来 - 本次将记录一下，工作中遇到的“主主热备 - 高可用”搭建的方法"><a href="# 在 -Mysql- 集群部署方案中有很多种组合方式，如 - 主从复制、主主热备、一主多从、多主一从（多源复制）等 - 无论哪种部署方案，都是为了提高 -Mysql- 服务的性能或可用性为目的 - 那么最终使用哪种部署方案，还是要根据需求场景来 - 本次将记录一下，工作中遇到的“主主热备 - 高可用”搭建的方法" class="headerlink" title="在 Mysql 集群部署方案中有很多种组合方式，如: 主从复制、主主热备、一主多从、多主一从（多源复制）等. 无论哪种部署方案，都是为了提高 Mysql 服务的性能或可用性为目的. 那么最终使用哪种部署方案，还是要根据需求场景来. 本次将记录一下，工作中遇到的“主主热备 + 高可用”搭建的方法."></a> 在 Mysql 集群部署方案中有很多种组合方式，如: 主从复制、主主热备、一主多从、多主一从（多源复制）等. 无论哪种部署方案，都是为了提高 Mysql 服务的性能或可用性为目的. 那么最终使用哪种部署方案，还是要根据需求场景来. 本次将记录一下，工作中遇到的“主主热备 + 高可用”搭建的方法.</h3><p><strong> 环境如下 </strong>:</p>
+<table>
+<thead>
+<tr>
+<th align="center">Plugin</th>
+<th align="center">Version</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Centos</td>
+<td align="center">7.2</td>
+</tr>
+<tr>
+<td align="center">MySQL</td>
+<td align="center">5.7</td>
+</tr>
+<tr>
+<td align="center">Keepalived</td>
+<td align="center">1.4.5</td>
+</tr>
+</tbody></table>
+<p><strong> 服务器配置 </strong>:</p>
+<table>
+<thead>
+<tr>
+<th align="center">Server</th>
+<th align="center">Software</th>
+<th align="center">Configure</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">192.168.1.100</td>
+<td align="center">Master1/Slave2/Keepalived-Master</td>
+<td align="center">8 核 + 8g</td>
+</tr>
+<tr>
+<td align="center">192.168.1.101</td>
+<td align="center">Master2/Slave1/Keepalived-Backup</td>
+<td align="center">8 核 + 8g</td>
+</tr>
+<tr>
+<td align="center">192.168.1.110(vip)</td>
+<td align="center">&amp;</td>
+<td align="center">&amp;</td>
+</tr>
+</tbody></table>
+<p><strong>MySQL 主从架构 </strong></p>
+<ol>
+<li><p> 主服务器上面的任何修改都会通过自己的 I/O tread(I/O 线程) 保存在二进制日志 Binary log 里面。</p>
+</li>
+<li><p> 从服务器上面也启动一个 I/O thread，通过配置好的用户名和密码, 连接到主服务器上面请求读取二进制日志，然后把读取到的二进制日志写到本地的一个 Realy log（中继日志）里面。</p>
+</li>
+<li><p> 从服务器上面同时开启一个 SQL thread 定时检查 Realy log(这个文件也是二进制的)，如果发现有更新立即把更新的内容在本机的数据库上面执行一遍。</p>
+</li>
+</ol>
+<div aligh="center">
+    <img src="/.com//wangliang/Documents/ 王亮 /blog/source/_posts/MySQL- 故障恢复（一）/MySQL.png" srcset="/img/loading.gif" width="100%">
+</div>
+
+<p><strong> 实施过程 </strong></p>
+<ul>
+<li><p>192.168.1.100 与 192.168.1.101 主主热备.</p>
+</li>
+<li><p> 使用 Keepalived 搭建虚拟 VIP192.168.1.110，实现对外暴露统一 ip.<br><img src="http://qiniu.raindrop-wl.cn/mysql-keepalived.png" srcset="/img/loading.gif" alt="Mysql-Keepalived"></p>
+</li>
+</ul>
+<h3 id="我们首先来配置主主热备"><a href="# 我们首先来配置主主热备" class="headerlink" title="我们首先来配置主主热备"></a> 我们首先来配置主主热备 </h3><ul>
+<li><p>Master1 192.168.1.100 配置 </p>
+<pre><code class="bash"># 防火墙开发 3306 端口
+$ firewall-cmd --permanent --zone=public --add-port=3306/tcp
+$ firewall-cmd --reload
+
+#配置 root 用户远程访问权限，配置 mysql 数据同步授权
+$ ./mysql -uroot -p
+mysql&gt; grant all on *.* to &#39;root&#39;@&#39;192.168.1.%&#39; identified by &#39;123456&#39;;
+mysql&gt; flush privileges;
+mysql&gt; grant replication slave on *.* to &#39;slave&#39;@&#39;192.168.1.%&#39; identified by &#39;123456&#39;;
+mysql&gt; flush privileges;
+
+#配置 my.cnf 如下
+$ vim /etc/my.cnf
+  [mysqld]
+  user=mysql
+  server-id=1                                    #主从服务器 id，必须保证唯一，值越小优先级越高（master 值小）
+  port=3306
+  basedir=/usr/local/mysql
+  datadir=/usr/local/mysql/data
+  socket=/tmp/mysql.sock
+  character-set-server=utf8
+  auto_increment_offset=1                        #自增起始值 1，因为是 master1 所以为 1
+  auto_increment_increment=2                     #自增步骤 2，因为目前的是 2 台机器集群，所有步骤为 2
+  log-bin=mysql-bin                              #开启 binlog 二进制日志（存储的是写操作的 sql 执行日志）
+  binlog_format=ROW                              #binlog 同步模式
+  replicate-ignore-db = mysql                    #忽略不同步主从的数据库
+  replicate-ignore-db = information_schema       #忽略不同步主从的数据库
+  replicate-ignore-db = performance_schema       #忽略不同步主从的数据库
+  replicate-ignore-db = test                     #忽略不同步主从的数据库
+  lower_case_table_names=1                       #大小写敏感，默认为 0 可以不配置
+
+  [mysqld_safe]
+  log-error=/usr/local/mysql/mysqld.log
+  pid-file=/usr/local/mysql/mysqld.pid
+
+  [client]
+  default-character-set=utf8
+  socket=/tmp/mysql.sock
+
+  [mysql]
+  default-character-set=utf8
+  socket=/tmp/mysql.sock
+
+#重启 mysql
+$ system restart mysqld
+
+#查看 binlog 日志及 pos 位置
+$ ./mysql -uroot -p
+
+mysql&gt; show master status;
++------------------|----------|--------------|--------------------------|-------------------+
+| File             | Position | Binlog_Do_DB | Binlog_Ignore_DB         | Executed_Gtid_Set |
++------------------|----------|--------------|--------------------------|-------------------+
+| mysql-bin.000001 |      120 |              | mysql,information_schema |                   |
++------------------|----------|--------------|--------------------------|-------------------+</code></pre>
+</li>
+<li><p>Master2 192.168.1.101 配置 </p>
+<pre><code class="bash"># 防火墙开发 3306 端口
+$ firewall-cmd --permanent --zone=public --add-port=3306/tcp
+$ firewall-cmd --reload
+
+#配置 mysql 数据同步授权，配置 root 用户远程访问权限
+$ ./mysql -uroot -p
+mysql&gt; grant all on *.* to &#39;root&#39;@&#39;192.168.1.%&#39; identified by &#39;123456&#39;;
+mysql&gt; flush privileges;
+mysql&gt; grant replication slave on *.* to &#39;slave&#39;@&#39;192.168.1.%&#39; identified by &#39;123456&#39;;
+mysql&gt; flush privileges;
+
+#配置 my.cnf 如下
+$ vim /etc/my.cnf
+  [mysqld]
+  user=mysql
+  server-id=2                                    #主从服务器 id，必须保证唯一，值越小优先级越高（master 值小）
+  port=3306
+  basedir=/usr/local/mysql
+  datadir=/usr/local/mysql/data
+  socket=/tmp/mysql.sock
+  character-set-server=utf8
+  auto_increment_offset=2                        #自增起始值 2，因为是 master2 所以为 2
+  auto_increment_increment=2                     #自增步骤 2，因为目前的是 2 台机器集群，所有步骤为 2
+  log-bin=mysql-bin                              #开启 binlog 二进制日志（存储的是写操作的 sql 执行日志）
+  binlog_format=ROW                              #binlog 同步模式
+  replicate-ignore-db = mysql                    #忽略不同步主从的数据库
+  replicate-ignore-db = information_schema       #忽略不同步主从的数据库
+  replicate-ignore-db = performance_schema       #忽略不同步主从的数据库
+  replicate-ignore-db = test                     #忽略不同步主从的数据库
+  lower_case_table_names=1                       #大小写敏感，默认为 0 可以不配置
+
+  [mysqld_safe]
+  log-error=/usr/local/mysql/mysqld.log
+  pid-file=/usr/local/mysql/mysqld.pid
+
+  [client]
+  default-character-set=utf8
+  socket=/tmp/mysql.sock
+
+  [mysql]
+  default-character-set=utf8
+  socket=/tmp/mysql.sock
+
+#重启 mysql
+$ system restart mysqld
+
+#查看 binlog 日志及 pos 位置
+$ ./mysql -uroot -p
+
+mysql&gt; show master status;
++------------------|----------|--------------|--------------------------|-------------------+
+| File             | Position | Binlog_Do_DB | Binlog_Ignore_DB         | Executed_Gtid_Set |
++------------------|----------|--------------|--------------------------|-------------------+
+| mysql-bin.000001 |      120 |              | mysql,information_schema |                   |
++------------------|----------|--------------|--------------------------|-------------------+</code></pre>
+</li>
+</ul>
+<ul>
+<li><p>Master1 做同步操作 </p>
+<pre><code class="bash">$ ./mysql -uroot -p
+
+mysql&gt; stop slave;
+mysql&gt; change master to \
+        master_host=&#39;192.168.1.101&#39;,
+        master_port=3306,
+        master_user=&#39;slave&#39;,
+        master_password=&#39;123456&#39;,
+        master_log_file=&#39;mysql-bin.000001&#39;,
+        master_log_pos=120;
+mysql&gt; start slave;
+
+mysql&gt; show slave status \G;
+*************************** 1. row ***************************
+            Slave_IO_State: Waiting for master to send event
+              Master_Host: 192.168.1.101
+              Master_User: slave
+              Master_Port: 3306
+            Connect_Retry: 60
+          Master_Log_File: mysql-bin.000001
+      Read_Master_Log_Pos: 120
+            Relay_Log_File: mysql-relay-bin.000001
+            Relay_Log_Pos: 120
+    Relay_Master_Log_File: mysql-bin.000001
+          Slave_IO_Running: Yes
+        Slave_SQL_Running: Yes
+    .........................
+    Seconds_Behind_Master: 0
+    .........................
+# 如上，只要保证 Slave_IO_Running、Slave_SQL_Running 的值全部为 Yes 就标识 Master1 与 Master2 实现了主从，Master1 同步 Master2 的数据 </code></pre>
+</li>
+<li><p>Master2 做同步操作 </p>
+<pre><code class="bash">$ ./mysql -uroot -p
+
+mysql&gt; stop slave;
+mysql&gt; change master to \
+        master_host=&#39;192.168.1.100&#39;,
+        master_port=3306,
+        master_user=&#39;slave&#39;,
+        master_password=&#39;123456&#39;,
+        master_log_file=&#39;mysql-bin.000001&#39;,
+        master_log_pos=120;
+mysql&gt; start slave;
+
+mysql&gt; show slave status \G;
+*************************** 1. row ***************************
+            Slave_IO_State: Waiting for master to send event
+              Master_Host: 192.168.1.100
+              Master_User: slave
+              Master_Port: 3306
+            Connect_Retry: 60
+          Master_Log_File: mysql-bin.000001
+      Read_Master_Log_Pos: 120
+            Relay_Log_File: mysql-relay-bin.000001
+            Relay_Log_Pos: 120
+    Relay_Master_Log_File: mysql-bin.000001
+          Slave_IO_Running: Yes
+        Slave_SQL_Running: Yes
+    .........................
+    Seconds_Behind_Master: 0
+    .........................
+# 如上，只要保证 Slave_IO_Running、Slave_SQL_Running 的值全部为 Yes 就标识 Master2 与 Master1 实现了主从，Master2 同步 Master1 的数据 </code></pre>
+</li>
+</ul>
+<ul>
+<li><p> 主主热备同步验证 </p>
+<pre><code class="shell"># 在 Master1 中操作
+mysql&gt; create database my_local;
+mysql&gt; use my_local;
+mysql&gt; CREATE TABLE `book` (`id` int(11) NOT NULL AUTO_INCREMENT COMMENT &#39; 主键 &#39;,
+        `book_name` varchar(100) NOT NULL COMMENT &#39; 书名 &#39;,
+        `author` varchar(100) DEFAULT NULL COMMENT &#39; 作者 &#39;,
+        `price` varchar(100) DEFAULT NULL COMMENT &#39; 价格 &#39;,
+        `remark` varchar(100) DEFAULT NULL COMMENT &#39; 备注 &#39;,
+        PRIMARY KEY (`id`)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+mysql&gt; insert into book values(1, &quot;Java 深入浅出 &quot;, &quot;Mas&quot;, &quot;50.00&quot;, &quot;Java 入门不错的书！&quot;);
+mysql&gt; insert into book values(2, &quot;Python 深入浅出 &quot;, &quot;Mas&quot;, &quot;50.00&quot;, &quot;Python 入门不错的书！&quot;);
+mysql&gt; insert into book values(3, &quot;Golang 深入浅出 &quot;, &quot;Mas&quot;, &quot;50.00&quot;, &quot;Golang 入门不错的书！&quot;);
+# 在 Master1 中操作
+mysql&gt; select * from book;
++----|-----------------|--------|-------|----------------------+
+| id | book_name       | author | price | remark               |
++----|-----------------|--------|-------|----------------------+
+|  1 | Java 深入浅出     | Mas    | 50.00 | Java 入门不错的书！      |
+|  2 | Python 深入浅出   | Mas    | 50.00 | Python 入门不错的书！    |
+|  3 | Golang 深入浅出   | Mas    | 50.00 | Golang 入门不错的书！    |
++----|-----------------|--------|-------|----------------------+
+# 在 Master2 中操作
+mysql&gt; use my_local;
+mysql&gt; select * from book;
++----|-----------------|--------|-------|----------------------+
+| id | book_name       | author | price | remark               |
++----|-----------------|--------|-------|----------------------+
+|  1 | Java 深入浅出     | Mas    | 50.00 | Java 入门不错的书！      |
+|  2 | Python 深入浅出   | Mas    | 50.00 | Python 入门不错的书！    |
+|  3 | Golang 深入浅出   | Mas    | 50.00 | Golang 入门不错的书！    |
++----|-----------------|--------|-------|----------------------+
+
+mysql&gt; CREATE TABLE `user` (`id` int(11) NOT NULL AUTO_INCREMENT COMMENT &#39; 主键 &#39;,
+        `name` varchar(100) NOT NULL COMMENT &#39; 姓名 &#39;,
+        `email` varchar(100) DEFAULT NULL COMMENT &#39; 邮件 &#39;,
+        `phone` varchar(100) DEFAULT NULL COMMENT &#39; 手机号 &#39;,
+        `remark` varchar(100) DEFAULT NULL COMMENT &#39; 备注 &#39;,
+        PRIMARY KEY (`id`)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+mysql&gt; insert into user values(1, &quot;Wang Liang&quot;, &quot;727474430@qq.com&quot;, &quot;18888888888&quot;, &quot; 管理员 &quot;);
+mysql&gt; insert into user values(2, &quot;Wang Er&quot;, &quot;727474430@qq.com&quot;, &quot;18666666666&quot;, &quot; 普通用户 &quot;);
+mysql&gt; insert into user values(3, &quot;Wang San&quot;, &quot;727474430@qq.com&quot;, &quot;18555555555&quot;, &quot; 正常人 &quot;);
+# 在 Master2 中操作
+mysql&gt; select * from user;
++----|------------|------------------|-------------|----------+
+| id | name       | email            | phone       | remark   |
++----|------------|------------------|-------------|----------+
+|  1 | Wang Liang | 727474430@qq.com | 18888888888 | 管理员    |
+|  2 | Wang Er    | 727474430@qq.com | 18666666666 | 普通用户  |
+|  3 | Wang San   | 727474430@qq.com | 18555555555 | 正常人   |
++----|------------|------------------|-------------|----------+
+# 在 Master1 中操作
+mysql&gt; use my_local;
+mysql&gt; select * from user;
++----|------------|------------------|-------------|----------+
+| id | name       | email            | phone       | remark   |
++----|------------|------------------|-------------|----------+
+|  1 | Wang Liang | 727474430@qq.com | 18888888888 | 管理员    |
+|  2 | Wang Er    | 727474430@qq.com | 18666666666 | 普通用户  |
+|  3 | Wang San   | 727474430@qq.com | 18555555555 | 正常人   |
++----|------------|------------------|-------------|----------+
+
+# 至此 192.168.1.100 与 192.168.1.101 主主同步已经配置成功 </code></pre>
+</li>
+</ul>
+<h3 id="接下来我们配置 -Keepalived-ip- 飘逸高可用"><a href="# 接下来我们配置 -Keepalived-ip- 飘逸高可用" class="headerlink" title="接下来我们配置 Keepalived ip 飘逸高可用"></a> 接下来我们配置 Keepalived ip 飘逸高可用 </h3><ul>
+<li><p> 安装 Keepalived，在 192.168.1.100、192.168.1.101 做相同的操作 </p>
+<pre><code class="bash"># 安装依赖
+$ yum install -y openssl-devel wget
+$ yum install -y libnfnetlink-devel
+$ yum -y install libssl-dev libnl libnl-devel
+
+# 下载 keepalived
+$ cd /usr/local/src
+$ wget http://www.keepalived.org/software/keepalived-1.3.5.tar.gz &amp;&amp; tar -zxvf keepalived-1.3.5.tar.gz
+$ cd keepalived-1.3.5 &amp;&amp; ./configure --prefix=/usr/local/keepalived
+$ make &amp;&amp; make install
+
+$ cp /usr/local/src/keeyalived-1.3.5/keepalived/etc/init.d/keepalived /etc/rc.d/init.d
+$ cp /usr/local/keepalived/etc/sysconfig/keepalived /etc/sysconfig/
+$ mkdir /etc/keepalived
+$ cp /usr/local/keepalived/etc/keepalived/keepalived.conf /etc/keepalived/
+$ cp /usr/local/keepalived/sbin/keepalived /usr/sbin/
+
+# 开机启动
+echo &quot;/etc/init.d/keepalived start&quot; &gt;&gt; /etc/rc.local</code></pre>
+</li>
+<li><p> 在 Master1 中操作 </p>
+<pre><code class="bash"># 备份一下配置文件，如果配置错误可以还原
+$ cp /etc/keepalived/keepalived.conf /etc/keepalived/keepalived.conf.bak
+
+$ vim /etc/keepalived/keepalived.conf
+  global_defs {
+  notification_email {727474430@qq.com}
+
+  notification_email_from 727474430@qq.com
+  smtp_server 127.0.0.1
+  smtp_connect_timeout 30
+  router_id MASTER-HA
+  }
+
+  vrrp_script chk_mysql_port {     #检测 mysql 服务是否在运行。有很多方式，比如进程，用脚本检测等等
+      script &quot;/opt/chk_mysql.sh&quot;   #这里通过脚本监测
+      interval 2                   #脚本执行间隔，每 2s 检测一次
+      weight -5                    #脚本结果导致的优先级变更，检测失败（脚本返回非 0）则优先级 -5
+      fall 2                       #检测连续 2 次失败才算确定是真失败。会用 weight 减少优先级（1-255 之间）
+      rise 1                       #检测 1 次成功就算成功。但不修改优先级
+  }
+
+  vrrp_instance VI_1 {
+      state MASTER
+      interface eth0               #指定虚拟 ip 的网卡接口
+      mcast_src_ip 192.168.1.100
+      virtual_router_id 51         #路由器标识，MASTER 和 BACKUP 必须是一致的
+      priority 101                 #定义优先级，数字越大，优先级越高，在同一个 vrrp_instance 下，MASTER 的优先级必须大于 BACKUP 的优先级。这样 MASTER 故障恢复后，就可以将 VIP 资源再次抢回来
+      advert_int 1
+      authentication {
+          auth_type PASS
+          auth_pass 1111
+      }
+      virtual_ipaddress {192.168.1.110}
+      track_script {chk_mysql_port}
+    }
+
+# 编写 keepalived 检测脚本
+$ vim /opt/chk_mysql.sh
+  #!/bin/bash
+  counter=$(netstat -na|grep &quot;LISTEN&quot;|grep &quot;3306&quot;|wc -l)
+  if [&quot;${counter}&quot; -eq 0 ]; then
+      /etc/init.d/keepalived stop
+  fi
+
+# 授权
+$ chmod 755 /opt/chk_mysql.sh
+
+# 启动 keepalived
+$ /etc/init.d/keepalived start</code></pre>
+</li>
+<li><p> 在 Master2 中操作 </p>
+<pre><code class="bash"># 备份一下配置文件，如果配置错误可以还原
+$ cp /etc/keepalived/keepalived.conf /etc/keepalived/keepalived.conf.bak
+
+$ vim /etc/keepalived/keepalived.conf
+  global_defs {
+  notification_email {727474430@qq.com}
+
+  notification_email_from 727474430@qq.com
+  smtp_server 127.0.0.1
+  smtp_connect_timeout 30
+  router_id MASTER-HA
+  }
+
+  vrrp_script chk_mysql_port {     #检测 mysql 服务是否在运行。有很多方式，比如进程，用脚本检测等等
+      script &quot;/opt/chk_mysql.sh&quot;   #这里通过脚本监测
+      interval 2                   #脚本执行间隔，每 2s 检测一次
+      weight -5                    #脚本结果导致的优先级变更，检测失败（脚本返回非 0）则优先级 -5
+      fall 2                       #检测连续 2 次失败才算确定是真失败。会用 weight 减少优先级（1-255 之间）
+      rise 1                       #检测 1 次成功就算成功。但不修改优先级
+  }
+
+  vrrp_instance VI_1 {
+      state MASTER
+      interface eth0               #指定虚拟 ip 的网卡接口
+      mcast_src_ip 192.168.1.101
+      virtual_router_id 51         #路由器标识，MASTER 和 BACKUP 必须是一致的
+      priority 101                 #定义优先级，数字越大，优先级越高，在同一个 vrrp_instance 下，MASTER 的优先级必须大于 BACKUP 的优先级。这样 MASTER 故障恢复后，就可以将 VIP 资源再次抢回来
+      advert_int 1
+      authentication {
+          auth_type PASS
+          auth_pass 1111
+      }
+      virtual_ipaddress {192.168.1.110}
+      track_script {chk_mysql_port}
+    }
+
+# 编写 keepalived 检测脚本
+$ vim /opt/chk_mysql.sh
+  #!/bin/bash
+  counter=$(netstat -na|grep &quot;LISTEN&quot;|grep &quot;3306&quot;|wc -l)
+  if [&quot;${counter}&quot; -eq 0 ]; then
+      /etc/init.d/keepalived stop
+  fi
+
+# 授权
+$ chmod 755 /opt/chk_mysql.sh
+
+# 启动 keepalived
+$ /etc/init.d/keepalived start</code></pre>
+</li>
+<li><p> 配置防火墙规则 </p>
+<pre><code class="bash"># 在 Master1、Master2 中做相同操作
+$ vim /etc/sysconfig/iptables
+  # 加入如下三行配置
+  -A INPUT -s 182.148.15.0/24 -d 224.0.0.18 -j ACCEPT       #允许组播地址通信
+  -A INPUT -s 182.148.15.0/24 -p vrrp -j ACCEPT             #允许 VRRP（虚拟路由器冗余协）通信
+  -A INPUT -m state --state NEW -m tcp -p tcp --dport 3306 -j ACCEPT    #开放 mysql 的 3306 端口
+
+# 重启防火墙
+$ /etc/init.d/iptables restart</code></pre>
+</li>
+</ul>
+<h3 id="Mysql-Keepalived- 故障转义高可用测试"><a href="#Mysql-Keepalived- 故障转义高可用测试" class="headerlink" title="Mysql Keepalived 故障转义高可用测试"></a>Mysql Keepalived 故障转义高可用测试 </h3><ul>
+<li><p> 使用客户端连接 keepalived 所创建的 vip，查看是否可以连接并看到对应的数据.</p>
+<pre><code class="bash">$ mysql -h192.168.1.110 -uroot -p123456
+
+mysql&gt; use my_local;
+mysql&gt; select * from user;
++----|------------|------------------|-------------|----------+
+| id | name       | email            | phone       | remark   |
++----|------------|------------------|-------------|----------+
+|  1 | Wang Liang | 727474430@qq.com | 18888888888 | 管理员    |
+|  2 | Wang Er    | 727474430@qq.com | 18666666666 | 普通用户  |
+|  3 | Wang San   | 727474430@qq.com | 18555555555 | 正常人   |
++----|------------|------------------|-------------|----------+</code></pre>
+</li>
+<li><p> 查看当前 vip 所在地址 </p>
+<pre><code class="bash"># 因为默认 vip 是创建在 master1 上的，所以我们首先在 master1 上执行
+$ ip addr
+  eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP qlen 1000
+  link/ether 52:54:00:3c:25:42 brd ff:ff:ff:ff:ff:ff
+  inet 192.168.1.100/27 brd 182.148.15.255 scope global eth0
+  inet 192.168.1.110/32 scope global eth0                              // 这个 32 位子网掩码的 vip 地址表示该资源目前还在 master1 机器上
+  inet 192.168.1.100/27 brd 82.48.115.255 scope global secondary eth0:0
+  inet6 fe80::5054:ff:fe3c:2542/64 scope link
+  valid_lft forever preferred_lft forever
+
+# 停止 Master1 上的 mysql 服务，根据配置如果 mysql 服务停止了，keepalived 也随之停止，然后 vip 将会漂移到 Master2 上.
+$ /etc/init.d/mysql stop
+  eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP qlen 1000
+  link/ether 52:54:00:3c:25:42 brd ff:ff:ff:ff:ff:ff
+  inet 192.168.1.100/27 brd 182.148.15.255 scope global eth0
+  inet 192.168.1.100/27 brd 82.48.115.255 scope global secondary eth0:0
+  inet6 fe80::5054:ff:fe3c:2542/64 scope link
+  valid_lft forever preferred_lft forever
+
+# 如上，如果 32 位子网掩码的 vip 没有了，就证明只是 vip 在 Master1 上已经停止
+# 查看 Master1 的系统日志，可以看到 vip 资源切换的过程
+$ tail -f /var/log/message
+  Apr 15 17:17:43 localhost Keepalived_vrrp[23037]: Sending gratuitous ARP on eth0 for 192.168.1.110
+  Apr 15 17:17:48 localhost Keepalived_vrrp[23037]: Sending gratuitous ARP on eth0 for 192.168.1.110
+  Apr 15 17:17:48 localhost Keepalived_vrrp[23037]: VRRP_Instance(VI_1) Sending/queueing gratuitous ARPs on eth0 for 192.168.1.110
+  Apr 15 17:17:48 localhost Keepalived_vrrp[23037]: Sending gratuitous ARP on eth0 for 192.168.1.110
+  Apr 15 17:17:48 localhost Keepalived_vrrp[23037]: Sending gratuitous ARP on eth0 for 192.168.1.110
+  Apr 15 17:17:48 localhost Keepalived_vrrp[23037]: Sending gratuitous ARP on eth0 for 192.168.1.110
+  Apr 15 17:17:48 localhost Keepalived_vrrp[23037]: Sending gratuitous ARP on eth0 for 192.168.1.110
+  Apr 15 17:30:39 localhost Keepalived_healthcheckers[23036]: Stopped
+  Apr 15 17:30:39 localhost Keepalived_vrrp[23037]: VRRP_Instance(VI_1) sent 0 priority
+  Apr 15 17:30:39 localhost Keepalived_vrrp[23037]: VRRP_Instance(VI_1) removing protocol VIPs.
+
+# 此时切换到 Master2 上执行
+$ ip addr
+  eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP qlen 1000
+  link/ether 52:54:00:3c:25:42 brd ff:ff:ff:ff:ff:ff
+  inet 192.168.1.101/27 brd 182.148.15.255 scope global eth0
+  inet 192.168.1.110/32 scope global eth0                              // 这个 32 位子网掩码的 vip 地址表示该资源目前还在 master2 机器上
+  inet6 fe80::5054:ff:fe3c:2542/64 scope link
+  valid_lft forever preferred_lft forever
+
+# 查看 Master2 的系统日志，可以看到 vip 资源切换的过程
+$ tail -f /var/log/message
+  Apr 15 17:30:41 localhost Keepalived_vrrp[8731]: Sending gratuitous ARP on eth0 for 192.168.1.110
+  Apr 15 17:30:41 localhost Keepalived_vrrp[8731]: Sending gratuitous ARP on eth0 for 192.168.1.110
+  Apr 15 17:30:41 localhost Keepalived_vrrp[8731]: Sending gratuitous ARP on eth0 for 192.168.1.110
+  Apr 15 17:30:41 localhost Keepalived_vrrp[8731]: Sending gratuitous ARP on eth0 for 192.168.1.110
+  Apr 15 17:30:46 localhost Keepalived_vrrp[8731]: Sending gratuitous ARP on eth0 for 192.168.1.110
+  Apr 15 17:30:46 localhost Keepalived_vrrp[8731]: VRRP_Instance(VI_1) Sending/queueing gratuitous ARPs on eth0 for 192.168.1.110
+  Apr 15 17:30:46 localhost Keepalived_vrrp[8731]: Sending gratuitous ARP on eth0 for 192.168.1.110
+  Apr 15 17:30:46 localhost Keepalived_vrrp[8731]: Sending gratuitous ARP on eth0 for 192.168.1.110
+  Apr 15 17:30:46 localhost Keepalived_vrrp[8731]: Sending gratuitous ARP on eth0 for 192.168.1.110
+  Apr 15 17:30:46 localhost Keepalived_vrrp[8731]: Sending gratuitous ARP on eth0 for 192.168.1.110
+
+# 再次启动 Master1 上的 mysql 服务、然后启动 keepalived 服务，我们可以看到 vip 此时漂移回 Master1 服务器上
+$ /etc/init.d/mysql start
+$ /etc/init.d/keepalived start
+$ ip addr
+  eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP qlen 1000
+  link/ether 52:54:00:3c:25:42 brd ff:ff:ff:ff:ff:ff
+  inet 192.168.1.100/27 brd 182.148.15.255 scope global eth0
+  inet 192.168.1.110/32 scope global eth0                              // 这个 32 位子网掩码的 vip 地址表示该资源目前还在 master1 机器上
+  inet 192.168.1.100/27 brd 82.48.115.255 scope global secondary eth0:0
+  inet6 fe80::5054:ff:fe3c:2542/64 scope link
+  valid_lft forever preferred_lft forever
+
+# 查看日志
+$ tail -f /var/log/message
+  Apr 15 17:30:41 localhost Keepalived_vrrp[8731]: Sending gratuitous ARP on eth0 for 192.168.1.110
+  Apr 15 17:30:41 localhost Keepalived_vrrp[8731]: Sending gratuitous ARP on eth0 for 192.168.1.110
+  Apr 15 17:30:41 localhost Keepalived_vrrp[8731]: Sending gratuitous ARP on eth0 for 192.168.1.110
+  Apr 15 17:30:41 localhost Keepalived_vrrp[8731]: Sending gratuitous ARP on eth0 for 192.168.1.110
+  Apr 15 17:30:46 localhost Keepalived_vrrp[8731]: Sending gratuitous ARP on eth0 for 192.168.1.110
+  Apr 15 17:30:46 localhost Keepalived_vrrp[8731]: VRRP_Instance(VI_1) Sending/queueing gratuitous ARPs on eth0 for 192.168.1.110
+  Apr 15 17:30:46 localhost Keepalived_vrrp[8731]: Sending gratuitous ARP on eth0 for 192.168.1.110
+  Apr 15 17:30:46 localhost Keepalived_vrrp[8731]: Sending gratuitous ARP on eth0 for 192.168.1.110
+  Apr 15 17:30:46 localhost Keepalived_vrrp[8731]: Sending gratuitous ARP on eth0 for 192.168.1.110
+  Apr 15 17:30:46 localhost Keepalived_vrrp[8731]: Sending gratuitous ARP on eth0 for 192.168.1.110
+
+# 在查看 Master2 上，vip 已经不存在了，漂移回 Master1 上了
+$ ip addr
+  eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP qlen 1000
+  link/ether 52:54:00:3c:25:42 brd ff:ff:ff:ff:ff:ff
+  inet 192.168.1.101/27 brd 182.148.15.255 scope global eth0
+  inet 192.168.1.101/27 brd 82.48.115.255 scope global secondary eth0:0
+  inet6 fe80::5054:ff:fe3c:2542/64 scope link
+  valid_lft forever preferred_lft forever
+
+# 查看日志
+$ tail -f /var/log/message
+  Apr 15 17:30:41 localhost Keepalived_vrrp[8731]: Sending gratuitous ARP on eth0 for 192.168.1.110
+  Apr 15 17:30:46 localhost Keepalived_vrrp[8731]: Sending gratuitous ARP on eth0 for 192.168.1.110
+  Apr 15 17:30:46 localhost Keepalived_vrrp[8731]: VRRP_Instance(VI_1) Sending/queueing gratuitous ARPs on eth0 for 192.168.1.110
+  Apr 15 17:30:46 localhost Keepalived_vrrp[8731]: Sending gratuitous ARP on eth0 for 192.168.1.110
+  Apr 15 17:30:46 localhost Keepalived_vrrp[8731]: Sending gratuitous ARP on eth0 for 192.168.1.110
+  Apr 15 17:30:46 localhost Keepalived_vrrp[8731]: Sending gratuitous ARP on eth0 for 192.168.1.110
+  Apr 15 17:30:46 localhost Keepalived_vrrp[8731]: Sending gratuitous ARP on eth0 for 192.168.1.110
+  Apr 15 17:40:41 localhost Keepalived_vrrp[8731]: VRRP_Instance(VI_1) Received advert with higher priority 101, ours 99
+  Apr 15 17:40:41 localhost Keepalived_vrrp[8731]: VRRP_Instance(VI_1) Entering BACKUP STATE
+  Apr 15 17:40:41 localhost Keepalived_vrrp[8731]: VRRP_Instance(VI_1) removing protocol VIPs.
+
+# 同样如果停止 Master1 或 Master2 上的 Keepalived 服务，vip 同样也会漂移，再次启动 Keepalived 服务，vip 会再次漂移回来.</code></pre>
+</li>
+</ul>
+<h5 id="Q-amp-A"><a href="#Q-amp-A" class="headerlink" title="Q &amp; A"></a>Q &amp; A</h5><ul>
+<li><p> 单向同步:<br> 可以重新执行 change master 同步操作，只不过这样同步后，只能同步在此之后的数据，不能能同步之前丢失的数据.</p>
+</li>
+<li><p> 主从报错:</p>
+<pre><code class="bash"># 通过命令查询错误信息，主要查看一下字段
+mysql&gt; show slave status \G;
+       Slave_IO_Running: Yes
+       Slave_SQL_Running: No
+       Last_Error: 1008
+       Last_Error: Error Message &#39;Can&#39;t drop database &#39;lcp&#39;; database doesn&#39;t exist&#39; on query. Default database: &#39;lcp&#39;. Query: &#39;drop database lcp&#39;
+# 通过以上信息看出来，是数据库不存在而导致的主从查询失败. 原因是在主库和从库同时做了相同的操作也导致的报错. 解决这个问题，我们需要先查看一下错误日志，然后定位到问题所在的位置，在然后找一下一共有多少条错误，最后将 binlog 指针下移错误次数位置即可解决.
+
+# 查看错误日志文件地址
+mysql&gt; show global variables like &#39;%log%&#39;;
+
+# 查看错误日志文
+$ cat error.log
+
+# 执行 binlog 指针下移 2 位
+mysql&gt; stop slave;
+mysql&gt; set global_sql_slave_skip_counter=2
+mysql&gt; start slave;
+
+# 再次查看主从状态
+mysql&gt; show slave status \G;
+       Slave_IO_Running: Yes
+       Slave_SQL_Running: Yes</code></pre>
+</li>
+</ul>
+<h5 id="抢占模式"><a href="# 抢占模式" class="headerlink" title="抢占模式:"></a> 抢占模式:</h5><ul>
+<li><p> 主服务正常工作时，虚拟 IP 会在主上，备不提供服务，当主服务优先级低于备的时候，备会自动抢占虚拟 IP，这时，主不提供服务，备提供服务。也就是说，工作在抢占模式下，不分主备，只管优先级.</p>
+</li>
+<li><p> 这种方式通过参数 nopreempt（一般设置在 advert_int 的那一行下面）来控制。不管 priority 优先级，只要 MASTER 机器发生故障，VIP 资源就会被切换到 BACKUP 上。并且当 MASTER 机器恢复后，也不会去将 VIP 资源抢占回来，直至 BACKUP 机器发生故障时，才能自动切换回来.</p>
+</li>
+<li><p>nopreempt 这个参数只能用于 state 为 backup 的情况，所以在配置的时候要把 master 和 backup 的 state 都设置成 backup，这样才会实现 keepalived 的非抢占模式！</p>
+</li>
+</ul>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+              <span>
+                <i class="iconfont icon-inbox"></i>
+                
+                  <a class="hover-with-bg" href="/categories/Mysql">Mysql</a>
+                  &nbsp;
+                
+              </span>&nbsp;&nbsp;
+            
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv"></span>总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv"></span>总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="/lib/jquery/jquery.min.js" ></script>
+<script src="/lib/popper/popper.min.js" ></script>
+<script src="/lib/bootstrap/js/bootstrap.min.js" ></script>
+<script src="/lib/mdbootstrap/js/mdb.min.js" ></script>
+<script src="/js/main.js" ></script>
+
+
+  <script src="/js/lazyload.js" ></script>
+
+
+
+  
+    <script src="/lib/tocbot/tocbot.min.js" ></script>
+  
+  <script src="/js/post.js" ></script>
+
+
+
+  <script src="/lib/smoothscroll/SmoothScroll.min.js" ></script>
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+
+  
+
+  
+
+  <!-- cnzz Analytics -->
+  
+
+
+
+  <script src="/lib/prettify/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="/lib/typed/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Mysql High Availability&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="/lib/anchor/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="/lib/fancybox/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

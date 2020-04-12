@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="description" content="雨下不停-日记">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  <title>MySQL- 故障恢复（一） ~ Raindrop Blog</title>
+
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css"  >
+<link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css"  >
+<link rel="stylesheet" href="/lib/mdbootstrap/css/mdb.min.css"  >
+<link rel="stylesheet" href="/lib/github-markdown/github-markdown.min.css"  >
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css"  >
+
+<link rel="stylesheet" href="/css/main.css"  >
+
+
+  <link rel="stylesheet" href="/lib/fancybox/jquery.fancybox.min.css"  >
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Raindrop Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/luas/">Lua</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/javas/">Java</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/golangs/">Golang</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/clojures/">Clojure</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/dockers/">Docker</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" false
+         style="background: url('/img/default.png')no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  星期三, 三月 11日 2020, 7:32 晚上
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    711 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      3 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <center> <font face="黑体" size="6">MySQL 故障恢复方法（一）</font> </center>
+
+<hr>
+<a id="more"></a>
+
+<h5 id="背景"><a href="# 背景" class="headerlink" title="背景"></a>背景</h5><ul>
+<li>Master 192.168.0.1</li>
+<li>Slave1 192.168.0.2</li>
+<li>Slave2 192.168.0.3</li>
+</ul>
+<p>小明 11:00 接到告警通知，Master 节点出现异常，因为基于 MyCat 做了故障切换，目前服务应该可以正常 <br> 使用。因为此时 Slave1 节点可以负责读写工作。半分钟后 Master 节点重启成功，MySQL 自动启动后，线上 <br> 服务开始报错，排查日志后发现，此时主从数据库数据已不同步，导致报错。</p>
+<div aligh="center">
+    <img src="/.com//wangliang/Documents/ 王亮 /blog/source/_posts/MySQL- 故障恢复（一）/MySQL.png" srcset="/img/loading.gif" width="100%">
+</div>
+
+<p><strong>note:</strong> 线上环境 MySQL 架构为一主两从，使用 MyCat 作为中间件配置读写分离。</p>
+<hr>
+<h5 id="解决方案"><a href="# 解决方案" class="headerlink" title="解决方案"></a>解决方案</h5><blockquote>
+<p>因为此时只是数据不同步，那么可以确定的是，Slave1 节点的数据是最全的，那么简单粗暴使用备份的方式 <br> 恢复数据。说干就干，步骤如下。</p>
+</blockquote>
+<ol>
+<li><strong>停止 MyCat 防止数据写入</strong></li>
+</ol>
+<pre><code class="bash">$ sh mycat stop</code></pre>
+<ol start="2">
+<li><strong>停止主从复制</strong></li>
+</ol>
+<pre><code class="bash"># Slave1、Slave2
+mysql&gt; stop slave;
+mysql&gt; show slave status \G;
+*************************** 1. row ***************************
+               Slave_IO_State:
+                  Master_Host: 192.168.0.2
+                  Master_User: slave
+                  Master_Port: 3306
+                Connect_Retry: 60
+              Master_Log_File: mysql-bin.000002
+          Read_Master_Log_Pos: 2705
+               Relay_Log_File: 2af2354ad45b-relay-bin.000006
+                Relay_Log_Pos: 320
+        Relay_Master_Log_File: mysql-bin.000002
+             Slave_IO_Running: No
+            Slave_SQL_Running: No
+              Replicate_Do_DB: backup
+
+*************************** 1. row ***************************
+               Slave_IO_State:
+                  Master_Host: 192.168.0.3
+                  Master_User: slave
+                  Master_Port: 3306
+                Connect_Retry: 60
+              Master_Log_File: mysql-bin.000002
+          Read_Master_Log_Pos: 2705
+               Relay_Log_File: 2af2354ad45b-relay-bin.000006
+                Relay_Log_Pos: 320
+        Relay_Master_Log_File: mysql-bin.000002
+             Slave_IO_Running: No
+            Slave_SQL_Running: No
+              Replicate_Do_DB: backup</code></pre>
+<ol start="3">
+<li><strong>重置主从关系</strong></li>
+</ol>
+<pre><code class="bash"># Master
+mysql&gt; resrt master;
+mysql&gt; show master status \G;
+*************************** 1. row ***************************
+                         File: mysql-bin.000001
+                     Position: 154
+                 Binlog_Do_DB: backup
+             Binlog_Ignore_DB:
+            Executed_Gtid_Set:
+
+# Slave1、Slave2
+mysql&gt; reset slave;
+mysql&gt; show slave status \G;
+*************************** 1. row ***************************
+               Slave_IO_State:
+                  Master_Host: 192.168.0.2
+                  Master_User: slave
+                  Master_Port: 3306
+                Connect_Retry: 60
+              Master_Log_File:
+          Read_Master_Log_Pos: 4
+               Relay_Log_File: 2af2354ad45b-relay-bin.000001
+                Relay_Log_Pos: 4
+        Relay_Master_Log_File:
+             Slave_IO_Running: No
+            Slave_SQL_Running: No
+              Replicate_Do_DB: backup
+
+*************************** 1. row ***************************
+               Slave_IO_State:
+                  Master_Host: 192.168.0.3
+                  Master_User: slave
+                  Master_Port: 3306
+                Connect_Retry: 60
+              Master_Log_File:
+          Read_Master_Log_Pos: 4
+               Relay_Log_File: 2af2354ad45b-relay-bin.000001
+                Relay_Log_Pos: 4
+        Relay_Master_Log_File:
+             Slave_IO_Running: No
+            Slave_SQL_Running: No
+              Replicate_Do_DB: backup</code></pre>
+<ol start="4">
+<li><strong>导出 Slave1 数据</strong></li>
+</ol>
+<pre><code class="bash"># 导出 backup 库
+$ mysqldump -uroot -p backup &gt; backup.sql
+
+# 拷贝到 Master 服务器
+$ scp backup.sql root@192.168.0.1:/mysql</code></pre>
+<ol start="5">
+<li><strong>导入 Master 库</strong></li>
+</ol>
+<pre><code class="bash"># 删除数据库
+mysql&gt; drop database backup;
+
+# 创建数据库
+mysql&gt; create database backup;
+
+# 导入数据
+$ mysql -uroot -p backup &lt; backup.sql</code></pre>
+<ol start="6">
+<li><strong>重新配置主从关系</strong></li>
+</ol>
+<pre><code class="bash"># Slave1、Slave2
+mysql&gt; change master to
+       master_host=&#39;192.168.0.1&#39;,
+       master_port=3306,
+       master_user=&#39;slave&#39;,
+       master_password=&#39;slave123&#39;,
+       master_log_file=&#39;mysql-bin.000001&#39;
+       master_log_pos=154;</code></pre>
+<ol start="7">
+<li><strong>开启主从</strong></li>
+</ol>
+<pre><code class="bash"># Salve1、Slave2
+mysql&gt; start slave;
+mysql&gt; show slave status \G;
+*************************** 1. row ***************************
+               Slave_IO_State: Waiting for master to send event
+                  Master_Host: 192.168.0.2
+                  Master_User: slave
+                  Master_Port: 3306
+                Connect_Retry: 60
+              Master_Log_File: mysql-bin.000001
+          Read_Master_Log_Pos: 154
+               Relay_Log_File: 2af2354ad45b-relay-bin.000003
+                Relay_Log_Pos: 367
+        Relay_Master_Log_File: mysql-bin.000001
+             Slave_IO_Running: Yes
+            Slave_SQL_Running: Yes
+              Replicate_Do_DB: backup
+
+*************************** 1. row ***************************
+               Slave_IO_State: Waiting for master to send event
+                  Master_Host: 192.168.0.3
+                  Master_User: slave
+                  Master_Port: 3306
+                Connect_Retry: 60
+              Master_Log_File: mysql-bin.000001
+          Read_Master_Log_Pos: 154
+               Relay_Log_File: 2af2354ad45b-relay-bin.000003
+                Relay_Log_Pos: 367
+        Relay_Master_Log_File: mysql-bin.000001
+             Slave_IO_Running: Yes
+            Slave_SQL_Running: Yes
+              Replicate_Do_DB: backup</code></pre>
+<ol start="8">
+<li><strong>开启 MyCat</strong></li>
+</ol>
+<pre><code class="bash">$ mycat start</code></pre>
+<hr>
+<h5 id="总结"><a href="# 总结" class="headerlink" title="总结"></a>总结 </h5><p> 经过上面一系列到操作，最终恢复了数据和主从架构。虽然此方法可以恢复数据，但是前提是至少有一台 MySQL 节 <br> 点数据是未丢失到，只有满足这个前提，才能使用这种简单粗暴到方法。</p>
+<div aligh="center">
+    <img src="/.com//wangliang/Documents/ 王亮 /blog/source/_posts/MySQL- 故障恢复（一）/over.png" srcset="/img/loading.gif" width="100%">
+</div>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+              <span>
+                <i class="iconfont icon-inbox"></i>
+                
+                  <a class="hover-with-bg" href="/categories/MySQL">MySQL</a>
+                  &nbsp;
+                
+              </span>&nbsp;&nbsp;
+            
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv"></span>总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv"></span>总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="/lib/jquery/jquery.min.js" ></script>
+<script src="/lib/popper/popper.min.js" ></script>
+<script src="/lib/bootstrap/js/bootstrap.min.js" ></script>
+<script src="/lib/mdbootstrap/js/mdb.min.js" ></script>
+<script src="/js/main.js" ></script>
+
+
+  <script src="/js/lazyload.js" ></script>
+
+
+
+  
+    <script src="/lib/tocbot/tocbot.min.js" ></script>
+  
+  <script src="/js/post.js" ></script>
+
+
+
+  <script src="/lib/smoothscroll/SmoothScroll.min.js" ></script>
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+
+  
+
+  
+
+  <!-- cnzz Analytics -->
+  
+
+
+
+  <script src="/lib/prettify/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="/lib/typed/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "MySQL- 故障恢复（一）&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="/lib/anchor/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="/lib/fancybox/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

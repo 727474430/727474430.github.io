@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="description" content="雨下不停-日记">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  <title>MySQL- 设计范式 ~ Raindrop Blog</title>
+
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css"  >
+<link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css"  >
+<link rel="stylesheet" href="/lib/mdbootstrap/css/mdb.min.css"  >
+<link rel="stylesheet" href="/lib/github-markdown/github-markdown.min.css"  >
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css"  >
+
+<link rel="stylesheet" href="/css/main.css"  >
+
+
+  <link rel="stylesheet" href="/lib/fancybox/jquery.fancybox.min.css"  >
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Raindrop Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/luas/">Lua</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/javas/">Java</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/golangs/">Golang</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/clojures/">Clojure</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/dockers/">Docker</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" false
+         style="background: url('/img/default.png')no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  星期三, 三月 18日 2020, 9:17 晚上
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    1.1k 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      5 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <center> <font face="黑体" size="6">MySQL- 设计范式 </font> </center>
+
+<hr>
+<a id="more"></a>
+
+<p><strong> 在使用 MySQL 数据库时，我们通常有一些基本的设计规范需要遵守，这样会让我们在实际使用 MySQL 数据库时，避免前人才过的各种坑 </strong></p>
+<hr>
+<h5 id="MySQL- 设计范式（一）：数据表中所有字段都是不可分割的原子值"><a href="#MySQL- 设计范式（一）：数据表中所有字段都是不可分割的原子值" class="headerlink" title="MySQL 设计范式（一）：数据表中所有字段都是不可分割的原子值"></a>MySQL 设计范式（一）：数据表中所有字段都是不可分割的原子值 </h5><pre><code class="bash"># 如下 address 字段实际可以分割为国家、省份、城市、地区等字段。同时第三条和第一条记录重复（不唯一），所以不符合第一范式
+mysql&gt; CREATE TABLE `sys_user`  (-&gt;   `id` int(0) NOT NULL AUTO_INCREMENT,
+    -&gt;   `name` varchar(32) NOT NULL,
+    -&gt;   `address` varchar(32) NOT NULL,
+    -&gt;   PRIMARY KEY (`id`)
+    -&gt; );
+
+mysql&gt; insert into sys_user (name, address) values (&#39;zhangsan&#39;, &#39; 中国四川省武侯区桂溪街道 xx 号 &#39;);
+mysql&gt; insert into sys_user (name, address) values (&#39;lisi&#39;, &#39; 中国四川省武侯区桂溪街道 xx 号 &#39;);
+
+mysql&gt; select * from sys_user;
++----+----------+------------------------------+
+| id | name     | address                      |
++----+----------+------------------------------+
+|  1 | zhangsan | 中国四川省武侯区桂溪街道 xx 号 |
+|  2 | lisi     | 中国四川省武侯区桂溪街道 xx 号 |
+|  2 | wangwu   | 中国四川省武侯区桂溪街道 xx 号 |
++----+----------+------------------------------+
+
+# 如下表字段基本不可分割。同时每行数据都是唯一的（必须有主键），所以符合第一范式
+mysql&gt; CREATE TABLE `sys_user`  (-&gt;   `id` int(0) PRIMARY KEY AUTO_INCREMENT,
+    -&gt;   `name` varchar(32) NOT NULL,
+    -&gt;   `country` varchar(32) NOT NULL,
+    -&gt;   `privence` varchar(32) NOT NULL,
+    -&gt;   `city` varchar(32) NOT NULL,
+    -&gt;   `addr` varchar(32) NOT NULL,
+    -&gt;   PRIMARY KEY (`id`)
+    -&gt; );
+
+mysql&gt; insert into sys_user (name, country, privence, city, addr) values (&#39;zhangsan&#39;, &#39; 中国 &#39;, &#39; 四川 &#39;, &#39; 成都 &#39;, &#39; 武侯区桂溪街道 xx 号 &#39;);
+mysql&gt; insert into sys_user (name, country, privence, city, addr) values (&#39;lisi&#39;, &#39; 中国 &#39;, &#39; 四川 &#39;, &#39; 成都 &#39;, &#39; 武侯区桂溪街道 xx 号 &#39;);
+
+mysql&gt; select * from sys_user;
++----+----------+---------+----------+------+---------------------+
+| id | name     | country | privence | city | addr                |
++----+----------+---------+----------+------+---------------------+
+|  1 | zhangsan | 中国    | 四川     | 成都 | 武侯区桂溪街道 xx 号  |
+|  2 | lisi     | 中国    | 四川     | 成都 | 武侯区桂溪街道 xx 号  |
+|  3 | wangwu   | 中国    | 四川     | 成都 | 武侯区桂溪街道 xx 号  |
++----+----------+---------+----------+------+---------------------+</code></pre>
+<p><strong>note:</strong> 设计范式只是在大多时候奏效，实际还需要根据业务区划分，例如上面的表，如果没有需求按照 country、city、privence 等字段分别统计 <br>，则无需进行拆分。</p>
+<hr>
+<h5 id="MySQL- 设计范式（二）：建立在第一范式基础上。同时所以非主键字段必须完全依赖主键，不能产生部分依赖"><a href="#MySQL- 设计范式（二）：建立在第一范式基础上。同时所以非主键字段必须完全依赖主键，不能产生部分依赖" class="headerlink" title="MySQL 设计范式（二）：建立在第一范式基础上。同时所以非主键字段必须完全依赖主键，不能产生部分依赖"></a>MySQL 设计范式（二）：建立在第一范式基础上。同时所以非主键字段必须完全依赖主键，不能产生部分依赖 </h5><pre><code class="bash"># 如下表 std_name 只与 std_id 有关，teacher_name 只与 teacher_id 有关。出现除主键以外其他列，只依赖于主键的部分字段
+mysql&gt; CREATE TABLE `student`  (
+    -&gt;   `std_id` int,
+    -&gt;   `std_name` varchar(32),
+    -&gt;   `teacher_id` int,
+    -&gt;   `teacher_name` varchar(32),
+    -&gt;   PRIMARY KEY (`std_id`, `std_name`)
+    -&gt; );
+
+mysql&gt; insert into student (std_id, std_name, teacher_id, teacher_name) values (1001, &#39;zhangsan&#39;, 2001, &#39; 张老师 &#39;);
+mysql&gt; insert into student (std_id, std_name, teacher_id, teacher_name) values (1002, &#39;lisi&#39;, 2002, &#39; 李老师 &#39;);
+mysql&gt; insert into student (std_id, std_name, teacher_id, teacher_name) values (1003, &#39;wangwu&#39;, 2001, &#39; 张老师 &#39;);
+
+mysql&gt; select * from student;
++--------+----------+------------+--------------+
+| std_id | std_name | teacher_id | teacher_name |
++--------+----------+------------+--------------+
+|   1001 | zhangsan |       2001 | 张老师       |
+|   1002 | lisi     |       2002 | 李老师       |
+|   1003 | lisi     |       2001 | 张老师       |
++--------+----------+------------+--------------+
+
+# 如下拆表后，满足第二范式
+mysql&gt; CREATE TABLE `student`  (
+    -&gt;   `std_id` int primary key,
+    -&gt;   `std_name` varchar(32)
+    -&gt; );
+msyql&gt; insert into student (std_id, std_name) values (1001, &#39;zhangsan&#39;);
+msyql&gt; insert into student (std_id, std_name) values (1002, &#39;lisi&#39;);
+msyql&gt; insert into student (std_id, std_name) values (1003, &#39;wangwu&#39;);
+
+mysql&gt; CREATE TABLE `teacher`  (
+    -&gt;   `teacher_id` int primary key,
+    -&gt;   `teacher_name` varchar(32)
+    -&gt; );
+mysql&gt; insert into teacher (teacher_id, teacher_name) values (2001, &#39; 张老师 &#39;);
+mysql&gt; insert into teacher (teacher_id, teacher_name) values (2002, &#39; 李老师 &#39;);
+
+mysql&gt; CREATE TABLE `student_teacher`  (
+    -&gt;   `id` int primary key,
+    -&gt;   `std_id` int,
+    -&gt;   `teacher_id` int
+    -&gt; );
+mysql&gt; insert into student_teacher (id, std_id, teacher_id) values (1, 1001, 2001);
+mysql&gt; insert into student_teacher (id, std_id, teacher_id) values (2, 1002, 2002);
+mysql&gt; insert into student_teacher (id, std_id, teacher_id) values (3, 1003, 2001);
+
+mysql&gt; select * from student;
++--------+----------+
+| std_id | std_name |
++--------+----------+
+|   1001 | zhangsan |
+|   1002 | lisi     |
+|   1003 | wangwu   |
++--------+----------+
+
+mysql&gt; select * from teacher;
++------------+--------------+
+| teacher_id | teacher_name |
++------------+--------------+
+|       2001 | zhanglaoshi  |
+|       2002 | lilaoshi     |
++------------+--------------+
+
+mysql&gt; select * from student_teacher;
++----+--------+------------+
+| id | std_id | teacher_id |
++----+--------+------------+
+|  1 |   1001 |       2001 |
+|  2 |   1002 |       2002 |
+|  3 |   1003 |       2001 |
++----+--------+------------+</code></pre>
+<h5 id="MySQL- 设计范式（三）：建立在第二范式基础上。同时非主键字段的其他列之间不能有传递以来关系"><a href="#MySQL- 设计范式（三）：建立在第二范式基础上。同时非主键字段的其他列之间不能有传递以来关系" class="headerlink" title="MySQL 设计范式（三）：建立在第二范式基础上。同时非主键字段的其他列之间不能有传递以来关系"></a>MySQL 设计范式（三）：建立在第二范式基础上。同时非主键字段的其他列之间不能有传递以来关系 </h5><pre><code class="bash"># 如下表 std_email 字段依赖于 id 字段外，还依赖 std_id 字段，产生了依赖传递关系，所以不符合第三范式
+mysql&gt; CREATE TABLE `student`  (
+    -&gt;   `std_id` int primary key,
+    -&gt;   `std_name` varchar(32)
+    -&gt; );
+mysql&gt; CREATE TABLE `student_teacher`  (
+    -&gt;   `id` int primary key,
+    -&gt;   `std_id` int,
+    -&gt;   `teacher_id` int,
+    -&gt;   `std_email` varchar(32)
+    -&gt; );
+
+# 应该将 std_email 字段加入 student 表，依赖于 std_id 字段即可
+mysql&gt; CREATE TABLE `student`  (
+    -&gt;   `std_id` int primary key,
+    -&gt;   `std_name` varchar(32),
+    -&gt;   `std_email` varchar(32)
+    -&gt; );
+mysql&gt; CREATE TABLE `student_teacher`  (
+    -&gt;   `id` int primary key,
+    -&gt;   `std_id` int,
+    -&gt;   `teacher_id` int
+    -&gt; );</code></pre>
+<div aligh="center">
+    <img src="/.com//wangliang/Documents/ 王亮 /blog/source/_posts/MySQL- 设计范式 /mysql-standard-logo.jpeg" srcset="/img/loading.gif" width="100%">
+</div>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+              <span>
+                <i class="iconfont icon-inbox"></i>
+                
+                  <a class="hover-with-bg" href="/categories/MySQL">MySQL</a>
+                  &nbsp;
+                
+              </span>&nbsp;&nbsp;
+            
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv"></span>总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv"></span>总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="/lib/jquery/jquery.min.js" ></script>
+<script src="/lib/popper/popper.min.js" ></script>
+<script src="/lib/bootstrap/js/bootstrap.min.js" ></script>
+<script src="/lib/mdbootstrap/js/mdb.min.js" ></script>
+<script src="/js/main.js" ></script>
+
+
+  <script src="/js/lazyload.js" ></script>
+
+
+
+  
+    <script src="/lib/tocbot/tocbot.min.js" ></script>
+  
+  <script src="/js/post.js" ></script>
+
+
+
+  <script src="/lib/smoothscroll/SmoothScroll.min.js" ></script>
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+
+  
+
+  
+
+  <!-- cnzz Analytics -->
+  
+
+
+
+  <script src="/lib/prettify/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="/lib/typed/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "MySQL- 设计范式&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="/lib/anchor/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="/lib/fancybox/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

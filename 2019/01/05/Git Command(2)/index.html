@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="description" content="雨下不停-日记">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  <title>Git Command(2) ~ Raindrop Blog</title>
+
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css"  >
+<link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css"  >
+<link rel="stylesheet" href="/lib/mdbootstrap/css/mdb.min.css"  >
+<link rel="stylesheet" href="/lib/github-markdown/github-markdown.min.css"  >
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css"  >
+
+<link rel="stylesheet" href="/css/main.css"  >
+
+
+  <link rel="stylesheet" href="/lib/fancybox/jquery.fancybox.min.css"  >
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Raindrop Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/luas/">Lua</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/javas/">Java</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/golangs/">Golang</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/clojures/">Clojure</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/dockers/">Docker</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" false
+         style="background: url('/img/default.png')no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  星期六, 一月 5日 2019, 3:34 下午
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    786 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      3 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <p><strong>Git brach command</strong></p>
+<a id="more"></a>
+
+<h3 id="如何创建一个分支"><a href="# 如何创建一个分支" class="headerlink" title="如何创建一个分支"></a> 如何创建一个分支 </h3><ul>
+<li><p> 第一种方式：</p>
+<pre><code class="bash"># 创建分支
+$ git branch &#39;branch-name&#39;
+# 切换分支
+$ git checkout &#39;branch-name&#39;</code></pre>
+</li>
+<li><p> 第二种方式 (I prefer to), 这种方式在创建分支后即切换到分支:</p>
+<pre><code class="bash">$ git checkout -b &#39;branch-name&#39;</code></pre>
+</li>
+</ul>
+<h3 id="学会了创建分支 - 接下来我们学习删除分支"><a href="# 学会了创建分支 - 接下来我们学习删除分支" class="headerlink" title="学会了创建分支, 接下来我们学习删除分支"></a> 学会了创建分支, 接下来我们学习删除分支 </h3><ul>
+<li> 以下命令即可简单删除指定分支:<pre><code class="bash">$ git branch -d &#39;branch-name&#39;</code></pre>
+</li>
+</ul>
+<h3 id="接下来我们学习如何合并分支"><a href="# 接下来我们学习如何合并分支" class="headerlink" title="接下来我们学习如何合并分支"></a> 接下来我们学习如何合并分支 </h3><ul>
+<li><p> 首先来看默认 fast-forward 方式:</p>
+<pre><code class="bash"># 这种方式执行后会提示我们使用点上 ff 方式合并, 默认情况下执行结果如下
+$ git merge &#39;branch-name&#39;</code></pre>
+</li>
+<li><p> 接下来我们看一下除了 ff 方式合并, 正常开时遇到的合并方式 </p>
+<pre><code class="bash"># 首先创建分支 \`dev\`, 完成之后修改 README.org 文件并提交
+$ git checkout -b dev
+$ vim README.org
+$ git commit -am &quot;dev commit content&quot;
+
+# 然后切换到 master 分支, 修改 README.org 文件并提交
+$ git checkout master
+$ vim README.org
+$ git commit -am &quot;master commit content&quot;
+
+# 最后合并分支查看提示
+$ git merge dev</code></pre>
+</li>
+<li><p> 此时 git 提示我们 Readme 文件产生冲突, 请解决冲突后在进行合并. 然后我们打开 README.org 文件看到如下内容:<br> 该文件目前以 ===== 分割, HEAD -&gt; 表示当前分支提交到内容, dev -&gt; 表示另一个分支提交到内容. 此时我们需要将冲突解决后, 在进行合并集合完成目的.</p>
+</li>
+<li><p> 如上图所示，解决为该内容后就可以进行合并啦！</p>
+<pre><code class="bash">$ git merge dev</code></pre>
+</li>
+</ul>
+<h3 id="查看分支情况"><a href="# 查看分支情况" class="headerlink" title="查看分支情况"></a> 查看分支情况 </h3><ul>
+<li> 通过带参数的 git log 进行查看, 如下图 <pre><code class="bash">$ git log --graph --pretty=oneline --abbrev-commit</code></pre>
+</li>
+</ul>
+<h3 id="合并分支（普通合并）"><a href="# 合并分支（普通合并）" class="headerlink" title="合并分支（普通合并）"></a> 合并分支（普通合并）</h3><ul>
+<li>git default useing fast-forward mode merge. we can pass prohibit(禁止) ff. use ordinary(普通) merge. ordinary merge will generate a new commit obejct.<pre><code class="bash">$ git merge --no-ff -m &quot;merge with no-ff&quot; dev</code></pre>
+</li>
+</ul>
+<h3 id="分支管理策略"><a href="# 分支管理策略" class="headerlink" title="分支管理策略"></a> 分支管理策略 </h3><ul>
+<li><p> 一般来说工作中使用 3 个分支进行开发就足够了.<br>master 主分支用来发布 <br>dev    日常开发使用分支 <br>bug    修改 bug 时使用分支 </p>
+</li>
+<li><p>master 分支应该是非常稳定的, 也就是仅仅用来进行新版本发布, 一般不再上面做开发,dev 分支应该是平常用了进行新功能开发的分支,dev 分支是不稳定的. 当我们新功能开发完成并测试通过后, 即可将 dev 合并到 master 中进行发布. 而 bug 分支我们只用来解决日常 bug, 解决后合并到 dev 分支即可.</p>
+</li>
+</ul>
+<h3 id="Git-Branch-Relevent-Common-Command"><a href="#Git-Branch-Relevent-Common-Command" class="headerlink" title="Git Branch Relevent Common Command"></a>Git Branch Relevent Common Command</h3><table>
+<thead>
+<tr>
+<th align="center">Command</th>
+<th align="center">Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">git branch -v</td>
+<td align="center"> 查看每一个分支最后一次提交 </td>
+</tr>
+<tr>
+<td align="center">git branch -a</td>
+<td align="center"> 查看本地和远程分支情况 </td>
+</tr>
+<tr>
+<td align="center">git branch -merged</td>
+<td align="center"> 查看已经与当前分支合并过的分支 </td>
+</tr>
+<tr>
+<td align="center">git branch -no-merge</td>
+<td align="center"> 查看已经与当前分支未合并的分支 </td>
+</tr>
+<tr>
+<td align="center">git branch -r</td>
+<td align="center"> 查看远程分支情况 </td>
+</tr>
+<tr>
+<td align="center">git branch dev</td>
+<td align="center"> 创建分支 dev</td>
+</tr>
+<tr>
+<td align="center">git checkout dev</td>
+<td align="center"> 切换到分支 dev</td>
+</tr>
+<tr>
+<td align="center">git checkout -b dev</td>
+<td align="center"> 创建同时切换到 dev 分支 </td>
+</tr>
+<tr>
+<td align="center">git merge dev</td>
+<td align="center"> 合并 dev 分支 </td>
+</tr>
+<tr>
+<td align="center">git branch -d dev</td>
+<td align="center"> 删除 dev 分支 </td>
+</tr>
+<tr>
+<td align="center">git merge -no -ff -m”message”</td>
+<td align="center"> 合并分支并禁用 fast-forward</td>
+</tr>
+</tbody></table>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+              <span>
+                <i class="iconfont icon-inbox"></i>
+                
+                  <a class="hover-with-bg" href="/categories/Git">Git</a>
+                  &nbsp;
+                
+              </span>&nbsp;&nbsp;
+            
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv"></span>总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv"></span>总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="/lib/jquery/jquery.min.js" ></script>
+<script src="/lib/popper/popper.min.js" ></script>
+<script src="/lib/bootstrap/js/bootstrap.min.js" ></script>
+<script src="/lib/mdbootstrap/js/mdb.min.js" ></script>
+<script src="/js/main.js" ></script>
+
+
+  <script src="/js/lazyload.js" ></script>
+
+
+
+  
+    <script src="/lib/tocbot/tocbot.min.js" ></script>
+  
+  <script src="/js/post.js" ></script>
+
+
+
+  <script src="/lib/smoothscroll/SmoothScroll.min.js" ></script>
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+
+  
+
+  
+
+  <!-- cnzz Analytics -->
+  
+
+
+
+  <script src="/lib/prettify/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="/lib/typed/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Git Command(2)&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="/lib/anchor/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="/lib/fancybox/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

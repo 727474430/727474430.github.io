@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="description" content="雨下不停-日记">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  <title>Docker Jenkins Develop Springboot ~ Raindrop Blog</title>
+
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css"  >
+<link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css"  >
+<link rel="stylesheet" href="/lib/mdbootstrap/css/mdb.min.css"  >
+<link rel="stylesheet" href="/lib/github-markdown/github-markdown.min.css"  >
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css"  >
+
+<link rel="stylesheet" href="/css/main.css"  >
+
+
+  <link rel="stylesheet" href="/lib/fancybox/jquery.fancybox.min.css"  >
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Raindrop Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/luas/">Lua</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/javas/">Java</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/golangs/">Golang</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/clojures/">Clojure</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/dockers/">Docker</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" false
+         style="background: url('/img/default.png')no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  星期三, 十二月 25日 2019, 2:20 下午
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    981 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      4 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <p><strong>Jenkins Deployment Nginx And SpringBoot Instance</strong></p>
+<a id="more"></a>
+
+<p><strong>需求:</strong><br>  由于公司项目的不断增加，新需求不断的增加，导致每部署一次项目都是一次折磨（项目打包、jar 包上传、启动、监控日志…）。所以决定通过以 Jenkins 持续集成的方式，部署公司项目（Nginx 前端、Tomcat 后端）。</p>
+<p><strong>方案</strong><br>  在本次搭建中我们将基于 Centos7.2 + Docker 来实现需求。主要是在 Docker 中部署 Jenkins，挂在宿主机 Jdk、Maven、Nginx、Jenkins_home，在容器中进行 Jenkins 相关配置管理。</p>
+<p><strong>实现</strong>  </p>
+<ul>
+<li><p>Setp 1: Jdk1.8</p>
+<pre><code class="bash"># 下载并安装 jdk1.8
+$ mkdir /usr/local/jdk1.8
+$ wget http://download.oracle.com/otn-pub/java/jdk/8u161-b12/2f38c3b165be4555a1fa6e98c45e0808/jdk-8u161-linux-x64.tar.gz &amp;&amp; tar -zxvf jdk-8u161-linux-x64.tar.gz /usr/local/jdk1.8
+
+# 配置环境变量
+$ vim /etc/profile
+export JAVA_HOME=/usr/local/jdk1.8
+export CLASSPATH=.:$JAVA_HOME/jre/lib/rt.java:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+export PATH=$PATH:$JAVA_HOME/bin
+$ source /etc/profile
+
+# 运行 java -version 验证安装是否成功
+$ java -version</code></pre>
+</li>
+<li><p>Setp 2: Maven3.5</p>
+<pre><code class="bash"># 下载并安装 maven3.5
+$ mkdir /usr/local/maven3.5
+$ wget http://mirrors.tuna.tsinghua.edu.cn/apache/maven/maven-3/3.6.0/binaries/apache-maven-3.6.0-bin.tar.gz &amp;&amp; tar -zxvf apache-maven-3.6.0-bin.tar.gz /usr/local/maven3.5
+
+# 配置环境变量
+$ vim /etc/profile
+export M2_HOME=/usr/local/maven3.5
+export PATH=$PATH:$M2_HOME/bin
+
+# 运行 mvn -v 验证是否安装成功
+$ mvn -v</code></pre>
+</li>
+<li><p>Setp 3: Nginx1.14</p>
+<pre><code class="bash"># 下载并安装 nginx
+$ wget -c https://nginx.org/download/nginx-1.14.0.tar.gz &amp;&amp; tar -zxvf nginx-1.14.0.tar.gz
+
+# 编译安装
+$ cd nginx-1.14.0 &amp;&amp; ./configure
+$ make &amp;&amp; make install
+
+# 查看安装路径
+$ whereis nginx
+
+# 启动 nginx、停止、退出、重启
+$ cd /usr/local/nginx/sbin
+$ ./nginx 
+$ ./nginx -s stop
+$ ./nginx -s quit
+$ ./nginx -s reload
+
+# 配置开机启动
+$ vi /etc/rc.loca
+# 在最后一行添加
+$ /usr/local/nginx/sbin/nginx
+# 配置权限
+$ chmod 755 rc.local</code></pre>
+</li>
+<li><p>Setp 4: DockerCe</p>
+<pre><code class="bash"># 安装依赖
+$ sudo yum install -y yum-utils \ 
+device-mapper-persistent-data \ 
+lvm2
+
+# 添加 repo 源
+$ sudo yum-config-manager \ 
+--add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+# 安装 dockerce
+$ sudo yum-config-manager --enable docker-ce-edge
+$ sudo yum-config-manager --enable docker-ce-test
+$ sudo yum install docker-ce
+
+# 启动 docker、启动容器
+$ sudo systemctl start docker
+$ sudo docker run hello-world</code></pre>
+</li>
+<li><p>Setp 5: Docker 镜像拉取并启动容器</p>
+<pre><code class="bash"># 拉取镜像
+$ docker pull jenkins/jenkins:lts
+
+# 启动容器同时挂载所需文件
+$ docker run -d \ 
+--name my_jenkins \ 
+-v /usr/local/jdk1.8:/usr/local/jdk1.8 \ 
+-v /usr/local/maven3.5:/usr/local/maven3.5 \ 
+-v /home/jenkins_home:/var/jenkins_home \ 
+-p 8080 \ 
+jenkins/jenkins:lts
+
+# 查看容器启动日志，获取 jenkins 初始密码
+$ docker logs -f containerId</code></pre>
+<p><img src="http://qiniu.raindrop-wl.cn/jenkins_init_pass.jpg" srcset="/img/loading.gif" alt="jenkins_init_pass"></p>
+</li>
+<li><p>Setp 6: Jenkins 配置 <br> 登录 Jenkins，访问宿主机 8080 端口，第一次登录需要初始密码，就是我们上一步获取的密码。<br><img src="http://qiniu.raindrop-wl.cn/jenkins_login.jpg" srcset="/img/loading.gif" alt="jenkins_login"></p>
+<p>选择安装推荐的插件即可<br><img src="http://qiniu.raindrop-wl.cn/jenkins_init_plugin.jpg" srcset="/img/loading.gif" alt="jenkins_init_plugin"></p>
+<p>安装好插件以后，我们可以配置一个用户作为以后登录 Jenkins 的用户，这里就不做过多介绍了。</p>
+</li>
+<li><p>Setp 7: Jenkins 环境、任务配置 <br> 安装所需插件，Maven Integration Plugin、Nodejs、Publish Over SSH、Subversion、Ding<br><img src="http://qiniu.raindrop-wl.cn/jenkins_plugin_maven.png" srcset="/img/loading.gif" alt="jenkins_plugin_maven"><br><img src="http://qiniu.raindrop-wl.cn/jenkins_plugin_nodejs.png" srcset="/img/loading.gif" alt="jenkins_plugin_nodejs"><br><img src="http://qiniu.raindrop-wl.cn/jenkins_plugin_ssh.png" srcset="/img/loading.gif" alt="jenkins_plugin_ssh"><br><img src="http://qiniu.raindrop-wl.cn/jenkins_plugin_svn.png" srcset="/img/loading.gif" alt="jenkins_plugin_svn"></p>
+<p>服务器配置 Publish over ssh<br><img src="http://qiniu.raindrop-wl.cn/jenkins_config.png" srcset="/img/loading.gif" alt="jenkins_config"><br><img src="http://qiniu.raindrop-wl.cn/jenkins_ssh_01.png" srcset="/img/loading.gif" alt="jenkins_ssh_01"><br><img src="http://qiniu.raindrop-wl.cn/jenkins_ssh_02.png" srcset="/img/loading.gif" alt="jenkins_ssh_02"></p>
+<p>配置 jdk、maven、nodejs，按照以下步骤来操作.<br><img src="http://qiniu.raindrop-wl.cn/jenkins_sys_config.png" srcset="/img/loading.gif" alt="jenkins_sys_config"><br><img src="http://qiniu.raindrop-wl.cn/jenkins_sys_jdk.png" srcset="/img/loading.gif" alt="jenkins_sys_jdk"><br><img src="http://qiniu.raindrop-wl.cn/jenkins_sys_maven.png" srcset="/img/loading.gif" alt="jenkins_sys_maven"><br><img src="http://qiniu.raindrop-wl.cn/jenkins_sys_nodejs.png" srcset="/img/loading.gif" alt="jenkins_sys_nodejs"></p>
+</li>
+<li><p>Setp 8: 基础环境配置好了，下面我们开始正式配置前端任务，后端任务<br><img src="http://qiniu.raindrop-wl.cn/jenkins_project_web_01.png" srcset="/img/loading.gif" alt="jenkins_project_web_01"><br><img src="http://qiniu.raindrop-wl.cn/jenkins_project_web_02.png" srcset="/img/loading.gif" alt="jenkins_project_web_02"><br><img src="http://qiniu.raindrop-wl.cn/jenkins_project_web_03.png" srcset="/img/loading.gif" alt="jenkins_project_web_03"><br><img src="http://qiniu.raindrop-wl.cn/jenkins_project_web_04.png" srcset="/img/loading.gif" alt="jenkins_project_web_04"><br><img src="http://qiniu.raindrop-wl.cn/jenkins_project_web_05.png" srcset="/img/loading.gif" alt="jenkins_project_web_05"><br><img src="http://qiniu.raindrop-wl.cn/jenkins_project_web_06.png" srcset="/img/loading.gif" alt="jenkins_project_web_06"><br><img src="http://qiniu.raindrop-wl.cn/jenkins_project_web_07.png" srcset="/img/loading.gif" alt="jenkins_project_web_07"><br><img src="http://qiniu.raindrop-wl.cn/jenkins_project_web_08.png" srcset="/img/loading.gif" alt="jenkins_project_web_08"></p>
+<pre><code class="bash">#!/bin/bash -l
+DATE=$(date +%Y%m%d)
+TARFILE=tb-cams-web.tar.gz
+WORKSPACE=/home/webapps/tb-cams
+DISTFILE=$WORKSPACE/dist
+BACKUP=$WORKSPACE/backup
+TMP=$WORKSPACE/tmp
+cd $WORKSPACE
+
+if [! -d $BACKUP];then
+echo &quot;backup directory does not exists, new backup directory&quot;
+mkdir $BACKUP
+fi
+
+if [! -d $DISTFILE];then
+echo &quot;dist directory does not exists, new dist directory&quot;
+mkdir $DISTFILE
+fi
+
+mv $DISTFILE/$TARFILE $BACKUP/$TARFILE.$DATE
+mv $TMP/$TARFILE $DISTFILE/
+
+cd $DISTFILE &amp;&amp; tar -zxvf $TARFILE
+echo &quot;Cams web deploy success&quot;</code></pre>
+</li>
+<li><p>后端<br><img src="http://qiniu.raindrop-wl.cn/jenkins_project_admin_01.png" srcset="/img/loading.gif" alt="jenkins_project_admin_01"><br><img src="http://qiniu.raindrop-wl.cn/jenkins_project_admin_02.png" srcset="/img/loading.gif" alt="jenkins_project_admin_02"><br><img src="http://qiniu.raindrop-wl.cn/jenkins_project_admin_03.png" srcset="/img/loading.gif" alt="jenkins_project_admin_03"><br><img src="http://qiniu.raindrop-wl.cn/jenkins_project_admin_04.png" srcset="/img/loading.gif" alt="jenkins_project_admin_04"><br><img src="http://qiniu.raindrop-wl.cn/jenkins_project_admin_05.png" srcset="/img/loading.gif" alt="jenkins_project_admin_05"></p>
+<pre><code class="bash">#!/bin/bash -l
+DATE=$(date +%Y%m%d)
+WARFILE=tb-cams.war
+WORKSPACE=/home/webapps/tb-cams
+LOGFILE=$WORKSPACE/logs
+BACKUP=$WORKSPACE/backup
+cd $WORKSPACE
+
+if [! -d $BACKUP];then
+echo &quot;backup directory does not exists, new backup directory&quot;
+mkdir $BACKUP
+fi
+
+if [! -d $LOGFILE];then
+echo &quot;logs directory does not exists, new logs directory&quot;
+mkdir $LOGFILE
+fi
+
+PID=$(ps -ef | grep $WARFILE | grep -v grep | awk &#39;{print $2}&#39;)
+if [-z &quot;$PID&quot;];then
+echo &quot;$WARFILE is not started&quot;
+else
+echo &quot;$WARFILE is a startup task, kill process $PID&quot;
+kill -9 $PID
+fi
+
+mv $WARFILE $BACKUP/$WARFILE.$DATE
+mv $WORKSPACE/tmp/$WARFILE .
+rm -rf $WORKSPACE/tmp/$WARFILE
+
+java -jar $WARFILE --spring.profiles.active=stg &gt; logs/cams.log &amp;</code></pre>
+</li>
+</ul>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+              <span>
+                <i class="iconfont icon-inbox"></i>
+                
+                  <a class="hover-with-bg" href="/categories/Java">Java</a>
+                  &nbsp;
+                
+                  <a class="hover-with-bg" href="/categories/Docker">Docker</a>
+                  &nbsp;
+                
+              </span>&nbsp;&nbsp;
+            
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv"></span>总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv"></span>总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="/lib/jquery/jquery.min.js" ></script>
+<script src="/lib/popper/popper.min.js" ></script>
+<script src="/lib/bootstrap/js/bootstrap.min.js" ></script>
+<script src="/lib/mdbootstrap/js/mdb.min.js" ></script>
+<script src="/js/main.js" ></script>
+
+
+  <script src="/js/lazyload.js" ></script>
+
+
+
+  
+    <script src="/lib/tocbot/tocbot.min.js" ></script>
+  
+  <script src="/js/post.js" ></script>
+
+
+
+  <script src="/lib/smoothscroll/SmoothScroll.min.js" ></script>
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+
+  
+
+  
+
+  <!-- cnzz Analytics -->
+  
+
+
+
+  <script src="/lib/prettify/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="/lib/typed/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Docker Jenkins Develop Springboot&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="/lib/anchor/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="/lib/fancybox/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

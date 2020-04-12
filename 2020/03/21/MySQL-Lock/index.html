@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="description" content="雨下不停-日记">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  <title>MySQL 表锁 ~ Raindrop Blog</title>
+
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css"  >
+<link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css"  >
+<link rel="stylesheet" href="/lib/mdbootstrap/css/mdb.min.css"  >
+<link rel="stylesheet" href="/lib/github-markdown/github-markdown.min.css"  >
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css"  >
+
+<link rel="stylesheet" href="/css/main.css"  >
+
+
+  <link rel="stylesheet" href="/lib/fancybox/jquery.fancybox.min.css"  >
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Raindrop Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/luas/">Lua</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/javas/">Java</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/golangs/">Golang</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/clojures/">Clojure</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/dockers/">Docker</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" false
+         style="background: url('/img/default.png')no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  星期六, 三月 21日 2020, 9:18 晚上
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    1.1k 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      4 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <center> <font face="黑体" size="6">MySQL 表锁</font> </center>
+
+<hr>
+<a id="more"></a>
+
+<h5 id="MySQL- 表锁"><a href="#MySQL- 表锁" class="headerlink" title="MySQL 表锁"></a>MySQL 表锁</h5><p>MySQL 中提供了锁定表 <code>lock tables</code> 和解锁表 <code>unlock tables</code> 的法语，用来对指定对表进行锁定和解锁限制。</p>
+<hr>
+<h5 id="涉及命令"><a href="# 涉及命令" class="headerlink" title="涉及命令"></a>涉及命令</h5><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>含义</th>
+<th>常用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>select connection_id()</td>
+<td>显示会话 id</td>
+<td>select connection_id() 显示当前会话 id</td>
+</tr>
+<tr>
+<td>show open tables</td>
+<td>显示所有表占用锁的信息（包含全部表）</td>
+<td>show open tables 显示所有表占用锁的信息（包含全部表）</td>
+</tr>
+<tr>
+<td>show open tables where in_user &gt;= 1</td>
+<td>显示所有表占用锁的信息（只包含已加锁的表）</td>
+<td>显示所有表占用锁的信息（只包含已加锁的表）</td>
+</tr>
+<tr>
+<td>lock table tableName1, tableName2… read</td>
+<td>对指定表添加读锁（共享锁）</td>
+<td>lock table user read 对 user 表添加读锁</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>lock table user, score read 对 user 与 score 表添加读锁</td>
+</tr>
+<tr>
+<td>lock table tableName1, tableName2</td>
+<td>对指定表添加写锁</td>
+<td>lock table user write 对 user 表添加写锁</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>lock table user, score write 对 user 与 score 表添加写锁</td>
+</tr>
+<tr>
+<td>unlock tables</td>
+<td>对指定表进行解锁</td>
+<td>unlock tables user 释放 user 表的锁</td>
+</tr>
+</tbody></table>
+<hr>
+<h5 id="示例"><a href="# 示例" class="headerlink" title="示例"></a>示例</h5><ul>
+<li><code>lock table read</code> 锁表会将当前会话指定表进行锁定。限制当前会话只能查询该表，如果查询其他表则报错。如果对该表进行写操作也会报错。</li>
+</ul>
+<pre><code class="mysql">-- 查看当前会话 id
+select connection_id();
++-----------------+
+| connection_id() |
++-----------------+
+|              64 |
++-----------------+
+
+-- 使用读锁锁定 student 表
+lock table student read;
+Query OK, 0 rows affected (0.00 sec)
+
+-- 查看被锁住对表信息，如下表示 student 表被一个会话锁定（in_use = 1）
+show open tables where in_use &gt;= 1;
++----------+---------+--------+-------------+
+| Database | Table   | In_use | Name_locked |
++----------+---------+--------+-------------+
+| backup   | student |      1 |           0 |
++----------+---------+--------+-------------+
+
+-- 查询带锁对表没问题
+select * from student;
++--------+----------+
+| std_id | std_name |
++--------+----------+
+|   1001 | zhangsan |
+|   1002 | lisi     |
+|   1003 | wangwu   |
++--------+----------+
+
+-- 查询未锁定对表则报错
+select * from teacher;
+ERROR 1100 (HY000): Table &#39;teacher&#39; was not locked with LOCK TABLES
+
+-- 对锁定的表进行插入操作
+insert into student (std_id, std_name) values (1004, &#39;liuliu&#39;);
+ERROR 1100 (HY000): Table &#39;studentstudent&#39; was not locked with LOCK TABLES
+
+-- 对未锁定对表进行插入操作
+insert into teacher (teacher_id, teacher_name) values (1004, &#39;liuliu&#39;);
+ERROR 1100 (HY000): Table &#39;teacher&#39; was not locked with LOCK TABLES
+
+-- 再次执行锁表，之前的锁表将自动解锁
+lock table teacher read;
+Query OK, 0 rows affected (0.00 sec)
+
+-- 查看被锁住对表信息，如下表示 student 表被一个会话锁定（in_use = 1）
+show open tables where in_use &gt;= 1;
++----------+---------+--------+-------------+
+| Database | Table   | In_use | Name_locked |
++----------+---------+--------+-------------+
+| backup   | teacher |      1 |           0 |
++----------+---------+--------+-------------+
+
+-- 客户端断开链接后，所有表锁将自动解锁, 重新链接后不再持有锁
+exit -- 断开链接
+mysql -uroot -p -- 再次链接
+
+show open tables where in_use &gt;= 1;
+Empty set (0.00 sec)</code></pre>
+<hr>
+<h5 id="注意点"><a href="# 注意点" class="headerlink" title="注意点"></a>注意点 </h5><p> 锁表获取方式：</p>
+<blockquote>
+<p>LOCK TABLES acquires locks as follows:<br>Sort all tables to be locked in an internally defined order. From the user standpoint, this order is undefined.<br>If a table is to be locked with a read and a write lock, put the write lock request before the read lock request.<br>Lock one table at a time until the session gets all locks.<br>This policy ensures that table locking is deadlock free.<br>LOCK TABLES acquires locks as follows:<br>Sort all tables to be locked in an internally defined order. From the user standpoint, this order is undefined.<br>If a table is to be locked with a read and a write lock, put the write lock request before the read lock request.<br>Lock one table at a time until the session gets all locks.<br>This policy ensures that table locking is deadlock free.<br>锁表获取锁的方式如下:<br>按照内部定义的顺序对所有要锁定的表进行排序。<br>从用户的角度来看，这个顺序是未定义的。<br>如果要用读锁和写锁锁定表，请将写锁请求放在读锁请求之前。<br>一次锁定一个表，直到会话获得所有锁。<br>此策略确保表锁定没有死锁。</p>
+</blockquote>
+<p>释放锁对条件：</p>
+<blockquote>
+<ul>
+<li>当会话持有的表锁被释放时，它们都同时被释放会话可以显式地释放锁，也可以在某些条件下隐式地释放锁</li>
+<li>可以使用 unlock tables 命令显示对释放锁</li>
+<li>如果一个会话在已经持有锁的情况下发出一个 LOCK TABLES 命令再次获取锁，那么在授予新锁之前，MySQL 会将已经存在的锁隐式地解除</li>
+<li>如果一个会话开始了一个事务(例如：start transaction)，就会执行一个隐式的 UNLOCK TABLES，从而释放现有的锁。</li>
+<li>如果客户端会话的连接终止，无论是否正常，服务器都会隐式释放会话持有的所有表锁 (事务性和非事务性)。<br> 如果客户端重新连接，锁将不再有效。</li>
+<li></li>
+</ul>
+</blockquote>
+<p>关联锁表：</p>
+<blockquote>
+<p>lock table 命令可能会锁定比我们指定表更多对表。这是因为，如果表中有 trigger，那么 MySQL 为了让功能正常运行，<br>那么会将 trigger 中涉及对表一同 lock</p>
+</blockquote>
+<p><strong>note:</strong> 以上测试都是基于 InnoDB 引擎</p>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+              <span>
+                <i class="iconfont icon-inbox"></i>
+                
+                  <a class="hover-with-bg" href="/categories/MySQL">MySQL</a>
+                  &nbsp;
+                
+              </span>&nbsp;&nbsp;
+            
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv"></span>总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv"></span>总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="/lib/jquery/jquery.min.js" ></script>
+<script src="/lib/popper/popper.min.js" ></script>
+<script src="/lib/bootstrap/js/bootstrap.min.js" ></script>
+<script src="/lib/mdbootstrap/js/mdb.min.js" ></script>
+<script src="/js/main.js" ></script>
+
+
+  <script src="/js/lazyload.js" ></script>
+
+
+
+  
+    <script src="/lib/tocbot/tocbot.min.js" ></script>
+  
+  <script src="/js/post.js" ></script>
+
+
+
+  <script src="/lib/smoothscroll/SmoothScroll.min.js" ></script>
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+
+  
+
+  
+
+  <!-- cnzz Analytics -->
+  
+
+
+
+  <script src="/lib/prettify/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="/lib/typed/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "MySQL 表锁&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="/lib/anchor/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="/lib/fancybox/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
