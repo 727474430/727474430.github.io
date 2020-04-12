@@ -16,7 +16,7 @@
   <meta name="description" content="雨下不停-日记">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
-  <title>CAS ~ Raindrop Blog</title>
+  <title>Dockerfile 使用 ~ Raindrop Blog</title>
 
   <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css"  >
 <link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css"  >
@@ -153,7 +153,7 @@
               
                 <p class="mt-3">
                   <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
-                  星期二, 三月 10日 2020, 9:52 晚上
+                  星期日, 四月 12日 2020, 10:46 晚上
                 </p>
               
 
@@ -162,7 +162,7 @@
                   
                   &nbsp;<i class="far fa-chart-bar"></i>
                   <span class="post-count">
-                    1k 字
+                    1.1k 字
                   </span>&nbsp;
                 
 
@@ -170,7 +170,7 @@
                   
                   &nbsp;<i class="far fa-clock"></i>
                   <span class="post-count">
-                      3 分钟
+                      4 分钟
                   </span>&nbsp;
                 
 
@@ -203,53 +203,257 @@
       <div class="py-5 z-depth-3" id="board">
         <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
-            <p><strong>Compare And Swap</strong></p>
+            <p><strong>Dockerfile</strong> 使用 </p>
 <a id="more"></a>
 
-<h5 id="背景"><a href="# 背景" class="headerlink" title="背景"></a>背景</h5><p>Java 在 1.4 版本后，提供了 JUC 下面的很多并发工具类，我们常使用的如下：</p>
-<ol>
-<li>AtomicInteger</li>
-<li>AtomicLong</li>
-<li>AtmoicReference</li>
-</ol>
-<p>那么在使用这些原子工具类来确保并发安全的背后，究竟是什么操作，代替了原有的 Sync 重量锁操作呢？<strong>CAS Java Util Current</strong> 背后的男人。</p>
-<h5 id="CAS- 概念"><a href="#CAS- 概念" class="headerlink" title="CAS 概念"></a>CAS 概念</h5><blockquote>
-<p>Cas 是 Compare And Swap 的简称，他的出现主要是解决了并发操作时，使用 Sync 锁而产生的效率问题，同时他的实现也是乐观锁的一种方式。</p>
-</blockquote>
-<h5 id="L1- 缓存概念"><a href="#L1- 缓存概念" class="headerlink" title="L1 缓存概念"></a>L1 缓存概念</h5><blockquote>
-<p>L1 缓存是为了提高线程每次直接从主内存读写变量的速度而开发的逻辑缓存单元，各线程 L1 中的数据是独享的。有些处理器还提供了 L2 工作缓存</p>
-</blockquote>
-<h5 id="并发问题"><a href="# 并发问题" class="headerlink" title="并发问题"></a>并发问题 </h5><p> 在没有 CAS 出现之前，我们在并发操作一个共享变量的时候，步骤如下：</p>
-<blockquote>
-<p>假设目前有两个线程（T1、T2），同时对内存中的共享变量 x 其值为 0 变量做 +1 操作</p>
-</blockquote>
-<ol>
-<li>线程 T1 从主内存读取变量 x 值，同时将 x 加入到 L1 缓存</li>
-<li>线程 T2 从主内存读取变量 x 值，同时将 x 加入到 L1 缓存</li>
-<li>线程 T1 对 x 做 +1 操作，此时 x 值为 1，并将其写入到 L1 缓存中</li>
-<li>线程 T2 对 x 做 +1 操作，此时 x 值为 1，并将其写入到 L1 缓存中</li>
-<li>线程 T1 将 L1 缓存中的 x 写入到主内存（此时主内存的 x 值为 1）</li>
-<li>线程 T2 将 L1 缓存中的 x 写入到主内存（此时主内存的 x 值为 1）</li>
-</ol>
-<blockquote>
-<p>经过如上步骤我们发现，最终主内存中的 x 并不符合我们预期对值 2，而这就是并发安全问题。<br>解决上述问题，以往我们会对操作 x 的方法添加 Sync 关键字，使该方法加锁来解决此类问题。<br>但是锁的消耗是巨大的，为了这么小的一个改变，而对方法加锁，是不值得的。为此 CAS 诞生。</p>
-</blockquote>
-<h5 id="CAS- 解决方式"><a href="#CAS- 解决方式" class="headerlink" title="CAS 解决方式"></a>CAS 解决方式 </h5><p> 我们来看一下 CAS 如何解决上述问题:</p>
-<blockquote>
-<p>假设目前有两个线程（T1、T2），同时对内存中的共享变量 x 其值为 0 变量做 +1 操作</p>
-</blockquote>
-<ol>
-<li>线程 T1 从主内存读取变量 x 值，同时将 x 加入到 L1 缓存</li>
-<li>线程 T2 从主内存读取变量 x 值，同时将 x 加入到 L1 缓存</li>
-<li>线程 T1 对 x 做 +1 操作，此时 x 值为 1，并将其写入到 L1 缓存中</li>
-<li>线程 T2 对 x 做 +1 操作，此时 x 值为 1，并将其写入到 L1 缓存中</li>
-<li>线程 T1 将 L1 缓存中的 x 写入到主内存，在写入之前会再次从主内存中拿到 x 的值，并与开始获取到的 x 值做对比，<br>发现相等，然后写入 x 值到主内存（此时主内存的 x 值为 1）</li>
-<li>线程 T2 将 L1 缓存中的 x 写入到主内存，在写入之前会再次从主内存中拿到 x 的值，并与开始获取到的 x 值做对比,<br>发现不等，此时 T2 线程不会将 x 值写入到主内存，而是返回到第一步操作，读取主内存中 x 的值，并对其做 +1 操作，<br>然后再次判断主内存中当前 x 与开始获取到的 x 做对比（此时 x 为 1），直到相等后，然后写入 x 值到主内存（此时主内存的 x 值为 2）</li>
-</ol>
-<blockquote>
-<p>以上便是 CAS 操作到步骤，在与之前线程直接将 x 值协会主内存中不同，CAS 此时会做一个对比，将开始获取到到 x 与当前 <br> 主内存的 x 做对比，如果一致则写入主内存，如果不一致则回到获取 x 值的步骤重新执行，直至 x 对比一致后写入主内存</p>
-</blockquote>
-<h5 id="CAS- 流程图如下"><a href="#CAS- 流程图如下" class="headerlink" title="CAS 流程图如下"></a>CAS 流程图如下 </h5><h5 id="ABA- 问题（对象引用）"><a href="#ABA- 问题（对象引用）" class="headerlink" title="ABA 问题（对象引用）"></a>ABA 问题（对象引用）</h5><h5 id="乐观锁"><a href="# 乐观锁" class="headerlink" title="乐观锁"></a> 乐观锁</h5>
+<h5 id="Dockerfile- 常用命令"><a href="#Dockerfile- 常用命令" class="headerlink" title="Dockerfile 常用命令"></a>Dockerfile 常用命令 </h5><table>
+<thead>
+<tr>
+<th align="center"> 命令 </th>
+<th align="center"> 备注 </th>
+<th align="center"> 是否必填 </th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">FROM</td>
+<td align="center"> 基础镜像 </td>
+<td align="center"> 必填 </td>
+</tr>
+<tr>
+<td align="center">ADD</td>
+<td align="center"> 拷贝文件到容器中（文件可以为 URL 链接）</td>
+<td align="center"> 不必填 </td>
+</tr>
+<tr>
+<td align="center">COPY</td>
+<td align="center"> 拷贝文件到容器中（文件只能是本地文件）</td>
+<td align="center"> 不必填 </td>
+</tr>
+<tr>
+<td align="center">WORKDIR</td>
+<td align="center"> 切换工作目录到指定目录 </td>
+<td align="center"> 不必填 </td>
+</tr>
+<tr>
+<td align="center">RUN</td>
+<td align="center"> 镜像构建时运行脚本命令 </td>
+<td align="center"> 不必填 </td>
+</tr>
+<tr>
+<td align="center">CMD</td>
+<td align="center"> 镜像构建后，启动容器时运行脚本命令 </td>
+<td align="center"> 不必填 </td>
+</tr>
+<tr>
+<td align="center">ENTRYPOINT</td>
+<td align="center"> 镜像构建后，启动容器时运行脚本命令 </td>
+<td align="center"> 不必填 </td>
+</tr>
+<tr>
+<td align="center">ONBUILE</td>
+<td align="center"> 在当前 Dockerfile 中不执行，在子镜像中会的 FROM 命令后执行 </td>
+<td align="center"> 不必填 </td>
+</tr>
+<tr>
+<td align="center">ENV</td>
+<td align="center"> 设置环境变量，容器启动后依然存在 </td>
+<td align="center"> 不必填 </td>
+</tr>
+<tr>
+<td align="center">ARG</td>
+<td align="center"> 设置变量参数，只在容器构建时存在 </td>
+<td align="center"> 不必填 </td>
+</tr>
+<tr>
+<td align="center">SHELL</td>
+<td align="center"> 执行 SHELL 脚本 </td>
+<td align="center"> 不必填 </td>
+</tr>
+<tr>
+<td align="center">MAINTAINER</td>
+<td align="center"> 维护人信息 </td>
+<td align="center"> 不必填 </td>
+</tr>
+<tr>
+<td align="center">LABEL</td>
+<td align="center">key-value 形式标签，没有实质作用 </td>
+<td align="center"> 不必填 </td>
+</tr>
+<tr>
+<td align="center">EXPOSE</td>
+<td align="center"> 暴露容器内端口 </td>
+<td align="center"> 不必填 </td>
+</tr>
+<tr>
+<td align="center">USER</td>
+<td align="center">RUN、CMD、ENTRYPOINT 执行 Shell 命令时指定用户，默认 root</td>
+<td align="center"> 不必填 </td>
+</tr>
+<tr>
+<td align="center">VOLUME</td>
+<td align="center"> 挂在主机目录到容器 </td>
+<td align="center"> 不必填 </td>
+</tr>
+<tr>
+<td align="center">HEALTHCHECK</td>
+<td align="center"> 告诉 Docker 如何测试容器以检查它是否仍在工作，健康检查 </td>
+<td align="center"> 不必填 </td>
+</tr>
+</tbody></table>
+<h5 id="命令示例"><a href="# 命令示例" class="headerlink" title="命令示例"></a> 命令示例 </h5><ul>
+<li><p><strong>FROM</strong></p>
+<pre><code class="dockerfile"># Dockerfile 基于 centos 为基础镜像构建
+FROM centos</code></pre>
+</li>
+</ul>
+<ul>
+<li><p><strong>MAINTAINER</strong></p>
+<pre><code class="dockerfile"># 维护者信息
+MAINTAINER Raindrop &lt;727474430@qq.com&gt;</code></pre>
+</li>
+</ul>
+<ul>
+<li><p><strong>LABEL</strong></p>
+<pre><code class="dockerfile"># 标签，一般可用来替代 MAINTAINER
+LABEL maintainer=Raindrop email=727474430@qq.com</code></pre>
+</li>
+</ul>
+<ul>
+<li><p><strong>ARG</strong></p>
+<pre><code class="dockerfile"># 环境变量，构建镜像时有效
+ARG SERVICE_NAME Tomcat
+RUN echo $SERVICE_NAME
+# 可在构建时传入变量
+docker build -t --build-arg SERVICE_NAME=Weblogic .</code></pre>
+</li>
+</ul>
+<ul>
+<li><p><strong>ENV</strong></p>
+<pre><code class="dockerfile"># 环境变量，容器启动后依然有效
+ENV JAVA_HOME /usr/local/jdk1.8
+RUN echo $JAVA_HOME</code></pre>
+</li>
+</ul>
+<ul>
+<li><p><strong>ADD</strong></p>
+<pre><code class="dockerfile"># 拷贝文件到容器中，可拷贝网络资源
+ADD index.html /var/www/html
+ADD https://www.baidu.com/index.html /var/www/html</code></pre>
+</li>
+</ul>
+<ul>
+<li><p><strong>COPY</strong></p>
+<pre><code class="dockerfile"># 拷贝文件到容器中，只能拷贝本地资源，不拷贝网络资源时，建议使用
+COPY index.html /var/www/html
+COPY app.jar /app</code></pre>
+</li>
+</ul>
+<ul>
+<li><p><strong>WORKDIR</strong></p>
+<pre><code class="dockerfile"># 切入工作目录，类似 cd
+WORKDIR /app
+WORKDIR /tomcat</code></pre>
+</li>
+</ul>
+<ul>
+<li><p><strong>RUN</strong></p>
+<pre><code class="dockerfile"># 构建镜像时执行的 shell
+RUN [&quot;yum&quot;, &quot;install&quot;, &quot;httpd&quot;]
+RUN yum install httpd</code></pre>
+</li>
+</ul>
+<ul>
+<li><p><strong>CMD</strong></p>
+<pre><code class="dockerfile"># 启动容器时执行的 shell
+CMD [&quot;-C&quot;, &quot;/run.sh&quot;]
+CMD [&quot;/usr/sbin/sshd&quot;, &quot;-D&quot;]
+CMD /usr/sbin/sshd -D</code></pre>
+</li>
+</ul>
+<ul>
+<li><p><strong>ENTRYPOINT</strong></p>
+<pre><code class="dockerfile"># 启动容器时执行的 shell，同 CMD 类似，只是由 ENTRYPOINT 启动的程序不会被 docker run 命令行指定的参数所覆盖，而且，这些命令行参数会被当作参数传递给 ENTRYPOINT 指定指定的程序
+ENTRYPOINT [&quot;/bin/bash&quot;, &quot;-C&quot;, &quot;/start.sh&quot;]
+ENTRYPOINT /bin/bash -C &#39;/start.sh&#39;</code></pre>
+</li>
+</ul>
+<ul>
+<li><p><strong>EXPOSE</strong></p>
+<pre><code class="dockerfile"># 暴露端口
+EXPOSE 80 443</code></pre>
+</li>
+</ul>
+<ul>
+<li><p><strong>USER</strong></p>
+<pre><code class="dockerfile"># RUN、CMD、ENTRYPOINT 执行 shell 命令指定用户，默认 root
+USER &lt;user&gt;[:&lt;usergroup&gt;]
+USER &lt;UID&gt;[:&lt;UID&gt;]
+USER weblogic:weblogic</code></pre>
+</li>
+</ul>
+<ul>
+<li><p><strong>VOLUME</strong></p>
+<pre><code class="dockerfile"># 挂载容器目录之本地
+VOLUME [&quot;/var/lib/mysql&quot;]
+VOLUME /usr/lib/mysql /var/lib/mysql</code></pre>
+</li>
+</ul>
+<ul>
+<li><p><strong>ONBUILE</strong></p>
+<pre><code class="dockerfile"># 子容器 FROM 后执行，通常用于构建基础镜像时预先添加内容，在子镜像中依赖，以减轻镜像容量
+FROM alpine
+ONBUILD ENV APP_NAME=Tomcat
+CMD echo $APP_NAME
+docker build -t test .
+---
+# 若不指定 CMD 和 ENTRYPOINT 默认执行父镜像指令，若父镜像也没有 CMD 和 ENTRYPOINT 则报错
+FROM test</code></pre>
+</li>
+</ul>
+<ul>
+<li><p><strong>HEALTHCHECK</strong></p>
+<pre><code class="dockerfile"># 健康检查
+HEALTHCHECK --interval=5m --timeout=3s --retries=3 \
+    CMD curl -f http:/localhost/ || exit 1
+# 含义
+-- interval=DURATION (default: 30s)：每隔多长时间探测一次，默认 30 秒
+-- timeout= DURATION (default: 30s)：服务响应超时时长，默认 30 秒
+-- start-period= DURATION (default: 0s)：服务启动多久后开始探测，默认 0 秒
+-- retries=N (default: 3)：认为检测失败几次为宕机，默认 3 次
+# 一些返回值的说明：
+0：容器成功是健康的，随时可以使用
+1：不健康的容器无法正常工作
+2：保留不使用此退出代码 </code></pre>
+</li>
+</ul>
+<h5 id="Dockerfile 示例"><a href="#Dockerfile 示例" class="headerlink" title="Dockerfile 示例"></a>Dockerfile 示例 </h5><ul>
+<li><p> 构建 centos 镜像 </p>
+<pre><code class="dockerfile"># 基础镜像
+FROM centos
+# 维护人信息
+MAINTAINER Raindrop &lt;727474430@qq.com&gt;
+# 构建时运行命令
+RUN yum -y update &amp;&amp; yum -y install httpd
+# 暴露 80 端口
+EXPOSE 80
+# 复制 index.html 到指定地址
+COPY index.html /var/www/html/index.html
+# 切换工作目录
+WORKDIR /var/www/html/index.html
+# 设置环境变量
+ENV SHELL_NAME=&quot;run.sh&quot;
+# 复制该脚本至镜像中，并修改其权限
+ADD $SHELL_NAME /run.sh
+RUN chmod 775 /run.sh
+# 容器启动时执行脚本文件
+CMD [&quot;/run.sh&quot;]</code></pre>
+</li>
+</ul>
+<div aligh="center">
+    <img src="http://qiniu.raindrop-wl.cn/Dockerfile.png" srcset="/img/loading.gif" width="100%">
+</div>
+
+
             <hr>
           </div>
           <br>
@@ -259,7 +463,7 @@
               <span>
                 <i class="iconfont icon-inbox"></i>
                 
-                  <a class="hover-with-bg" href="/categories/Java">Java</a>
+                  <a class="hover-with-bg" href="/categories/docker">docker</a>
                   &nbsp;
                 
               </span>&nbsp;&nbsp;
@@ -417,7 +621,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "CAS&nbsp;",
+        "Dockerfile 使用&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,
