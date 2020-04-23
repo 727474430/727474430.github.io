@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>MemoryLeaker</title>
+    <link href="/2020/04/14/MemoryLeaker/"/>
+    <url>/2020/04/14/MemoryLeaker/</url>
+    
+    <content type="html"><![CDATA[<p><strong>MemoryLeaker</strong></p><a id="more"></a><h3 id="背景"><a href="# 背景" class="headerlink" title="背景"></a>背景 </h3><p> 内存溢出，对我们 Java 开发者来讲是一个熟悉又陌生对话题。熟悉是因为我们常常会在各大文章中看到该类问题对字眼，而陌生是因为我们在实际对工作中，<br>可能基本上没有遇到过内存溢出的问题，或者说遇到了也没有花时间去排查该问题。这次我们就来模拟一下应用程序代码问题，导致的内存溢出问题，并对该 <br> 问题进行排查，最终找到问题代码。</p><h3 id="应用"><a href="# 应用" class="headerlink" title="应用"></a>应用 </h3><p> 这里我们使用 SpringBoot 创建一个简单的应用，并故意写出一个会导致内存泄漏的代码，然后使用工具逐步定位问题，最终解决内存泄漏对相关问题。</p><h3 id="内存异常"><a href="# 内存异常" class="headerlink" title="内存异常"></a>内存异常 </h3><h3 id="排查问题"><a href="# 排查问题" class="headerlink" title="排查问题"></a> 排查问题 </h3><h4 id="步骤一"><a href="# 步骤一" class="headerlink" title="步骤一"></a> 步骤一 </h4><h4 id="步骤二"><a href="# 步骤二" class="headerlink" title="步骤二"></a> 步骤二 </h4><h4 id="步骤三"><a href="# 步骤三" class="headerlink" title="步骤三"></a> 步骤三 </h4><h4 id="步骤四"><a href="# 步骤四" class="headerlink" title="步骤四"></a> 步骤四 </h4><h4 id="步骤五"><a href="# 步骤五" class="headerlink" title="步骤五"></a> 步骤五 </h4><h4 id="步骤六"><a href="# 步骤六" class="headerlink" title="步骤六"></a> 步骤六 </h4><h3 id="总结"><a href="# 总结" class="headerlink" title="总结"></a> 总结 </h3><p> 当然生产中对问题不会这么容易排查，但是这次模拟内存溢出主要对目的是熟悉相关排查工具及熟悉处理流程，这些内容 <br> 对于内存溢出问题来讲是通用的。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Java</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Nginx Ftp</title>
     <link href="/2020/04/12/Nginx%20Ftp/"/>
     <url>/2020/04/12/Nginx%20Ftp/</url>

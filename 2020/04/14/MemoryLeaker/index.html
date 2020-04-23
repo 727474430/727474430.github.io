@@ -16,7 +16,7 @@
   <meta name="description" content="雨下不停-日记">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
-  <title>归档 ~ Raindrop Blog</title>
+  <title>MemoryLeaker ~ Raindrop Blog</title>
 
   <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css"  >
 <link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css"  >
@@ -39,7 +39,7 @@
 
 
 <body>
-  <header style="height: 80vh;">
+  <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -138,7 +138,7 @@
   </div>
 </nav>
 
-    <div class="view intro-2" id="background" parallax=true
+    <div class="view intro-2" id="background" false
          style="background: url('/img/default.png')no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
@@ -148,6 +148,41 @@
               
             </span>
 
+            
+              <br>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  星期二, 四月 14日 2020, 11:08 晚上
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    299 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      1 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
             
           </div>
 
@@ -159,101 +194,66 @@
 
   <main>
     
-      <div class="container nopadding-md">
-        <div class="py-5 z-depth-3" id="board">
-          
-          <div class="container">
-            <div class="row">
-              <div class="col-12 col-md-10 m-auto">
-                
-
-<div class="list-group">
-  <p class="h4">共计 25 篇文章</p>
-  <hr>
-  
-    
       
-      <p class="h5">2020</p>
-    
-    <a href="/2020/03/26/Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">Redis 分布式锁</span>
-      <span style="float: right;">03-26</span>
-    </a>
-  
-    
-    <a href="/2020/03/21/MySQL-Lock/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">MySQL 表锁</span>
-      <span style="float: right;">03-21</span>
-    </a>
-  
-    
-    <a href="/2020/03/18/MySQL-%E4%BC%98%E5%8C%96/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">MySQL- 优化</span>
-      <span style="float: right;">03-18</span>
-    </a>
-  
-    
-    <a href="/2020/03/18/MySQL-%E8%AE%BE%E8%AE%A1%E8%8C%83%E5%BC%8F/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">MySQL- 设计范式</span>
-      <span style="float: right;">03-18</span>
-    </a>
-  
-    
-    <a href="/2020/03/17/MySQL-Slow-Query/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">MySQL-Slow-Query</span>
-      <span style="float: right;">03-17</span>
-    </a>
-  
-    
-    <a href="/2020/03/17/ZooKeeper/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">ZooKeeper 入门</span>
-      <span style="float: right;">03-17</span>
-    </a>
-  
-    
-    <a href="/2020/03/16/Nginx-Mirror/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">Nginx-Mirror</span>
-      <span style="float: right;">03-16</span>
-    </a>
-  
-    
-    <a href="/2020/03/13/Mysql%20High%20Availability/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">Mysql High Availability</span>
-      <span style="float: right;">03-13</span>
-    </a>
-  
-    
-    <a href="/2020/03/13/MySQL-Command/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">MySQL-Command</span>
-      <span style="float: right;">03-13</span>
-    </a>
-  
-    
-    <a href="/2020/03/11/MySQL-%E6%95%85%E9%9A%9C%E6%81%A2%E5%A4%8D%EF%BC%88%E4%BA%8C%EF%BC%89/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">MySQL- 故障恢复（二）</span>
-      <span style="float: right;">03-11</span>
-    </a>
-  
-</div>
 
-  <nav aria-label="index posts navigation">
-    <span class="pagination pg-blue justify-content-center mt-5" id="pagination">
-      <span class="page-number current">1</span><a class="page-number" href="/archives/2020/03/page/2/">2</a><a class="extend next" rel="next" href="/archives/2020/03/page/2/"><i class="fas fa-angle-double-right"></i></a>
-    </span>
-  </nav>
-  
-  <script>
-    for (ele of document.getElementById("pagination").getElementsByClassName("page-number")) {
-      ele.href += '#board';
-    }
-  </script>
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <p><strong>MemoryLeaker</strong></p>
+<a id="more"></a>
 
+<h3 id="背景"><a href="# 背景" class="headerlink" title="背景"></a>背景 </h3><p> 内存溢出，对我们 Java 开发者来讲是一个熟悉又陌生对话题。熟悉是因为我们常常会在各大文章中看到该类问题对字眼，而陌生是因为我们在实际对工作中，<br>可能基本上没有遇到过内存溢出的问题，或者说遇到了也没有花时间去排查该问题。这次我们就来模拟一下应用程序代码问题，导致的内存溢出问题，并对该 <br> 问题进行排查，最终找到问题代码。</p>
+<h3 id="应用"><a href="# 应用" class="headerlink" title="应用"></a>应用 </h3><p> 这里我们使用 SpringBoot 创建一个简单的应用，并故意写出一个会导致内存泄漏的代码，然后使用工具逐步定位问题，最终解决内存泄漏对相关问题。</p>
+<h3 id="内存异常"><a href="# 内存异常" class="headerlink" title="内存异常"></a>内存异常 </h3><h3 id="排查问题"><a href="# 排查问题" class="headerlink" title="排查问题"></a> 排查问题 </h3><h4 id="步骤一"><a href="# 步骤一" class="headerlink" title="步骤一"></a> 步骤一 </h4><h4 id="步骤二"><a href="# 步骤二" class="headerlink" title="步骤二"></a> 步骤二 </h4><h4 id="步骤三"><a href="# 步骤三" class="headerlink" title="步骤三"></a> 步骤三 </h4><h4 id="步骤四"><a href="# 步骤四" class="headerlink" title="步骤四"></a> 步骤四 </h4><h4 id="步骤五"><a href="# 步骤五" class="headerlink" title="步骤五"></a> 步骤五 </h4><h4 id="步骤六"><a href="# 步骤六" class="headerlink" title="步骤六"></a> 步骤六 </h4><h3 id="总结"><a href="# 总结" class="headerlink" title="总结"></a> 总结 </h3><p> 当然生产中对问题不会这么容易排查，但是这次模拟内存溢出主要对目的是熟悉相关排查工具及熟悉处理流程，这些内容 <br> 对于内存溢出问题来讲是通用的。</p>
 
-              </div>
-            </div>
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+              <span>
+                <i class="iconfont icon-inbox"></i>
+                
+                  <a class="hover-with-bg" href="/categories/Java">Java</a>
+                  &nbsp;
+                
+              </span>&nbsp;&nbsp;
+            
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
           </div>
         </div>
       </div>
+    </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+  </div>
+</div>
+
     
   </main>
 
@@ -332,6 +332,11 @@
 
 
 
+  
+    <script src="/lib/tocbot/tocbot.min.js" ></script>
+  
+  <script src="/js/post.js" ></script>
+
 
 
   <script src="/lib/smoothscroll/SmoothScroll.min.js" ></script>
@@ -372,7 +377,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "归档&nbsp;",
+        "MemoryLeaker&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,
