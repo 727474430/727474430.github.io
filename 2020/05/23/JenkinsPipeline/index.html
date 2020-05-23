@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="description" content="雨下不停-日记">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  <title>JenkinsPipeline ~ Raindrop Blog</title>
+
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css"  >
+<link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css"  >
+<link rel="stylesheet" href="/lib/mdbootstrap/css/mdb.min.css"  >
+<link rel="stylesheet" href="/lib/github-markdown/github-markdown.min.css"  >
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css"  >
+
+<link rel="stylesheet" href="/css/main.css"  >
+
+
+  <link rel="stylesheet" href="/lib/fancybox/jquery.fancybox.min.css"  >
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Raindrop Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/luas/">Lua</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/javas/">Java</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/golangs/">Golang</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/clojures/">Clojure</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/dockers/">Docker</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" false
+         style="background: url('/img/default.png')no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  星期六, 五月 23日 2020, 12:30 下午
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    3.8k 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      17 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <center><p style="font-size:30px;color:black"> Jenkins Pipeline </p></center>
+
+<a id="more"></a>
+
+<h3 id="介绍"><a href="# 介绍" class="headerlink" title="介绍"></a>介绍</h3><p>Jenkins Pipeline（或简称为“ Pipeline”，以大写字母“ P”表示）是一套插件，是 Jenkins 2.0 的核心特性，可支持将持续交付过程中的多个步骤集成到 Jenkins 中。</p>
+<p>从根本上说，Jenkins 是一个支持多种自动化模式的自动化引擎。Pipeline 为 Jenkins 添加了一组强大的自动化工具，支持从简单的 CI 到全面的 CD 管道的用例。通过对一系列相关任务进行建模，用户可以利用管道的许多特性。实现了构建步骤代码化、结构化、构建过程视图化的能力。</p>
+<p><strong>Code</strong>: 代码性，Pipeline 是用代码实现的，通常会集成到源代码管理中（版本管理），从而使团队能够编辑，查看和迭代其交付流水线。</p>
+<p><strong>Durable</strong>: 持久性，Pipeline 可以在 Jenkins master 的计划重启和计划外重启中存活。</p>
+<p><strong>Pausable</strong>：暂停性，Pipeline 可以选择停止并等待人工输入或批准，然后再继续管道运行。</p>
+<p><strong>Versatile</strong>: 多样性，Pipelines 支持复杂的真实 CD 需求, 包括分支、级联、循环、并行执行等。</p>
+<p><strong>Extensible</strong>: 扩展性，Pipeline 插件支持对 DSL 自定义扩展，以及与其他插件集成实现复杂功能的能力。</p>
+<blockquote>
+<p>官方介绍：<a href="https://www.jenkins.io/doc/book/pipeline/" target="_blank" rel="noopener">https://www.jenkins.io/doc/book/pipeline/</a></p>
+</blockquote>
+<h3 id="概念"><a href="# 概念" class="headerlink" title="概念"></a>概念 </h3><p> 以下概念是 Jenkins Pipeline 的关键，它们与 Pipeline 语法紧密相关。</p>
+<p><strong>Pipeline</strong>：一个 Pipeline 对应一个用户定义的 CD 模型。Pipeline 的代码描述了整个构建过程，通常包括构建、测试、验证、交付等阶段。</p>
+<p><strong>Node</strong>：一个 Node 对应一个 Jenkins 集群环境中的一个节点，它能够执行 Pipeline 定义的描述。</p>
+<p><strong>Stage</strong>：一个 Stage 块对应描述了在 Pipeline 中不同的任务子集（阶段），例如构建、测试、部署 Stages。</p>
+<p><strong>Step</strong>：一个 Step 对应一个步骤，它告诉 Jenkins 在某个特定时间点应该作什么。例如执行 shell 命令，执行 mvn 命令等。</p>
+<blockquote>
+<p>官方介绍：<a href="https://www.jenkins.io/doc/book/pipeline/#pipeline" target="_blank" rel="noopener">https://www.jenkins.io/doc/book/pipeline/#pipeline</a></p>
+</blockquote>
+<h3 id="语法"><a href="# 语法" class="headerlink" title="语法"></a>语法</h3><p>Jenkins Declarative Pipeline 代码块一般定义在名为 Jenkinsfile 的文件中。</p>
+<pre><code class="groovy">pipeline {
+  agent any // 1
+  stages {stage(&#39;Build&#39;) { // 2
+          steps {
+              // 3
+              sh &#39;echo build&#39;
+          }
+      }
+      stage(&#39;Test&#39;) { // 4
+          steps {
+              // 5
+              sh &#39;echo test&#39;
+          }
+      }
+      stage(&#39;Deploy&#39;) { // 6
+          steps {
+              // 7
+              sh &#39;echo deploy&#39;
+          }
+      }
+  }
+}</code></pre>
+<ol>
+<li>在任何可用的 agent 节点上执行 Piepline 定义的描述。</li>
+<li>定义”构建”阶段。</li>
+<li>执行与”构建”相关的一些步骤。</li>
+<li>定义”测试”阶段。</li>
+<li>执行与”测试”相关的一些步骤。</li>
+<li>定义”发布”阶段</li>
+<li>执行与”发布”相关的一些步骤。</li>
+</ol>
+<p>Pipeline post：Jenkins Pipeline 支持使用 Post 在执行执行结束后的各种结果状态中进行定义操作。</p>
+<pre><code class="groovy">pipeline {
+  agent any
+  stages {stage(&#39;Test&#39;) {
+          steps {...}
+      }
+  }
+  post {always { // 1}
+      success {// 2}
+      failure {// 3}
+      unstable {// 4}
+      changed {// 5}
+      aborted {// 6}
+  }
+}</code></pre>
+<ol>
+<li>构建结束后，结果无论是什么状态，总会执行该代码块中的内容。</li>
+<li>构建结束后，结果是成功状态时执行该代码块中的内容。</li>
+<li>构建结束后，结果是失败状态时，执行该代码块中的内容。</li>
+<li>构建结束后，结果是不稳定状态时，执行该代码块的内容。</li>
+<li>构建结束后，结果运行状态与之前的状态不同时，执行该代码块的内容。</li>
+<li>构建结束后，结果是终止状态时，执行该代码块中的内容。</li>
+</ol>
+<h3 id="指令"><a href="# 指令" class="headerlink" title="指令"></a>指令</h3><p><strong>environment</strong>：环境变量，一系列键值对，定义在 steps 外将对所有 step 可见，定义在 step 内仅对该 step 可见。该指令支持一种特殊的方法 credentials()，可以通过其在 Jenkins 环境中的标识符来访问预定义的凭据。</p>
+<pre><code class="groovy">pipeline {
+  agent any
+  environment {JAVA_HOME = &quot;/usr/local/java&quot; // 全局变量}
+  stages {stage(&quot; 构建 &quot;) {
+          environment {NAME = &quot;Raindrop&quot; // 只在 Stage 中生效}
+          steps {
+              sh &#39;echo &quot;Hello $NAME&quot;&#39;
+              sh &#39;echo &quot;Java_HOME $JAVA_HOME&quot;&#39;
+          }
+      }
+      stage(&quot; 扫描 &quot;) {
+          environment {NAME = &quot;Tom&quot; // 只在 Stage 中生效}
+          steps {
+              sh &#39;echo &quot;Hello $NAME&quot;&#39;
+              sh &#39;echo &quot;Java_HOME $JAVA_HOME&quot;&#39;
+          }
+      }
+  }
+}</code></pre>
+<p><strong>options</strong>：选项，Pipeline 内置了很多选项，用于在构建阶段中进行功能强化。例如 timestamps、buildDiscarder 等。</p>
+<pre><code class="groovy">pipeline {
+  agent any
+  // 定义管道特殊选项
+  options {skipDefaultCheckout() // 忽略 checkout 步骤
+      timeout(time: 1, unit: &#39;HOURS&#39;) // 设置管道执行超时时间
+      retry(3) // 设置管道失败重试次数
+      timestamps() // 控制台输出时，显示时间戳}
+  stages {stage(&quot;Example&quot;) {
+          steps {echo &quot;Hello pipeline！&quot;}
+      }
+  }
+}</code></pre>
+<p><strong>parameters</strong>：参数，在触发 Pipeline 时可用的参数列表。参数列表中的值可以通过 params 对象获取。</p>
+<pre><code class="groovy">pipeline {
+  agent any
+  parameters {
+      // 字符串参数
+      string(name: &#39;PERSON&#39;, defaultValue: &#39;Mr Jenkins&#39;, description: &#39;This is string param&#39;)
+      // 布尔值参数
+      booleanParam(name: &#39;DEBUG&#39;, defaultValue: true, description: &#39;This is boolean param&#39;)
+      // 选择参数
+      choice(name: &#39;ENV_TYPE&#39;, choices: [&#39;test&#39;, &#39;dev&#39;, &#39;prod&#39;], description: &#39;This is choice param&#39;)
+      // 文件参数
+      file(name: &#39;FILE_NAME&#39;, description: &#39;This is file param&#39;)
+      // 密码参数
+      password(name: &#39;PASSWORD&#39;, defaultValue: &#39;123456&#39;, description: &#39;This is password param&#39;)
+  }
+  stages {stage(&quot; 字符串参数 &quot;) {
+          steps {
+              script {echo &quot;String param ${params.PERSON}&quot;
+              }
+          }
+      }
+      stage(&quot; 布尔值参数 &quot;) {
+          steps {
+              script {echo &quot;Boolean param ${params.DEBUG}&quot;
+              }
+          }
+      }
+      stage(&quot; 选择参数 &quot;) {
+          steps {
+              script {echo &quot;Choice param ${params.ENV_TYPE}&quot;
+              }
+          }
+      }
+      stage(&quot; 文件参数 &quot;) {
+          steps {
+              script {echo &quot;File param ${params.FILE_NAME}&quot;
+              }
+          }
+      }
+      stage(&quot; 密码参数 &quot;) {
+          steps {
+              script {echo &quot;Password param ${params.PASSWORD}&quot;
+              }
+          }
+      }
+  }
+}</code></pre>
+<p><strong>triggers</strong>：触发器，定义了 Pipeline 自动化的触发方式。目前支持 cron、pollSCM 两种触发器，都是定时方式的实现。</p>
+<pre><code class="groovy">pipeline {
+  agent any
+  // 触发器：
+  // 如果使用的是 Gitlab、Github 等，有 webhook 功能的版本管理库，则可以不用使用。
+  // 如果使用的是 Svn 就可以使用 Cron/PollSCM 两种方式触发。
+  triggers {cron(&#39;H 4/* 0 0 1-5&#39;) // linux 语法
+      pollSCM(&#39;H 4/* 0 0 1-5&#39;) // Jenkins 语法
+  }
+  stages {stage(&quot;Example&quot;) {
+          steps {echo &quot;Hello pipeline！&quot;}
+      }
+  }
+}</code></pre>
+<p><strong>tools</strong>：工具，通过 tools 可以自动安装工具，并配置到环境变量 PATH 中。如果 agent none 则忽略。</p>
+<pre><code class="groovy">pipeline {
+    agent any
+    tools {
+        // 工具名称必须在 Jenkins 管理 Jenkins → 全局工具配置中预配置。
+        maven &#39;apache-maven-3&#39;
+        java &#39;jdk8&#39;
+    }
+    stages {stage(&#39;Example&#39;) {
+            steps {
+                sh &#39;mvn -version&#39;
+                sh &#39;java -version&#39;
+            }
+        }
+    }
+}</code></pre>
+<p><strong>when</strong>：分支判断，根据给定的条件判断是否执行该阶段任务。when 指令至少包含一个条件。如果 when 指令包含多个条件，则所有条件都为 true 时才会执行该阶段。</p>
+<pre><code class="groovy">pipeline {
+    agent any
+    environment {ROLE_NAME = &#39;ADMIN&#39;}
+    stages {stage(&#39; 初始化 &#39;) {
+            steps {
+                script {
+                    BRANCH_NAME = &#39;trunk&#39;
+                    SUBMITTER = &quot;admin&quot;
+                }
+            }
+        }
+        stage(&#39; 分支判断 &#39;) {
+            when {branch &#39;trunk&#39;}
+            steps {echo &quot;trunk 分支部署 &quot;}
+        }
+        stage(&#39; 变量判断 &#39;) {
+            when {
+                environment name: &#39;ROLE_NAME&#39;,
+                        value: &#39;ADMIN&#39;
+            }
+            steps {echo &quot; 角色为 ADMIN&quot;}
+        }
+        stage(&#39; 表达式判断 &#39;) {
+            when {
+                expression {return true}
+            }
+            steps {echo &quot; 表达式为 true&quot;}
+        }
+        stage(&#39; 为真判断 &#39;) {
+            when {
+                equals expected: &#39;admin&#39;,
+                        actual: SUBMITTER
+            }
+            steps {echo &quot; 条件为真 &quot;}
+        }
+        stage(&#39; 为假判断 &#39;) {
+            when {
+                not {branch &#39;dev&#39;}
+            }
+            steps {echo &quot; 条件为假 &quot;}
+        }
+        stage(&#39; 全部为真判断 &#39;) {
+            when {
+                allOf {equals expected: &#39;admin&#39;, actual: SUBMITTER; environment name: &#39;ROLE_NAME&#39;, value: &#39;ADMIN&#39;}
+            }
+            steps {echo &quot; 全部条件为真 &quot;}
+        }
+        stage(&#39; 任意为真判断 &#39;) {
+            when {
+                anyOf {equals expected: &#39;admin&#39;, actual: SUBMITTER; environment name: &#39;ROLE&#39;, value: &#39;ADMINA&#39;}
+            }
+            steps {echo &quot; 任意条件为真 &quot;}
+        }
+    }
+}</code></pre>
+<p><strong>parallel</strong>：并行，对耗时较长，相互不存在依赖关系的 stage 可以使用此方式提升执行效率。</p>
+<pre><code class="groovy">pipeline {
+    agent any
+    stages {stage(&#39;Non-Parallel&#39;) {
+            steps {echo &#39;Non-Parallel&#39;}
+        }
+        stage(&#39;Parallel Stage&#39;) { // 一个 stage 只能有一个 steps 或者 parallel
+            failFast true // 并行的 job 中如果其中的一个失败，则终止其他并行的 stage
+            parallel { // parallel 不能包含 agent 或者 tools
+                stage(&#39;parallel stage 1&#39;) { // 嵌套的 stages 里不能使用 parallel
+                    steps {echo &quot;parallel stage 1&quot;}
+                }
+                stage(&#39;parallel stage 2&#39;) { // 嵌套的 stages 里不能使用 parallel
+                    steps {echo &quot;parallel stage 2&quot;}
+                }
+            }
+        }
+    }
+}</code></pre>
+<p><strong>if-else</strong>：分支，当满足条件是执行 if 代码块，否则执行 else 代码块。</p>
+<pre><code class="groovy">pipeline {
+    agent any
+    environment {NAME = &quot;Tom&quot;}
+    stages {stage(&#39;Case&#39;) {
+            steps {
+                script {if (&quot;$NAME&quot; == &quot;Tom&quot;) {echo &quot;true&quot;} else {echo &quot;false&quot;}
+                }
+            }
+        }
+        stage(&#39;Not-Case&#39;) {
+            steps {
+                script {if (&quot;$NAME&quot; == &quot;LiLi&quot;) {echo &quot;true&quot;} else {echo &quot;false&quot;}
+                }
+            }
+        }
+    }
+}</code></pre>
+<p><strong>input</strong>：用户输入，阻塞当前构建阶段，显示提示等待用户选择。只有接收到有效选择才会继续当前构建阶段。</p>
+<pre><code class="groovy">/**
+ * message
+ * 这个 option 是必须的，这个 message 会在用户提交构建的页面显示，提示用户提交相关的 input 条件。
+ * id
+ * 这个 id 是一个可选的 option，可以作为这个 input 的标记符，默认的标记符是这个 stage 的名称。
+ * ok
+ * 这个 ok 也是一个可选的 option, 主要是在 ok 按钮上显示一些文本，在 input 表单里。
+ * submitter
+ * 这个 submitter 也是一个可选的 option，里面可以写多个用户名称或者组名称，用逗号隔开。意思就是，只有这写名称的对应用户登陆 jenkins，才能提交这个 input 动作，如果不写，默认是任何人都可以提交 input。
+ * parameters
+ * 这个也是一个可选的 option, 和我们前面学的 parameters 没有区别，就是定义一些参数的地方。
+ */
+// Input
+pipeline {
+    agent any
+    stages {stage(&#39;Deploy Application&#39;) {
+            input {
+                message &quot; 是否发布应用？&quot;
+                ok &quot; 发布 &quot;
+                submitter &quot;admin&quot;
+            }
+            steps {echo &quot;Hello pipeline nice to meet you.&quot;}
+        }
+    }
+}</code></pre>
+<p><strong>try-catch</strong>：异常捕获，对可能出现异常的代码块进行捕获，在出现异常时进行显示处理。</p>
+<pre><code class="groovy">pipeline {
+    agent any
+    stages {stage(&#39;trycache&#39;) {
+            steps {
+                script {
+                    try {sh &#39;exit 1&#39;} catch (exc) {echo &quot;something failed $exc&quot;}
+                }
+            }
+        }
+    }
+}</code></pre>
+<h3 id="Scripted-Pipeline"><a href="#Scripted-Pipeline" class="headerlink" title="Scripted Pipeline"></a>Scripted Pipeline</h3><p>Scripted pipeline 是 Jenkins 提供的基于 Groovy 脚本进行 pipeline 描述的一种格式。Groovy 脚本不一定适合所有使用者，因此 Jenkins 创建了 Declarative pipeline（声明式），为编写 Jenkins 管道提供了一种更简单、更有主见的语法。但是不可否认，由于脚本化的 pipeline 是基于 groovy 的一种 DSL 语言，所以 Scripted pipeline 相较于 Declarative pipeline 为 Jenkins 用户提供了更巨大的灵活性和可扩展性。</p>
+<p>pipeline 脚本同其它脚本语言一样，从上至下顺序执行，它的流程控制取决于 Groovy 表达式，如 if/else 条件语句，举例如下：</p>
+<pre><code class="groovy">node {
+    checkout scm // 代码检出
+    stage(&#39;Build&#39;) { // 构建阶段
+        docker.image(&#39;maven:3.3.3&#39;).inside {sh &#39;mvn --version&#39;}
+    }
+    stage(&#39;Deploy&#39;) { // 发布阶段
+        if (env.BRANCH_NAME == &#39;master&#39;) {echo &#39;Deploy master version.&#39;} else {echo &#39;Deploy other version.&#39;}
+    }
+}</code></pre>
+<h3 id="高级特性"><a href="# 高级特性" class="headerlink" title="高级特性"></a>高级特性</h3><p><strong>notification</strong>：通知，利用 Jenkins 提供的插件机制，在 Pipeline 构建阶段进行制定通知。</p>
+<pre><code class="groovy">pipeline {
+    agent any
+    stages {stage(&#39;Example&#39;) {...}
+    }
+    post {
+        always {
+            script {
+                // BUILD_USER 需要 user build vars plugin 插件支持
+                wrap([$class: &#39;BuildUser&#39;]) { // 邮件通知
+                    mail to: &quot;xxxxx@163.com&quot;, // 收件人地址
+                    subject: &quot;PineLine &#39;${JOB_NAME}&#39; (${BUILD_NUMBER}) result&quot;, // 主题
+                    body: &quot;${env.BUILD_USER}&#39;s Pineline &#39;${JOB_NAME}&#39; (${BUILD_NUMBER}) run success\n 请及时前往 ${env.BUILD_URL} 进行查看 &quot; // 内容
+                }
+            }
+        }
+    }
+}</code></pre>
+<pre><code class="groovy">pipeline {
+    agent any
+    stages {stage(&#39;Example&#39;) {...}
+    }
+    post {
+        always {
+            script {
+                // 需要 DingTalk 插件支持
+                dingtalk(
+                        robot: &#39;robotid&#39;, // 机器人 ID
+                        type: &#39;LINK&#39;, // 消息类型
+                        title: &#39; 监控报警 &#39;, // 消息标题
+                        text: [&quot;msg&quot;], // 消息内容
+                        messageUrl: &quot;build_url&quot;, // 消息连接地址
+                        picUrl: &quot;image_url&quot; // 图片连接地址
+                )
+            }
+        }
+    }
+}</code></pre>
+<p><strong>注意</strong>：以上邮件通知、钉钉通知都需要先在全局工具配置中进行对应配置，才可正常使用。</p>
+<h3 id="项目示例"><a href="# 项目示例" class="headerlink" title="项目示例"></a>项目示例 </h3><p> 工单系统：</p>
+<pre><code class="groovy">// 工单系统 Jenkinsfile
+pipeline {
+    agent any
+    parameters {string(name: &#39;svnUrl&#39;, defaultValue: &#39;https://10.28.1.160/svn/sourcecode/ticketSystem/code/branch/develop-1.0.0/ticket-system&#39;, description: &#39;SVN 代码路径 &#39;)
+        string(name: &#39;sonarParam&#39;, defaultValue: &#39;-Dsonar.projectKey=${JOB_NAME} -Dsonar.projectName=${JOB_NAME} -Dsonar.projectVersion=${v} -Dsonar.language=java -Dsonar.java.source=1.8 -Dsonar.sourceEncoding=UTF-8 -Dsonar.sources=src/main/java -Dsonar.java.binaries=target/classes -Dsonar.modules=ticket-system-backend,ticket-system-common&#39;, description: &#39;SonarQube 项目参数 &#39;)
+    }
+    environment {SONAR_HOME = tool &#39;SonarScanner4.2&#39; // 这里这个 tool 是直接根据名称，获取自动安装的插件的路径}
+    stages {stage(&quot; 拉取代码 &quot;) {
+            steps {
+                script {echo &quot;Checkout ticket system from svn, branch name: ${env.BRANCH_NAME}; job name: ${env.JOB_NAME}&quot;
+                    def scmVars = checkout([$class                : &#39;SubversionSCM&#39;,
+                                            additionalCredentials : [],
+                                            excludedCommitMessages: &#39;&#39;,
+                                            excludedRegions       : &#39;&#39;,
+                                            excludedRevprop       : &#39;&#39;,
+                                            excludedUsers         : &#39;&#39;,
+                                            filterChangelog       : false,
+                                            ignoreDirPropChanges  : false,
+                                            includedRegions       : &#39;&#39;,
+                                            locations             : [[cancelProcessOnExternalsFail: true,
+                                                                      credentialsId               : &#39;85475088-cf46-4bc1-a77e-70ae5fb65f8e&#39;,
+                                                                      depthOption                 : &#39;infinity&#39;,
+                                                                      ignoreExternalsOption       : true,
+                                                                      local                       : &#39;.&#39;,
+                                                                      remote                      : &#39;${svnUrl}&#39;]],
+                                            quietOperation        : true,
+                                            workspaceUpdater      : [$class: &#39;UpdateUpdater&#39;]])
+                    svnVersion = scmVars.SVN_REVISION
+                    echo &quot;Current svn version: ${svnVersion}&quot;
+                }
+            }
+        }
+        stage(&quot; 代码编译 &quot;) {
+            steps {
+                script {echo &quot;Compile ticket system code. branch name: ${env.BRANCH_NAME}; job name: ${env.JOB_NAME}&quot;
+                    sh &quot;mvn clean install&quot;
+                }
+            }
+        }
+        stage(&quot; 单元测试 &quot;) {
+            steps {
+                script {echo &quot;Unit test for ticket system. branch name: ${env.BRANCH_NAME}; job name: ${env.JOB_NAME}&quot;
+                    sh &quot;mvn test&quot;
+                }
+            }
+        }
+        stage(&quot; 扫描代码 &quot;) {
+            steps {echo &quot;Starting codeAnalyze with SonarQube... branch name: ${env.BRANCH_NAME}; job name: ${env.JOB_NAME}&quot;
+                withSonarQubeEnv(&quot;GroupamaSonar&quot;) {sh &quot;${SONAR_HOME}/bin/sonar-scanner ${sonarParam}&quot;
+                }
+                script {
+                    // 此处由于 SonarQube 响应较慢，需要叫上超时处理
+                    timeout(5) {
+                        // 利用 sonarqube webhook 通知 pipeline 代码扫描结果，未通过则 fail
+                        def qg = waitForQualityGate()
+                        if (qg.status != &#39;OK&#39;) {error &quot; 未通过 SonarQube 的代码检查，请及时修改! failure: ${qg.status}&quot;
+                        }
+                    }
+                }
+            }
+        }
+        stage(&quot; 构建代码 &quot;) {
+            steps {
+                script {echo &quot;Build ticket system code. branch name: ${env.BRANCH_NAME}; job name: ${env.JOB_NAME}&quot;
+                    sh &quot;mvn clean package -DskipTests&quot;
+                }
+            }
+        }
+        stage(&quot;Deploy Application&quot;) {
+            input {
+                message &quot; 是否发布应用？&quot;
+                ok &quot; 发布 &quot;
+                submitter &quot;admin&quot;
+            }
+            steps {
+                script {sh &quot;sshpass root@xxxxxx sh -c /app/deploy.sh&quot;}
+            }
+        }
+    }
+    post {
+        success {
+            script {def msg = &quot;【${JOB_NAME}】 项目打包成功，请及时处理！&quot;
+                def imageUrl = &quot;https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1729441498,1472936606&amp;fm=26&amp;gp=1.jpg&quot;
+                // 需要 DingTalk 插件支持
+                dingtalk(
+                        robot: &#39;ff6ce1f1-589a-4243-8d81-a4391ae21102&#39;,
+                        type: &#39;LINK&#39;,
+                        title: &#39; 监控报警 &#39;,
+                        text: [&quot;${msg}&quot;],
+                        messageUrl: &quot;${BUILD_URL}&quot;,
+                        picUrl: &quot;${imageUrl}&quot;
+                )
+                println &quot; 构建成功！&quot;
+                currentBuild.description = &quot; 工单系统生产环境构建成功！&quot;
+            }
+        }
+        failure {
+            script {def msg = &quot;【${JOB_NAME}】项目打包失败，请及时处理！&quot;
+                def imageUrl = &quot;https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1729441498,1472936606&amp;fm=26&amp;gp=0.jpg&quot;
+                // 需要 DingTalk 插件支持
+                dingtalk(
+                        robot: &#39;ff6ce1f1-589a-4243-8d81-a4391ae21102&#39;,
+                        type: &#39;LINK&#39;,
+                        title: &#39; 监控报警 &#39;,
+                        text: [&quot;${msg}&quot;],
+                        messageUrl: &quot;${BUILD_URL}&quot;,
+                        picUrl: &quot;${imageUrl}&quot;
+                )
+                println &quot; 构建失败！&quot;
+                currentBuild.description = &quot; 工单系统生产环境构建失败！&quot;
+            }
+        }
+        aborted {
+            script {def msg = &quot;【${JOB_NAME}】 项目打包终端，请及时处理！&quot;
+                def imageUrl = &quot;https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1729441498,1472936606&amp;fm=26&amp;gp=2.jpg&quot;
+                // 需要 DingTalk 插件支持
+                dingtalk(
+                        robot: &#39;ff6ce1f1-589a-4243-8d81-a4391ae21102&#39;,
+                        type: &#39;LINK&#39;,
+                        title: &#39; 监控报警 &#39;,
+                        text: [&quot;${msg}&quot;],
+                        messageUrl: &quot;${BUILD_URL}&quot;,
+                        picUrl: &quot;${imageUrl}&quot;
+                )
+                println &quot; 构建中断，请联系相关服务人询问中断原因！&quot;
+                currentBuild.description = &quot; 工单系统生产环境构建中断！&quot;
+            }
+        }
+    }
+}</code></pre>
+<h3 id="插件推荐"><a href="# 插件推荐" class="headerlink" title="插件推荐"></a>插件推荐 </h3><p> 在使用 Jenkins Pipeline 过程中，有很多插件支持我们的发布流程，常用的有如下插件，大家可以事情选择：</p>
+<ol>
+<li>Pipeline：Pipeline 流水线支持。</li>
+<li>Blue Ocean：Pipeline 流水线美化插件。</li>
+<li>SonarScanner：SonarQube 集成插件。</li>
+<li>user build vars：Pipeline 中获取构建人时需要用到。</li>
+<li>Sonar Quality Gates：SonarQube 扫描结果获取插件。</li>
+<li>Pipeline：InputStep：Input 等待用户输出需要用到该插件。</li>
+<li>Extended Choice Parameter：使用 Choice Parameter 参数选项时需要使用。</li>
+</ol>
+<h3 id="愿景"><a href="# 愿景" class="headerlink" title="愿景"></a>愿景 </h3><p> 我们使用 Jenkins Pipeline 流水线实现 CI/CD 的最终愿景是自动化重复性操作，并提升应该交付效率。流程如下图：</p>
+<div aligh="center">
+    <img src="http://qiniu.raindrop-wl.cn/JenkinsPiepline-log.jpg" srcset="/img/loading.gif" width="100%">
+</div>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+              <span>
+                <i class="iconfont icon-inbox"></i>
+                
+                  <a class="hover-with-bg" href="/categories/DevOps">DevOps</a>
+                  &nbsp;
+                
+              </span>&nbsp;&nbsp;
+            
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv"></span>总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv"></span>总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="/lib/jquery/jquery.min.js" ></script>
+<script src="/lib/popper/popper.min.js" ></script>
+<script src="/lib/bootstrap/js/bootstrap.min.js" ></script>
+<script src="/lib/mdbootstrap/js/mdb.min.js" ></script>
+<script src="/js/main.js" ></script>
+
+
+  <script src="/js/lazyload.js" ></script>
+
+
+
+  
+    <script src="/lib/tocbot/tocbot.min.js" ></script>
+  
+  <script src="/js/post.js" ></script>
+
+
+
+  <script src="/lib/smoothscroll/SmoothScroll.min.js" ></script>
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+
+  
+
+  
+
+  <!-- cnzz Analytics -->
+  
+
+
+
+  <script src="/lib/prettify/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="/lib/typed/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "JenkinsPipeline&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="/lib/anchor/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="/lib/fancybox/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
