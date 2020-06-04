@@ -162,7 +162,7 @@
                   
                   &nbsp;<i class="far fa-chart-bar"></i>
                   <span class="post-count">
-                    909 字
+                    900 字
                   </span>&nbsp;
                 
 
@@ -228,33 +228,31 @@
 <p>buildParams：构建参数，如：mvn clean install、gradle build</p>
 </li>
 <li><p>maven</p>
+<pre><code class="groovy">#!groovy
+@Library(&#39;shared-lib&#39;) _
+def build = new org.devops.build()
+
+pipeline {
+  stages {stage(&#39;Build&#39;) {
+      script {build.Build(&#39;maven&#39;, &#39;clean install&#39;)
+      }
+    }
+  }
+}</code></pre>
+</li>
+<li><p>gradle</p>
+<pre><code class="groovy">#!groovy
+@Library(&#39;shared-lib&#39;) _
+def build = new org.devops.build()
+
+pipeline {stages { stage(&#39;Build&#39;) {
+      script {build.Build(&#39;gradle&#39;, &#39;build&#39;)
+      }
+    }
+  }
+}</code></pre>
 </li>
 </ul>
-<pre><code class="groovy">  #!groovy
-  @Library(&#39;shared-lib&#39;) _
-  def build = new org.devops.build()
-
-  pipeline {
-    stages {stage(&#39;Build&#39;) {
-        script {build.Build(&#39;maven&#39;, &#39;clean install&#39;)
-        }
-      }
-    }
-  }</code></pre>
-<ul>
-<li>gradle</li>
-</ul>
-<pre><code class="groovy">  #!groovy
-  @Library(&#39;shared-lib&#39;) _
-  def build = new org.devops.build()
-
-  pipeline {
-    stages {stage(&#39;Build&#39;) {
-        script {build.Build(&#39;gradle&#39;, &#39;build&#39;)
-        }
-      }
-    }
-  }</code></pre>
 <h3 id="checkout- 代码取"><a href="#checkout- 代码取" class="headerlink" title="checkout 代码取"></a>checkout 代码取 </h3><p>  该方法主要用来对应用源码进行拉取，目前支持从 git、svn 两种版本管理工具中拉取代码。</p>
 <ul>
 <li><p> 使用方法 </p>
@@ -265,33 +263,32 @@
 <p>credentialsId：凭证 ID</p>
 </li>
 <li><p>git</p>
+<pre><code class="groovy">#!groovy
+@Library(&#39;shared-lib&#39;) _
+def checkout = new org.devops.checkout()
+
+pipeline {
+  stages {stage(&#39;Checkout&#39;) {
+      script {checkout.Checkout(&#39;git&#39;, &#39;https://github.com/727474430/web-logging-spring-boot-starter&#39;, &#39;master&#39;, &#39;tobo_wl&#39;)
+      }
+    }
+  }
+}</code></pre>
+</li>
+<li><p>svn</p>
+<pre><code class="groovy">#!groovy
+@Library(&#39;shared-lib&#39;) _
+def checkout = new org.devops.checkout()
+
+pipeline {
+  stages {stage(&#39;Checkout&#39;) {
+      script {checkout.Checkout(&#39;svn&#39;, &#39;https://10.28.1.160/svn/sourcecode/platform/code/groupama-microservice-v2&#39;, &#39;&#39;, &#39;tobo_wl&#39;)
+      }
+    }
+  }
+}</code></pre>
 </li>
 </ul>
-<pre><code class="groovy">  #!groovy
-  @Library(&#39;shared-lib&#39;) _
-  def checkout = new org.devops.checkout()
-
-  pipeline {
-    stages {stage(&#39;Checkout&#39;) {
-        script {checkout.Checkout(&#39;git&#39;, &#39;https://github.com/727474430/web-logging-spring-boot-starter&#39;, &#39;master&#39;, &#39;tobo_wl&#39;)
-        }
-      }
-    }
-  }</code></pre>
-<ul>
-<li>svn</li>
-</ul>
-<pre><code class="groovy">  #!groovy
-  @Library(&#39;shared-lib&#39;) _
-  def checkout = new org.devops.checkout()
-
-  pipeline {
-    stages {stage(&#39;Checkout&#39;) {
-        script {checkout.Checkout(&#39;svn&#39;, &#39;https://10.28.1.160/svn/sourcecode/platform/code/groupama-microservice-v2&#39;, &#39;&#39;, &#39;tobo_wl&#39;)
-        }
-      }
-    }
-  }</code></pre>
 <h3 id="codescan- 代码扫描"><a href="#codescan- 代码扫描" class="headerlink" title="codescan 代码扫描"></a>codescan 代码扫描 </h3><p>  该方法主要用来对后端代码执行静态文件扫描，对应用中不符合规则的代码进行检索并提示，若代码不符合规范将中断执行流水线任务。</p>
 <ul>
 <li><p> 使用方法 </p>
@@ -303,19 +300,19 @@
 <p>branchName：分支名称，默认 master</p>
 </li>
 <li><p>codescan</p>
-</li>
-</ul>
-<pre><code class="groovy">  #!groovy
-  @Library(&#39;shared-lib&#39;) _
-  def codescan = new org.devops.codescan()
+<pre><code class="groovy">#!groovy
+@Library(&#39;shared-lib&#39;) _
+def codescan = new org.devops.codescan()
 
-  pipeline {
-    stages {stage(&#39;SonarScan&#39;) {
-        script {codescan.SonarScan(&#39;ticket&#39;, &#39;v1.0&#39;, &#39;1.8&#39;, &#39;ticket-backend,ticket-common&#39;, &#39;dev&#39;)
-        }
+pipeline {
+  stages {stage(&#39;SonarScan&#39;) {
+      script {codescan.SonarScan(&#39;ticket&#39;, &#39;v1.0&#39;, &#39;1.8&#39;, &#39;ticket-backend,ticket-common&#39;, &#39;dev&#39;)
       }
     }
-  }</code></pre>
+  }
+}</code></pre>
+</li>
+</ul>
 <h3 id="logger- 执行日志"><a href="#logger- 执行日志" class="headerlink" title="logger 执行日志"></a>logger 执行日志 </h3><p>  该方法用来在流水线成打印不同级别的日志，通过不同颜色区分，目前支持 info、warning、error 三种级别 </p>
 <ul>
 <li><p> 使用方法 </p>
@@ -323,56 +320,63 @@
 <p>message：消息内容 </p>
 </li>
 <li><p>info</p>
+<pre><code class="groovy">#!groovy
+@Library(&#39;shared-lib&#39;) _
+def logger = new org.devops.logger()
+
+pipeline {
+  stages {stage(&#39;Example&#39;) {
+      script {logger.Info(&quot; 这是一段 Info 日志 &quot;)
+      }
+    }
+  }
+}</code></pre>
+</li>
+<li><p>warning</p>
+<pre><code class="groovy">#!groovy
+@Library(&#39;shared-lib&#39;) _
+def logger = new org.devops.logger()
+
+pipeline {
+  stages {stage(&#39;Example&#39;) {
+      script {logger.Warning(&quot; 这是一段 Warning 日志 &quot;)
+      }
+    }
+  }
+}</code></pre>
+</li>
+<li><p>error</p>
+<pre><code class="groovy">#!groovy
+@Library(&#39;shared-lib&#39;) _
+def logger = new org.devops.logger()
+
+pipeline {
+  stages {stage(&#39;Example&#39;) {
+      script {logger.Error(&quot; 这是一段 Error 日志 &quot;)
+      }
+    }
+  }
+}</code></pre>
 </li>
 </ul>
-<pre><code class="groovy">  #!groovy
-  @Library(&#39;shared-lib&#39;) _
-  def logger = new org.devops.logger()
-
-  pipeline {
-    stages {stage(&#39;Example&#39;) {
-        script {logger.Info(&quot; 这是一段 Info 日志 &quot;)
-        }
-      }
-    }
-  }</code></pre>
-<ul>
-<li>warning</li>
-</ul>
-<pre><code class="groovy">  #!groovy
-  @Library(&#39;shared-lib&#39;) _
-  def logger = new org.devops.logger()
-
-  pipeline {
-    stages {stage(&#39;Example&#39;) {
-        script {logger.Warning(&quot; 这是一段 Warning 日志 &quot;)
-        }
-      }
-    }
-  }</code></pre>
-<ul>
-<li>error</li>
-</ul>
-<pre><code class="groovy">  #!groovy
-  @Library(&#39;shared-lib&#39;) _
-  def logger = new org.devops.logger()
-
-  pipeline {
-    stages {stage(&#39;Example&#39;) {
-        script {logger.Error(&quot; 这是一段 Error 日志 &quot;)
-        }
-      }
-    }
-  }</code></pre>
-<pre><code> &lt;div aligh=center&gt;
-&lt;img src=&quot;http://qiniu.raindrop-wl.cn/logger-info.png&quot; width=&quot;100%&quot;&gt;
- &lt;/div&gt;</code></pre>   <div aligh="center">
-    <img src="http://qiniu.raindrop-wl.cn/logger-warning.png" srcset="/img/loading.gif" width="100%">
-   </div>
-
-   <div aligh="center">
-    <img src="http://qiniu.raindrop-wl.cn/logger-error.png" srcset="/img/loading.gif" width="100%">
-   </div>
+<center>
+  <img style="border-radius: 0.3125em;box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="http://qiniu.raindrop-wl.cn/logger-info.png">
+  <div style="color:orange; border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;padding: 2px;">
+        Info 日志
+    </div>
+</center>
+<center>
+  <img style="border-radius: 0.3125em;box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="http://qiniu.raindrop-wl.cn/logger-warning.png">
+  <div style="color:orange; border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;padding: 2px;">
+        Warning 日志
+    </div>
+</center>
+<center>
+  <img style="border-radius: 0.3125em;box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="http://qiniu.raindrop-wl.cn/logger-error.png">
+  <div style="color:orange; border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;padding: 2px;">
+        Error 日志
+    </div>
+</center>
 
 
 <h3 id="notify- 结果通知"><a href="#notify- 结果通知" class="headerlink" title="notify 结果通知"></a>notify 结果通知 </h3><p>  该方法用来发送消息通知，一般在构建结果阶段使用。目前支持钉钉、邮件两种方式。</p>
@@ -389,58 +393,63 @@
 <p>  to：收件人邮箱 </p>
 <p>  status：执行状态 </p>
 <ul>
-<li> 钉钉 </li>
+<li><p> 钉钉 </p>
+<pre><code class="groovy">#!groovy
+@Library(&#39;shared-lib&#39;) _
+def notify = new org.devops.notify()
+
+pipeline {
+  stages {stage(&#39;Notification&#39;) {
+      script {// ...}
+    }
+  }
+  post {
+    success {
+      script {notify.DingTalkNotify(&quot;2kjdkj2jfk32ll&quot;,&quot;${JOB_NAME}&quot;, &quot; 构建成功 ✅&quot;, &quot;master&quot;)
+      }
+    }
+    failure {
+      script {notify.DingTalkNotify(&quot;2kjdkj2jfk32ll&quot;,&quot;${JOB_NAME}&quot;, &quot; 构建失败 ❌&quot;, &quot;master&quot;)
+      }
+    }
+  }
+}</code></pre>
+</li>
+<li><p> 邮件 </p>
+<pre><code class="groovy">#!groovy
+@Library(&#39;shared-lib&#39;) _
+def notify = new org.devops.notify()
+
+pipeline {
+  stages {stage(&#39;Notification&#39;) {
+      script {// ...}
+    }
+  }
+  post {
+    success {
+      script {tool.MailNotify(&quot;727474430@qq.com&quot;, &quot; 构建成功 ✅&quot;)
+      }
+    }
+    failure {
+      script {tool.MailNotify(&quot;727474430@qq.com&quot;, &quot; 构建失败 ❌&quot;)
+      }
+    }
+  }
+}</code></pre>
+</li>
 </ul>
-<pre><code class="groovy">  #!groovy
-  @Library(&#39;shared-lib&#39;) _
-  def notify = new org.devops.notify()
-
-  pipeline {
-    stages {stage(&#39;Notification&#39;) {
-        script {// ...}
-      }
-    }
-    post {
-      success {
-        script {notify.DingTalkNotify(&quot;2kjdkj2jfk32ll&quot;,&quot;${JOB_NAME}&quot;, &quot; 构建成功 ✅&quot;, &quot;master&quot;)
-        }
-      }
-      failure {
-        script {notify.DingTalkNotify(&quot;2kjdkj2jfk32ll&quot;,&quot;${JOB_NAME}&quot;, &quot; 构建失败 ❌&quot;, &quot;master&quot;)
-        }
-      }
-    }
-  }</code></pre>
-<ul>
-<li> 邮件 </li>
-</ul>
-<pre><code class="groovy">  #!groovy
-  @Library(&#39;shared-lib&#39;) _
-  def notify = new org.devops.notify()
-
-  pipeline {
-    stages {stage(&#39;Notification&#39;) {
-        script {// ...}
-      }
-    }
-    post {
-      success {
-        script {tool.MailNotify(&quot;727474430@qq.com&quot;, &quot; 构建成功 ✅&quot;)
-        }
-      }
-      failure {
-        script {tool.MailNotify(&quot;727474430@qq.com&quot;, &quot; 构建失败 ❌&quot;)
-        }
-      }
-    }
-  }</code></pre>
-  <div aligh="center">
-    <img src="http://qiniu.raindrop-wl.cn/ding-success.png" srcset="/img/loading.gif" width="100%">
-  </div>
-
-  <div aligh="center">
-    <img src="http://qiniu.raindrop-wl.cn/ding-error.png" srcset="/img/loading.gif" width="100%">
-  </div>
+<center>
+  <img style="border-radius: 0.3125em;box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="http://qiniu.raindrop-wl.cn/ding-success.png">
+  <div style="color:orange; border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;padding: 2px;">
+        构建成功
+    </div>
+</center>
+<center>
+  <img style="border-radius: 0.3125em;box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="http://qiniu.raindrop-wl.cn/ding-error.png">
+  <div style="color:orange; border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;padding: 2px;">
+        构建失败
+    </div>
+</center>
 
             <hr>
           </div>

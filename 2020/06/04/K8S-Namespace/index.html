@@ -162,7 +162,7 @@
                   
                   &nbsp;<i class="far fa-chart-bar"></i>
                   <span class="post-count">
-                    1k 字
+                    1.1k 字
                   </span>&nbsp;
                 
 
@@ -170,7 +170,7 @@
                   
                   &nbsp;<i class="far fa-clock"></i>
                   <span class="post-count">
-                      3 分钟
+                      4 分钟
                   </span>&nbsp;
                 
 
@@ -207,11 +207,10 @@
 
 <a id="more"></a>
 
-<h3 id="Namespace- 介绍"><a href="#Namespace- 介绍" class="headerlink" title="Namespace 介绍"></a>Namespace 介绍 </h3><p>  K8S 中的 Namespace（命名空间）的作用是资源隔离。我们可以想象为在 K8S 集群内的虚拟机，用来讲不空命名空间的资源进行彼此隔离。当企业内部存在多个项目组时，可以通过 Namespace 来对项目组范围资源进行隔离，也可通过 Namespace 对应用相关环境如开发、测试、生产等进行隔离。</p>
-<p>  虽然 Namespace 可以隔离资源，但是不同的 Namespace 之间的服务是可以互相访问的。这样设计的目的是，让一个 Namespace 命名空间下的团队的服务可以调用另一个 Namespace 命名空间下的服务。</p>
-<p>  使用 Namespace 还可以提升 K8S 的可控性、安全性和灵活性。</p>
-<h3 id="Namespace- 类型"><a href="#Namespace- 类型" class="headerlink" title="Namespace 类型"></a>Namespace 类型 </h3><p>  K8S 中的 Namespce 默认提供三个命名空间，分别为：</p>
-<blockquote>
+<h3 id="Namespace- 介绍"><a href="#Namespace- 介绍" class="headerlink" title="Namespace 介绍"></a>Namespace 介绍 </h3><p>  &ensp;&ensp;K8S 中的 Namespace（命名空间）的作用是资源隔离。我们可以想象为在 K8S 集群内的虚拟机，用来讲不空命名空间的资源进行彼此隔离。当企业内部存在多个项目组时，可以通过 Namespace 来对项目组范围资源进行隔离，也可通过 Namespace 对应用相关环境如开发、测试、生产等进行隔离。</p>
+<p>  &ensp;&ensp; 虽然 Namespace 可以隔离资源，但是不同的 Namespace 之间的服务是可以互相访问的。这样设计的目的是，让一个 Namespace 命名空间下的团队的服务可以调用另一个 Namespace 命名空间下的服务。</p>
+<p>  &ensp;&ensp; 使用 Namespace 还可以提升 K8S 的可控性、安全性和灵活性。</p>
+<h3 id="Namespace- 类型"><a href="#Namespace- 类型" class="headerlink" title="Namespace 类型"></a>Namespace 类型 </h3><p>  &ensp;&ensp;K8S 中的 Namespce 默认提供三个命名空间，分别为：</p>
 <ul>
 <li><p>default</p>
 <p> 当我们创建资源时，未显示的使用命名空间时默认的命名空间 </p>
@@ -226,8 +225,7 @@
 <p> 泛指我们自定的命名空间 </p>
 </li>
 </ul>
-</blockquote>
-<h3 id="Namespace- 创建"><a href="#Namespace- 创建" class="headerlink" title="Namespace 创建"></a>Namespace 创建 </h3><p>  Namespace 创建的方式有两种，分别如下：</p>
+<h3 id="Namespace- 创建"><a href="#Namespace- 创建" class="headerlink" title="Namespace 创建"></a>Namespace 创建 </h3><p>  &ensp;&ensp;Namespace 创建的方式有两种，分别如下：</p>
 <ol>
 <li><p> 命令行 </p>
 <pre><code class="bash">$ kubectl create namespace test</code></pre>
@@ -243,7 +241,7 @@ metadata:
 <pre><code class="bash">$ kubectl apply -f test.yaml</code></pre>
 </li>
 </ol>
-<h3 id="Namespace- 查询"><a href="#Namespace- 查询" class="headerlink" title="Namespace 查询"></a>Namespace 查询 </h3><p>  Namespace 查询的方式有两种，分别如下：</p>
+<h3 id="Namespace- 查询"><a href="#Namespace- 查询" class="headerlink" title="Namespace 查询"></a>Namespace 查询 </h3><p>  &ensp;&ensp;Namespace 查询的方式有两种，分别如下：</p>
 <ol>
 <li><p> 查询全部 </p>
 <pre><code class="bash">$ kubectl get namespace</code></pre>
@@ -257,7 +255,7 @@ $ kubectl get svc --namespace=test
 $ kubectl get deploy --namespace=test</code></pre>
 </li>
 </ol>
-<h3 id="Namespace- 使用"><a href="#Namespace- 使用" class="headerlink" title="Namespace 使用"></a>Namespace 使用 </h3><p>  我们可以在创建资源时指定资源所属 Namespace，这里有两种方式，分别如下：</p>
+<h3 id="Namespace- 使用"><a href="#Namespace- 使用" class="headerlink" title="Namespace 使用"></a>Namespace 使用 </h3><p>  &ensp;&ensp; 我们可以在创建资源时指定资源所属 Namespace，这里有两种方式，分别如下：</p>
 <ol>
 <li><p> 命令行 </p>
 <pre><code class="bash">$ kubectl apply -f pod.yaml --namespace=test</code></pre>
@@ -277,24 +275,29 @@ spac:
 <p><strong> 注意 </strong>：建议使用声明式，因为无论资源如何改动，使用的命名空间时不会变化的。</p>
 </li>
 </ol>
-<h3 id="Namespace- 激活"><a href="#Namespace- 激活" class="headerlink" title="Namespace 激活"></a>Namespace 激活 </h3><p>  K8S 默认激活 default 命名空间，当我们创建资源时，未指定命名空间默认都会在 default 空间下进行资源创建。当然我们可以使用 –namespace 或 -n 进行指定命名空间的相关查询、更新等操作，但是这样还是比较麻烦的，每次执行命令都需要指定对应的命名空间。幸运的是，又一个叫做 kubens 的工具，可以简化这个工作。</p>
-<p>  kubens 使用非常简单，只需要在终端执行 kebens 然后就会在下面列出当前系统中全部的 namespace，如果需要切换直接选择对应的 namespace 安回车即可激活选中的 namespace 为默认激活命名空间。之后的全部操作，默认都会在该 namespace 下进行。  </p>
+<h3 id="Namespace- 激活"><a href="#Namespace- 激活" class="headerlink" title="Namespace 激活"></a>Namespace 激活 </h3><p>  &ensp;&ensp;K8S 默认激活 default 命名空间，当我们创建资源时，未指定命名空间默认都会在 default 空间下进行资源创建。当然我们可以使用 –namespace 或 -n 进行指定命名空间的相关查询、更新等操作，但是这样还是比较麻烦的，每次执行命令都需要指定对应的命名空间。幸运的是，又一个叫做 kubens 的工具，可以简化这个工作。</p>
+<p>  &ensp;&ensp;kubens 使用非常简单，只需要在终端执行 kebens 然后就会在下面列出当前系统中全部的 namespace，如果需要切换直接选择对应的 namespace 安回车即可激活选中的 namespace 为默认激活命名空间。之后的全部操作，默认都会在该 namespace 下进行。  </p>
+<ul>
+<li><p> 运行 kubens 查看命名空间 </p>
 <pre><code class="bash"># 运行 kubens 查看命名空间
 $ kubens
 default ✅
 kube-public
 kube-system
-test
-
-# 运行 kubens test 切换命名空间
+test</code></pre>
+</li>
+<li><p> 运行 kubens test 切换命名空间 </p>
+<pre><code class="bash"># 运行 kubens test 切换命名空间
 $ kubens test
 $ kubens
 default
 kube-public
 kube-system
 test ✅</code></pre>
-<h3 id="Namespace- 多服务"><a href="#Namespace- 多服务" class="headerlink" title="Namespace 多服务"></a>Namespace 多服务 </h3><p>  在 K8S 中我们想要访问一个服务，只需要使用每桌的 DNS 服务发现，将应用指向服务名即可，但是当一个集群内有多个同名不通作用的服务器时，这是不行的。通过 Namespace 隔离方式 K8S 允许在不同的 Namespace 中存在相同的服务，通过使用扩展形式的 DNS 地址可以轻松解决此问题。</p>
-<p>  K8S DNS 解析：</p>
+</li>
+</ul>
+<h3 id="Namespace- 多服务"><a href="#Namespace- 多服务" class="headerlink" title="Namespace 多服务"></a>Namespace 多服务 </h3><p>  &ensp;&ensp; 在 K8S 中我们想要访问一个服务，只需要使用每桌的 DNS 服务发现，将应用指向服务名即可，但是当一个集群内有多个同名不通作用的服务器时，这是不行的。通过 Namespace 隔离方式 K8S 允许在不同的 Namespace 中存在相同的服务，通过使用扩展形式的 DNS 地址可以轻松解决此问题。</p>
+<p>  &ensp;&ensp;K8S DNS 解析：</p>
 <ul>
 <li><p>DNS 完整版：&lt;ServiceName&gt;.&lt;NamespaceName&gt;.svc.cluster.local</p>
 </li>
@@ -318,7 +321,7 @@ test ✅</code></pre>
 
 </li>
 </ul>
-<h3 id="Namespace- 选择"><a href="#Namespace- 选择" class="headerlink" title="Namespace 选择"></a>Namespace 选择 </h3><p>  无需使用 Namespace 进行隔离 </p>
+<h3 id="Namespace- 选择"><a href="#Namespace- 选择" class="headerlink" title="Namespace 选择"></a>Namespace 选择 </h3><p>  &ensp;&ensp; 无需使用 Namespace 进行隔离 </p>
 <ul>
 <li><p> 小团队 5-10 人 </p>
 <p> 可以使用 Namespace 进行隔离 </p>
