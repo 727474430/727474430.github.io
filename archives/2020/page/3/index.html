@@ -16,7 +16,7 @@
   <meta name="description" content="雨下不停-日记">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
-  <title>Git Command(1) ~ Raindrop Blog</title>
+  <title>归档 ~ Raindrop Blog</title>
 
   <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css"  >
 <link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css"  >
@@ -39,7 +39,7 @@
 
 
 <body>
-  <header style="height: 70vh;">
+  <header style="height: 80vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -138,7 +138,7 @@
   </div>
 </nav>
 
-    <div class="view intro-2" id="background" false
+    <div class="view intro-2" id="background" parallax=true
          style="background: url('/img/default.png')no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
@@ -148,41 +148,6 @@
               
             </span>
 
-            
-              <br>
-              
-                <p class="mt-3">
-                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
-                  星期六, 一月 5日 2019, 3:34 下午
-                </p>
-              
-
-              <p>
-                
-                  
-                  &nbsp;<i class="far fa-chart-bar"></i>
-                  <span class="post-count">
-                    233 字
-                  </span>&nbsp;
-                
-
-                
-                  
-                  &nbsp;<i class="far fa-clock"></i>
-                  <span class="post-count">
-                      1 分钟
-                  </span>&nbsp;
-                
-
-                
-                  <!-- 不蒜子统计文章PV -->
-                  
-                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
-                  <span id="busuanzi_container_page_pv">
-                    <span id="busuanzi_value_page_pv"></span> 次
-                  </span>&nbsp;
-                
-              </p>
             
           </div>
 
@@ -194,99 +159,47 @@
 
   <main>
     
+      <div class="container nopadding-md">
+        <div class="py-5 z-depth-3" id="board">
+          
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-md-10 m-auto">
+                
+
+<div class="list-group">
+  <p class="h4">共计 29 篇文章</p>
+  <hr>
+  
+    
       
+      <p class="h5">2020</p>
+    
+    <a href="/2020/03/11/MySQL-%E6%95%85%E9%9A%9C%E6%81%A2%E5%A4%8D%EF%BC%88%E4%B8%80%EF%BC%89/" class="list-group-item list-group-item-action">
+      <span class="archive-post-title">MySQL- 故障恢复（一）</span>
+      <span style="float: right;">03-11</span>
+    </a>
+  
+</div>
 
-<div class="container-fluid">
-  <div class="row">
-    <div class="d-none d-lg-block col-lg-2"></div>
-    <div class="col-lg-8 nopadding-md">
-      <div class="py-5 z-depth-3" id="board">
-        <div class="post-content mx-auto" id="post">
-          <div class="markdown-body">
-            <p><strong>Git rollback command</strong></p>
-<a id="more"></a>
+  <nav aria-label="index posts navigation">
+    <span class="pagination pg-blue justify-content-center mt-5" id="pagination">
+      <a class="extend prev" rel="prev" href="/archives/2020/page/2/"><i class="fas fa-angle-double-left"></i></a><a class="page-number" href="/archives/2020/">1</a><a class="page-number" href="/archives/2020/page/2/">2</a><span class="page-number current">3</span>
+    </span>
+  </nav>
+  
+  <script>
+    for (ele of document.getElementById("pagination").getElementsByClassName("page-number")) {
+      ele.href += '#board';
+    }
+  </script>
 
-<h3 id="Revoke-Operation"><a href="#Revoke-Operation" class="headerlink" title="Revoke Operation"></a>Revoke Operation</h3><ul>
-<li><p>Basic command</p>
-<pre><code class="bash">$ git checkout -- [file]</code></pre>
-</li>
-<li><p>When file just in work area conduct modify, Not yet(还没有) commit to temporary(暂存) storage.<br>You can use this command, To achieve effect(来达到效果)</p>
-<pre><code class="bash">$ git reset HEAD</code></pre>
-</li>
-<li><p>If you in work area conduct the modify, And commit to temporary. `git checkout &#x2013; [file]` command<br>it’s invalid(就无效了).<br>This time should use `git reset HEAD` command to achieve effect.</p>
-<pre><code class="bash">$ git checkout HEAD [file]</code></pre>
-</li>
-<li><p>This command just will two on the top combine(组合起来), Direct use HEAD cover(覆盖) temporary and<br>word area.</p>
-</li>
-</ul>
-<hr>
-<h3 id="Rollback-Version"><a href="#Rollback-Version" class="headerlink" title="Rollback Version"></a>Rollback Version</h3><ul>
-<li><p>Basic command</p>
-<pre><code class="bash">$ git reset --hard HEAD~n</code></pre>
-</li>
-<li><p>In git `HEAD` express current version. This command just rollback to `~` after appoint version.</p>
-<pre><code class="bash">$ git reset --hard commit_id</code></pre>
-</li>
-<li><p>This command just rollback to `commit<sub>id</sub>` version.<br>In git see commit<sub>id</sub> the method: git reflog command.</p>
-</li>
-</ul>
-<hr>
-<h3 id="Delete-Summary"><a href="#Delete-Summary" class="headerlink" title="Delete Summary"></a>Delete Summary</h3><ul>
-<li><p>Basic command</p>
-<pre><code class="bash">$ git rm</code></pre>
-</li>
-<li><p>This command will delete word area and temporary in content.</p>
-</li>
-<li><p>If delete file after, Want to get back(想要找回) just got us(刚刚被我们) delete the file.Use `git checkout HEAD [file]` command to achieve effect. Permise is(前提是) not commit.</p>
-</li>
-<li><p>If delete file after and commit, Then you need use `git reset &#x2013;hard HEAD~1` rollback<br>to one on top version, Can achieve effect(可以达到效果).</p>
-</li>
-</ul>
 
-            <hr>
-          </div>
-          <br>
-          <div>
-            <p>
-            
-              <span>
-                <i class="iconfont icon-inbox"></i>
-                
-                  <a class="hover-with-bg" href="/categories/Git">Git</a>
-                  &nbsp;
-                
-              </span>&nbsp;&nbsp;
-            
-            
-            </p>
-            
-              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
-            
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="d-none d-lg-block col-lg-2 toc-container">
-      
-  <div id="toc">
-    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
-    <div id="tocbot"></div>
-  </div>
-
-    </div>
-  </div>
-</div>
-
-<!-- custom -->
-
-
-<!-- Comments -->
-<div class="col-lg-7 mx-auto nopadding-md">
-  <div class="container comments mx-auto" id="comments">
-    
-  </div>
-</div>
-
     
   </main>
 
@@ -365,11 +278,6 @@
 
 
 
-  
-    <script src="/lib/tocbot/tocbot.min.js" ></script>
-  
-  <script src="/js/post.js" ></script>
-
 
 
   <script src="/lib/smoothscroll/SmoothScroll.min.js" ></script>
@@ -410,7 +318,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "Git Command(1)&nbsp;",
+        "归档&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,
