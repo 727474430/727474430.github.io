@@ -16,7 +16,7 @@
   <meta name="description" content="雨下不停-日记">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
-  <title>K8S-Health ~ Raindrop Blog</title>
+  <title>K8S-Resources ~ Raindrop Blog</title>
 
   <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css"  >
 <link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css"  >
@@ -153,7 +153,7 @@
               
                 <p class="mt-3">
                   <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
-                  星期六, 六月 6日 2020, 10:19 晚上
+                  星期日, 六月 7日 2020, 1:56 下午
                 </p>
               
 
@@ -162,7 +162,7 @@
                   
                   &nbsp;<i class="far fa-chart-bar"></i>
                   <span class="post-count">
-                    1.7k 字
+                    1.6k 字
                   </span>&nbsp;
                 
 
@@ -203,226 +203,211 @@
       <div class="py-5 z-depth-3" id="board">
         <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
-            <center><p style="font-size:30px;color:black"> K8S Health </p></center>
+            <center><p style="font-size:30px;color:black"> K8S Resources </p></center>
 
 <a id="more"></a>
 
-<h3 id="分布式系统问题"><a href="# 分布式系统问题" class="headerlink" title="分布式系统问题"></a> 分布式系统问题 </h3><p>  &ensp;&ensp; 分布式系统比较难于管理的主要原因在于，在系统运行过程中，如果有某一点出现问题，我们需要让系统自动绕过该问题，并且自动修复该问题，来给用户带来 0 宕机时间的高可用系统。</p>
-<h3 id="Kubernetes- 健康检查"><a href="#Kubernetes- 健康检查" class="headerlink" title="Kubernetes 健康检查"></a>Kubernetes 健康检查 </h3><p>  &ensp;&ensp; 运行状况检查是一种可以让系统知道当前系统中每一个实例状态是否正常的简单方法，如果某个某个实例的某个服务不可用，那么其他服务就不应访问它，也就是不应该有任何流量发送到该服务，正确的方式应该是将流量发往另一个正常的实例或稍后重试。同时系统还应该将不可用的服务恢复到健康的状态。</p>
-<p>  &ensp;&ensp; 在 Kubernetes 中当 Pod 中所有的容器（应用进程）启动后，Kuberntes 将会开始向该 Pod 发送流量。并且在容器故障时重新启动容器。这个默认的行为一个足够好了，但是 Kubernetes 提供了可以自定义运行健康检查的方式，让我们更有针对性的应对不同容器做出更合理的检查方式。</p>
-<h3 id="Kubernetes- 健康检查方式"><a href="#Kubernetes- 健康检查方式" class="headerlink" title="Kubernetes 健康检查方式"></a>Kubernetes 健康检查方式 </h3><p>  &ensp;&ensp;Kubernetes 提供了两种健康检查的方式：</p>
-<ul>
-<li><p>Readiness 探针的用途旨在让 Kubernetes 知道我们的应用何时准备就绪，可对外提供服务。Kubernetes 在允许服务将流量发送到 Pod 之前，会确保 readiness 通过检查。如果启动时 readiness 探针失败，Kubernetes 会停止向这个 Pod 发送流量 </p>
-</li>
-<li><p>Liveness 探针的用途旨在让 Kubernetes 知道我们的应用是否存活，如果检测到应用非存活状态，Kubernetes 会删除这个 Pod，并启动一个新的 Pod 替换它。</p>
-</li>
-</ul>
-<h3 id="Kubernetes- 健康检查类型"><a href="#Kubernetes- 健康检查类型" class="headerlink" title="Kubernetes 健康检查类型"></a>Kubernetes 健康检查类型 </h3><p>  &ensp;&ensp;Kubernetes 提供了三种健康检查的类型：</p>
-<ul>
-<li><p>HTTP：发送 HTTP 请求，Kubernetes 会 ping 一个指定 path，当返回状态码在 200-300 范围内会标记为健康，否则标记为不健康。即使应用不是 HTTP 服务，也可以写一个轻量级 HTTP 接口，用于响应 Liveness 检测。</p>
-</li>
-<li><p>CMD：在容器中运行指定命令，如果命令返回码为 0 会标记为健康，否则标记为不健康。当不能使用 HTTP 检测服务是否健康时，可以使用 CMD 运行指定命令的方式进行健康检查。</p>
-</li>
-<li><p>TCP：在容器中对指定端口建立 TCP 链接，如果可以建立会标记为健康，否则标记为不健康。当服务为 grpc 或 ftp 等服务时，可以使用 TCP 对指定端口建立 TCP 链接进行健康检查。</p>
-</li>
-</ul>
-<h3 id="Kubernetes- 健康检查属性"><a href="#Kubernetes- 健康检查属性" class="headerlink" title="Kubernetes 健康检查属性"></a>Kubernetes 健康检查属性 </h3><p>  &ensp;&ensp;Kubernetes 提供了五种健康检查的属性：</p>
-<ul>
-<li><p>initialDelaySeconds：第一次检查，在容器启动多少秒后执行检查，单位秒。</p>
-</li>
-<li><p>periodSeconds：周期性检查，在容器启动后执行检查的周期是多少秒，单位秒。</p>
-</li>
-<li><p>timeoutSeconds：检查超时时间，检查运行超过多少秒后认为失败，单位秒。</p>
-</li>
-<li><p>successThreshold：检查成功阈值，检查通过次数达到阈值时认为成功，单位秒。</p>
-</li>
-<li><p>failureThreshold：检查失败阈值，检查失败此时达到阈值时认为失败，单位秒。</p>
-</li>
-</ul>
-<h3 id="Liveness- 存活性检查"><a href="#Liveness- 存活性检查" class="headerlink" title="Liveness 存活性检查"></a>Liveness 存活性检查 </h3><p>  &ensp;&ensp;Kubernetes 会定期执行 Liveness 探针检测，在通过检测时不会对 Pod 做任何处理。在未通过检测时 Kubernetes 会删除该 Pod，并启动新的 Pod 替换它。</p>
-<ul>
-<li><p>HTTP 方式 </p>
-<p> 启动 nginx 容器 5 秒后执行存活性检查，ping /index.html 路径，检查周期 5 秒，检查超时时间 5 秒，失败 3 次后认为失败，成功 1 次后认为成功。</p>
-<pre><code class="yaml">apiVersion: v1
-kind: Pod
-metadata:
-  name: liveness-http
-  labels:
-    app: liveness-http
-spec:
-  containers:
-  - name: liveness
-    image: nginx:1.9
-    ports:
-      - name: http
-        containerPort: 80
-    livenessProbe:
-      httpGet:
-        path: /index.html
-        port: 80
-      initialDelaySeconds: 5
-      periodSeconds: 5
-      timeoutSeconds: 3
-      successThreshold: 1
-      failureThreshold: 3</code></pre>
-</li>
-<li><p>CMD 方式 </p>
-<p> 启动 busybox 容器 5 秒后执行存活性检查，cat /tmp/healthy 文件，检查周期 5 秒，检查超时时间 5 秒，失败 3 次后认为失败，成功 1 次后认为成功。</p>
-<pre><code class="yaml">apiVersion: v1
-kind: Pod
-metadata:
-  name: liveness-cmd
-  labels:
-    app: liveness-cmd
-spec:
-  containers:
-  - name: busybox
-    image: busybox
-    command: [&quot;sh&quot;, &quot;-c&quot;, &quot;touch /tmp/healthy; sleep 30; rm -rf /tmp/healthy; sleep 600&quot;]
-    livenessProbe:
-      exec:
-        command:
-          - cat
-          - /tmp/healthy
-      initialDelaySeconds: 5
-      periodSeconds: 5
-      timeoutSeconds: 3
-      successThreshold: 1
-      failureThreshold: 3</code></pre>
-</li>
-<li><p>TCP 方式 </p>
-<p> 启动 nginx 容器 5 秒后执行存活性检查，对 80 端口建立 tcp 链接，检查周期 5 秒，检查超时时间 5 秒，失败 3 次后认为失败，成功 1 次后认为成功。</p>
-<pre><code class="yaml">apiVersion: v1
-kind: Pod
-metadata:
-  name: liveness-tcp
-  labels:
-    app: liveness-tcp
-spec:
-  containers:
-  - name: liveness
-    image: nginx:1.9
-    ports:
-      - name: http
-        containerPort: 80
-    livenessProbe:
-      tcpSocket:
-        port: 80
-      initialDelaySeconds: 5
-      periodSeconds: 5
-      timeoutSeconds: 3
-      successThreshold: 1
-      failureThreshold: 3</code></pre>
-</li>
-</ul>
+<h3 id="Kubernetes- 资源管理"><a href="#Kubernetes- 资源管理" class="headerlink" title="Kubernetes 资源管理"></a>Kubernetes 资源管理 </h3><p>  &ensp;&ensp; 在 Kubernetes 调度 Pod 时，节点有足够的资源用来运行容器非常重要。如果想将一个大的应用调度到一个资源受限的节点，节点可能会耗尽 Memory 或 CPU，导致无法正常工作。</p>
+<p>  &ensp;&ensp; 在 Kubernetes 中提供了 requests 和 limits 来解决调度时选择合适资源的问题。requests 和 limits 是用于控制资源的机制，例如 CPU 和 Memory。</p>
+<p>  &ensp;&ensp; 在 Kubernetes 中 scheduler 使用 CPU 和 Memory 的值来确定在哪里运行 Pod。Pod 中的每个容器都可以设置自己的 requests 和 limits，这些都是附加值。CPU 资源使用 millicores 定义，Memory 使用 million 定义。</p>
 <center>
-  <img style="border-radius: 0.3125em;box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="http://qiniu.raindrop-wl.cn/liveness-pass.png">
+  <img style="border-radius: 0.3125em;box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="http://qiniu.raindrop-wl.cn/requests.png">
   <div style="color:orange; border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;padding: 2px;">
-        liveness-pass
+        requests 资源
     </div>
 </center>
 
 <center>
-  <img style="border-radius: 0.3125em;box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="http://qiniu.raindrop-wl.cn/liveness-notpass.png">
+  <img style="border-radius: 0.3125em;box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="http://qiniu.raindrop-wl.cn/limits.png">
   <div style="color:orange; border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;padding: 2px;">
-        liveness-notpass
+        limits 资源
     </div>
 </center>
 
 
-<h3 id="Readiness- 可用性检查"><a href="#Readiness- 可用性检查" class="headerlink" title="Readiness 可用性检查"></a>Readiness 可用性检查 </h3><p>  &ensp;&ensp;Kuberntes 会定期执行 Readiness 探针检测，在未通过检测时不会将流量发往该 Pod。在通过检测后才会将流量发往该 Pod。</p>
+<h3 id="Kubernetes-Requests"><a href="#Kubernetes-Requests" class="headerlink" title="Kubernetes Requests"></a>Kubernetes Requests</h3><p>  &ensp;&ensp;requests 代表一定能获取到的资源，如果一个容器设置了 requests 属性，Kubernetes 会将其调度到能够提供这些资源的节点上。</p>
+<p>  &ensp;&ensp;requests 有两种类型的资源：</p>
 <ul>
-<li><p>HTTP 方式 </p>
-<p> 启动 nginx 容器 5 秒后执行可用性检查，ping /index.html 路径，检查周期 5 秒，检查超时时间 5 秒，失败 3 次后认为失败，成功 1 次后认为成功。</p>
+<li><p>CPU：需要使用 CPU 的核数，单位是 millicores。如：1/4 核设置为 250m，1 核设置为 1000m。</p>
+</li>
+<li><p>Memory：需要使用 Memory 的容量，单位时 million。如：100 兆设置为 100Mi，200 兆设置为 200Mi。</p>
 <pre><code class="yaml">apiVersion: v1
 kind: Pod
 metadata:
-  name: readiness-http
+  name: resource-demo
   labels:
-    app: readiness-http
+    app: resource-demo
 spec:
   containers:
-  - name: readiness
+  - name: resource-demo
     image: nginx:1.9
     ports:
       - name: http
         containerPort: 80
-    readinessProbe:
-      httpGet:
-        path: /index.html
-        port: 80
-      initialDelaySeconds: 5
-      periodSeconds: 5
-      timeoutSeconds: 3
-      successThreshold: 1
-      failureThreshold: 3</code></pre>
+    resources:
+      requests:
+        memory: &quot;32Mi&quot;
+        cpu: &quot;200m&quot;</code></pre>
 </li>
-<li><p>CMD 方式 </p>
-<p> 启动 busybox 容器 5 秒后执行可用性检查，cat /tmp/healthy 文件，检查周期 5 秒，检查超时时间 5 秒，失败 3 次后认为失败，成功 1 次后认为成功。</p>
+</ul>
+<h3 id="Kubernetes-Limits"><a href="#Kubernetes-Limits" class="headerlink" title="Kubernetes Limits"></a>Kubernetes Limits</h3><p>  &ensp;&ensp;limits 代表容器能获取的资源上限，如果一个容器设置了 limits 属性，Kubernetes 只允许容器上升到 limits，然后被限制住。</p>
+<p>  &ensp;&ensp;limits 有两种类型的资源：</p>
+<ul>
+<li><p>CPU：需要使用 CPU 的核数，单位是 millicores。如：1/4 核设置为 250m，1 核设置为 1000m。</p>
+</li>
+<li><p>Memory：需要使用 Memory 的容量，单位时 million。如：100 兆设置为 100Mi，200 兆设置为 200Mi。</p>
 <pre><code class="yaml">apiVersion: v1
 kind: Pod
 metadata:
-  name: readiness-cmd
+  name: resource-demo
   labels:
-    app: readiness-cmd
+    app: resource-demo
 spec:
   containers:
-  - name: nginx
-    image: nginx:1.9
-    command: [&quot;sh&quot;, &quot;-c&quot;, &quot;touch /tmp/healthy; sleep 30; rm -rf /tmp/healthy; sleep 600&quot;]
-    readinessProbe:
-      exec:
-        command:
-          - cat
-          - /tmp/healthy
-      initialDelaySeconds: 5
-      periodSeconds: 5
-      timeoutSeconds: 3
-      successThreshold: 1
-      failureThreshold: 3</code></pre>
-</li>
-<li><p>TCP 方式 </p>
-<p> 启动 nginx 容器 5 秒后执行可用性检查，对 80 端口建立 tcp 链接，检查周期 5 秒，检查超时时间 5 秒，失败 3 次后认为失败，成功 1 次后认为成功。</p>
-<pre><code class="yaml">apiVersion: v1
-kind: Pod
-metadata:
-  name: readiness-tcp
-  labels:
-    app: readiness-tcp
-spec:
-  containers:
-  - name: readiness
+  - name: resource-demo
     image: nginx:1.9
     ports:
       - name: http
         containerPort: 80
-    readinessProbe:
-      tcpSocket:
-        port: 80
-      initialDelaySeconds: 5
-      periodSeconds: 5
-      timeoutSeconds: 3
-      successThreshold: 1
-      failureThreshold: 3</code></pre>
+    resources:
+      limites:
+        memory: &quot;64Mi&quot;
+        cpu: &quot;300m&quot;</code></pre>
+</li>
+</ul>
+<h3 id="Kubernetes-ResourceQuotas"><a href="#Kubernetes-ResourceQuotas" class="headerlink" title="Kubernetes ResourceQuotas"></a>Kubernetes ResourceQuotas</h3><p>  &ensp;&ensp; 为了防止运维人员未限制资源使用或者使用过大的资源，Kubernetes 提供了 ResourceQuotas 资源配额来限制 Namespace 命名空间中所有容器所能使用的资源之合。</p>
+<ul>
+<li><p>requests.cpu：命名空间中所有容器所能达到的合计 CPU requests 的最大值。例如：50 个 10m requests 的容器。</p>
+</li>
+<li><p>requests.memory：命名空间中所有容器能达到的合计 Memory request 的最大值。例如：5 个 20MB requests 的容器。</p>
+</li>
+<li><p>limits.cpu：命名空间中所有容器所能达到的合计 CPU limits 的最大值。</p>
+</li>
+<li><p>limits.memory：命名空间中所有容器能达到的合计 Memory limits 的最大值。</p>
+</li>
+<li><p>pods：命名空间中 Pod 最大实例数。</p>
+</li>
+<li><p>secrets：命名空间中 Secret 最大实例数。</p>
+</li>
+<li><p>services：命名空间中 Service 最大实例数。</p>
+</li>
+<li><p>configmaps：命名空间中 ConfigMap 最大实例数。</p>
+</li>
+<li><p>persistentvolumeclaims：命名空间中 PVC 最大实例数。</p>
+</li>
+<li><p>replicationcontrollers：命名空间中 RC 最大实例数。</p>
+<pre><code class="yaml">apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: resource-quota-demo
+spec:
+  hard:
+    requests.cpu: 0.5
+    requests.memory: 100Mi
+    limits.cpu: 1
+    limits.memory: 500Mi
+    pods: 10
+    secrets: 10
+    services: 10
+    configmaps: 10
+    persistentvolumeclaims: 10
+    replicationcontrollers: 10</code></pre>
+</li>
+</ul>
+<h3 id="Kubernetes-LimitRange"><a href="#Kubernetes-LimitRange" class="headerlink" title="Kubernetes LimitRange"></a>Kubernetes LimitRange</h3><p>  &ensp;&ensp; 通过 LimitRange 可以有效的防止我们在命名空间内创建超小型或超大型的容器。它与针对每个命名空间的 ResourceQuotas 不同，LimitRange 会加强到每个容器上。LimitRange 是对 Pod 和 Container 级别的资源进行限制。</p>
+<ul>
+<li><p>default：Pod 中容器默认 limits，任何没有明确设置 limits 的容器，都将使用这个默认值。</p>
+</li>
+<li><p>defaultRequest：Pod 中容器默认 requests，任何没有明确设置 requests 的容器，都将使用这个默认值。</p>
+</li>
+<li><p>max：Pod 中容器可以设置的最大 limits 值。default 不能大于 max 值，同样容器中设置的值也不能大于该值。如果设置了 max 而为设置 default，那么 max 将成为默认值。</p>
+</li>
+<li><p>min：Pod 中容器可以设置的最小 requests 值。defaultRequest 不能小于 min 值，同样容器中设置的值也不能小于该值。如果设置了 min 而为设置 defaultRequest，那么 min 将成为默人值。</p>
+</li>
+<li><p>maxLimitRequestRatio：limit / request 限制值与请求值的比值上限。例如 Pod 中 CPU 的 Limit 值为 3，而 Requests 值为 0.5，此时比值为 6，创建 Pod 会失效。</p>
+<pre><code class="yaml">apiVersion: v1
+kind: LimitRange
+metadata:
+  name: limit-range-demo
+sepc:
+  limits:
+  - max:
+      cpu: &quot;4&quot;
+      memory: 2Gi
+    min:
+      cpu: 200m
+      memory: 6Mi
+    maxLimitRequestRatio: # max value for limit / request 限制值与请求值的比例
+      cpu: 3
+      memory: 2
+    type: Pod
+  - default:
+      cpu: 600m
+      memory: 100Mi
+    defaultRequest:
+      cpu: 100m
+      memory: 50Mi
+    max:
+      cpu: 1000m
+      memory: 200Mi
+    min: # min request
+      cpu: 10m
+      memory: 10Mi
+    maxLimitRequestRatio: # max value for limit / request 限制值与请求值的比例
+      cpu: 2
+      memory: 2
+    type: Container</code></pre>
+</li>
+</ul>
+<h3 id="Kubernets- 资源超出"><a href="#Kubernets- 资源超出" class="headerlink" title="Kubernets 资源超出"></a>Kubernets 资源超出 </h3><p>  &ensp;&ensp; 当 CPU 超过负载时，Kubernetes 会限制每个 Pod 可用 CPU 的资源，但会确保每个 Pod 都有可用的 CPU 资源。</p>
+<center>
+  <img style="border-radius: 0.3125em;box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="http://qiniu.raindrop-wl.cn/cpu-allocation.png">
+  <div style="color:orange; border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;padding: 2px;">
+        限制 CPU 资源
+    </div>
+</center>
+
+<p>  &ensp;&ensp; 当 Memory 超过负载时，首先 Kubernetes 会将资源超出 requests 的 Pods 终止运行，如果某个 Pod 没有配置 requests 那么这个 Pod 就满足资源超出 requests 的条件，所以这个 Pod 是终止运行的最佳候选。</p>
+<center>
+  <img style="border-radius: 0.3125em;box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="http://qiniu.raindrop-wl.cn/kill-requests.png">
+  <div style="color:orange; border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;padding: 2px;">
+        将超出 requests 终止运行
+    </div>
+</center>
+
+<p>  &ensp;&ensp; 其次 Kubernetes 会将资源超出 requests 但仍低于 limits 的 Pod 终止运行，如果 Kubernetes 找出了多个符合条件的 Pod 会对这些 Pods 进行优先级（Priority）排序，然后终止运行。</p>
+<center>
+  <img style="border-radius: 0.3125em;box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="http://qiniu.raindrop-wl.cn/kill-priority.png">
+  <div style="color:orange; border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;padding: 2px;">
+        将优先级 priority 最低的终止运行
+    </div>
+</center>
+
+<p>  &ensp;&ensp; 最后如果所有 Pods 优先级一致，那么 Kubernets 会终止运行超出 requests 最多的 Pod。</p>
+<center>
+  <img style="border-radius: 0.3125em;box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="http://qiniu.raindrop-wl.cn/kill-big-requests.png">
+  <div style="color:orange; border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;padding: 2px;">
+        将超出 requests 最多的终止运行
+    </div>
+</center>
+
+
+<h3 id="注意事项"><a href="# 注意事项" class="headerlink" title="注意事项"></a> 注意事项 </h3><ul>
+<li><p> 如果设置 CPU 核数大于最大节点的核数，那么这个 Pod 将永远无法得到调度。如果应用不是以计算为主，那么 requests 最好设置为 1 或 以下，然后通过更多副本来扩展。这样可以给系统更大的灵活性。</p>
+</li>
+<li><p>CPU 作为一种可压缩资源，当 CPU 使用达到上限时，Kubernetes 将会限制资源使用，这意味着 CPU 将受到认为的限制，给应用带来潜在的性能问题，然而 CPU 无法终止或收回。</p>
+</li>
+<li><p>Memory 作为一种不可压缩的资源，我们无法控制内存的使用，如果容器的内存使用超过了 limits 它将被终止。</p>
+</li>
+<li><p> 如果集群中所有节点都无法满足 Pod 需要的资源，那么 Pod 将被挂起。</p>
 </li>
 </ul>
 <center>
-    <img style="border-radius: 0.3125em;box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="http://qiniu.raindrop-wl.cn/readiness-notpass.png">
-    <div style="color:orange; border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;padding: 2px;">
-        readiness-notpass
-    </div>
-</center>
-
-<center>
-  <img style="border-radius: 0.3125em;box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="http://qiniu.raindrop-wl.cn/readiness-pass.png">
+  <img style="border-radius: 0.3125em;box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="http://qiniu.raindrop-wl.cn/big-requests.png">
   <div style="color:orange; border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;padding: 2px;">
-        readiness-pass
+        requests 过大无法调度
     </div>
 </center>
-
-
-<h3 id="注意事项"><a href="# 注意事项" class="headerlink" title="注意事项"></a> 注意事项 </h3><p>  &ensp;&ensp; 当使用 Liveness 时，需要注意 initialDelaySecons 参数设置的时间一定要大于应用启动时间，否则应用只能不断的循环重启，永远无法就绪。</p>
-<p>  &ensp;&ensp; 建议使用 P99 的启动时间作为 initialDelaySecons 参数的值。随着应用启动时间变快或变慢，确保更新该参数。</p>
 
             <hr>
           </div>
@@ -591,7 +576,7 @@ spec:
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "K8S-Health&nbsp;",
+        "K8S-Resources&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,
