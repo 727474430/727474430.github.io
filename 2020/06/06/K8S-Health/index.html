@@ -162,7 +162,7 @@
                   
                   &nbsp;<i class="far fa-chart-bar"></i>
                   <span class="post-count">
-                    1.7k 字
+                    1.9k 字
                   </span>&nbsp;
                 
 
@@ -170,7 +170,7 @@
                   
                   &nbsp;<i class="far fa-clock"></i>
                   <span class="post-count">
-                      6 分钟
+                      8 分钟
                   </span>&nbsp;
                 
 
@@ -207,17 +207,17 @@
 
 <a id="more"></a>
 
-<h3 id="分布式系统问题"><a href="# 分布式系统问题" class="headerlink" title="分布式系统问题"></a> 分布式系统问题 </h3><p>  &ensp;&ensp; 分布式系统比较难于管理的主要原因在于，在系统运行过程中，如果有某一点出现问题，我们需要让系统自动绕过该问题，并且自动修复该问题，来给用户带来 0 宕机时间的高可用系统。</p>
-<h3 id="Kubernetes- 健康检查"><a href="#Kubernetes- 健康检查" class="headerlink" title="Kubernetes 健康检查"></a>Kubernetes 健康检查 </h3><p>  &ensp;&ensp; 运行状况检查是一种可以让系统知道当前系统中每一个实例状态是否正常的简单方法，如果某个某个实例的某个服务不可用，那么其他服务就不应访问它，也就是不应该有任何流量发送到该服务，正确的方式应该是将流量发往另一个正常的实例或稍后重试。同时系统还应该将不可用的服务恢复到健康的状态。</p>
-<p>  &ensp;&ensp; 在 Kubernetes 中当 Pod 中所有的容器（应用进程）启动后，Kuberntes 将会开始向该 Pod 发送流量。并且在容器故障时重新启动容器。这个默认的行为一个足够好了，但是 Kubernetes 提供了可以自定义运行健康检查的方式，让我们更有针对性的应对不同容器做出更合理的检查方式。</p>
-<h3 id="Kubernetes- 健康检查方式"><a href="#Kubernetes- 健康检查方式" class="headerlink" title="Kubernetes 健康检查方式"></a>Kubernetes 健康检查方式 </h3><p>  &ensp;&ensp;Kubernetes 提供了两种健康检查的方式：</p>
+<h3 id="分布式系统问题"><a href="# 分布式系统问题" class="headerlink" title="分布式系统问题"></a> 分布式系统问题 </h3><p>&ensp;&ensp; 分布式系统比较难于管理的主要原因在于，在系统运行过程中，如果有某一点出现问题，我们需要让系统自动绕过该问题，并且自动修复该问题，来给用户带来 0 宕机时间的高可用系统。</p>
+<h3 id="Kubernetes- 健康检查"><a href="#Kubernetes- 健康检查" class="headerlink" title="Kubernetes 健康检查"></a>Kubernetes 健康检查 </h3><p>&ensp;&ensp; 运行状况检查是一种可以让系统知道当前系统中每一个实例状态是否正常的简单方法，如果某个某个实例的某个服务不可用，那么其他服务就不应访问它，也就是不应该有任何流量发送到该服务，正确的方式应该是将流量发往另一个正常的实例或稍后重试。同时系统还应该将不可用的服务恢复到健康的状态。</p>
+<p>&ensp;&ensp; 在 Kubernetes 中当 Pod 中所有的容器（应用进程）启动后，Kuberntes 将会开始向该 Pod 发送流量。并且在容器故障时重新启动容器。这个默认的行为一个足够好了，但是 Kubernetes 提供了可以自定义运行健康检查的方式，让我们更有针对性的应对不同容器做出更合理的检查方式。</p>
+<h3 id="Kubernetes- 健康检查方式"><a href="#Kubernetes- 健康检查方式" class="headerlink" title="Kubernetes 健康检查方式"></a>Kubernetes 健康检查方式 </h3><p>&ensp;&ensp;Kubernetes 提供了两种健康检查的方式：</p>
 <ul>
 <li><p>Readiness 探针的用途旨在让 Kubernetes 知道我们的应用何时准备就绪，可对外提供服务。Kubernetes 在允许服务将流量发送到 Pod 之前，会确保 readiness 通过检查。如果启动时 readiness 探针失败，Kubernetes 会停止向这个 Pod 发送流量 </p>
 </li>
 <li><p>Liveness 探针的用途旨在让 Kubernetes 知道我们的应用是否存活，如果检测到应用非存活状态，Kubernetes 会删除这个 Pod，并启动一个新的 Pod 替换它。</p>
 </li>
 </ul>
-<h3 id="Kubernetes- 健康检查类型"><a href="#Kubernetes- 健康检查类型" class="headerlink" title="Kubernetes 健康检查类型"></a>Kubernetes 健康检查类型 </h3><p>  &ensp;&ensp;Kubernetes 提供了三种健康检查的类型：</p>
+<h3 id="Kubernetes- 健康检查类型"><a href="#Kubernetes- 健康检查类型" class="headerlink" title="Kubernetes 健康检查类型"></a>Kubernetes 健康检查类型 </h3><p>&ensp;&ensp;Kubernetes 提供了三种健康检查的类型：</p>
 <ul>
 <li><p>HTTP：发送 HTTP 请求，Kubernetes 会 ping 一个指定 path，当返回状态码在 200-300 范围内会标记为健康，否则标记为不健康。即使应用不是 HTTP 服务，也可以写一个轻量级 HTTP 接口，用于响应 Liveness 检测。</p>
 </li>
@@ -226,7 +226,7 @@
 <li><p>TCP：在容器中对指定端口建立 TCP 链接，如果可以建立会标记为健康，否则标记为不健康。当服务为 grpc 或 ftp 等服务时，可以使用 TCP 对指定端口建立 TCP 链接进行健康检查。</p>
 </li>
 </ul>
-<h3 id="Kubernetes- 健康检查属性"><a href="#Kubernetes- 健康检查属性" class="headerlink" title="Kubernetes 健康检查属性"></a>Kubernetes 健康检查属性 </h3><p>  &ensp;&ensp;Kubernetes 提供了五种健康检查的属性：</p>
+<h3 id="Kubernetes- 健康检查属性"><a href="#Kubernetes- 健康检查属性" class="headerlink" title="Kubernetes 健康检查属性"></a>Kubernetes 健康检查属性 </h3><p>&ensp;&ensp;Kubernetes 提供了五种健康检查的属性：</p>
 <ul>
 <li><p>initialDelaySeconds：第一次检查，在容器启动多少秒后执行检查，单位秒。</p>
 </li>
@@ -239,190 +239,219 @@
 <li><p>failureThreshold：检查失败阈值，检查失败此时达到阈值时认为失败，单位秒。</p>
 </li>
 </ul>
-<h3 id="Liveness- 存活性检查"><a href="#Liveness- 存活性检查" class="headerlink" title="Liveness 存活性检查"></a>Liveness 存活性检查 </h3><p>  &ensp;&ensp;Kubernetes 会定期执行 Liveness 探针检测，在通过检测时不会对 Pod 做任何处理。在未通过检测时 Kubernetes 会删除该 Pod，并启动新的 Pod 替换它。</p>
+<h3 id="Liveness- 存活性检查"><a href="#Liveness- 存活性检查" class="headerlink" title="Liveness 存活性检查"></a>Liveness 存活性检查 </h3><p>&ensp;&ensp;Kubernetes 会定期执行 Liveness 探针检测，在通过检测时不会对 Pod 做任何处理。在未通过检测时 Kubernetes 会删除该 Pod，并启动新的 Pod 替换它。</p>
 <ul>
-<li><p>HTTP 方式 </p>
+<li>HTTP 方式 </li>
+</ul>
 <p> 启动 nginx 容器 5 秒后执行存活性检查，ping /index.html 路径，检查周期 5 秒，检查超时时间 5 秒，失败 3 次后认为失败，成功 1 次后认为成功。</p>
 <pre><code class="yaml">apiVersion: v1
 kind: Pod
 metadata:
-  name: liveness-http
-  labels:
-    app: liveness-http
+name: liveness-http
+labels:
+app: liveness-http
 spec:
-  containers:
-  - name: liveness
-    image: nginx:1.9
-    ports:
-      - name: http
-        containerPort: 80
-    livenessProbe:
-      httpGet:
-        path: /index.html
-        port: 80
-      initialDelaySeconds: 5
-      periodSeconds: 5
-      timeoutSeconds: 3
-      successThreshold: 1
-      failureThreshold: 3</code></pre>
-</li>
-<li><p>CMD 方式 </p>
-<p> 启动 busybox 容器 5 秒后执行存活性检查，cat /tmp/healthy 文件，检查周期 5 秒，检查超时时间 5 秒，失败 3 次后认为失败，成功 1 次后认为成功。</p>
-<pre><code class="yaml">apiVersion: v1
+containers:
+        - name: liveness
+        image: nginx:1.9
+        ports:
+                - name: http
+                containerPort: 80
+                livenessProbe:
+                httpGet:
+                path: /index.html
+                port: 80
+                initialDelaySeconds: 5
+                periodSeconds: 5
+                timeoutSeconds: 3
+                successThreshold: 1
+                failureThreshold: 3
+                ```
+
+* CMD 方式
+
+启动 busybox 容器 5 秒后执行存活性检查，cat /tmp/healthy 文件，检查周期 5 秒，检查超时时间 5 秒，失败 3 次后认为失败，成功 1 次后认为成功。
+
+```yaml
+apiVersion: v1
 kind: Pod
 metadata:
-  name: liveness-cmd
-  labels:
-    app: liveness-cmd
+name: liveness-cmd
+labels:
+app: liveness-cmd
 spec:
-  containers:
-  - name: busybox
-    image: busybox
-    command: [&quot;sh&quot;, &quot;-c&quot;, &quot;touch /tmp/healthy; sleep 30; rm -rf /tmp/healthy; sleep 600&quot;]
-    livenessProbe:
-      exec:
+containers:
+        - name: busybox
+        image: busybox
+        command: [&quot;sh&quot;, &quot;-c&quot;, &quot;touch /tmp/healthy; sleep 30; rm -rf /tmp/healthy; sleep 600&quot;]
+        livenessProbe:
+        exec:
         command:
-          - cat
-          - /tmp/healthy
-      initialDelaySeconds: 5
-      periodSeconds: 5
-      timeoutSeconds: 3
-      successThreshold: 1
-      failureThreshold: 3</code></pre>
-</li>
-<li><p>TCP 方式 </p>
-<p> 启动 nginx 容器 5 秒后执行存活性检查，对 80 端口建立 tcp 链接，检查周期 5 秒，检查超时时间 5 秒，失败 3 次后认为失败，成功 1 次后认为成功。</p>
-<pre><code class="yaml">apiVersion: v1
+                        - cat
+                        - /tmp/healthy
+                        initialDelaySeconds: 5
+                        periodSeconds: 5
+                        timeoutSeconds: 3
+                        successThreshold: 1
+                        failureThreshold: 3
+                        ```
+
+* TCP 方式
+
+启动 nginx 容器 5 秒后执行存活性检查，对 80 端口建立 tcp 链接，检查周期 5 秒，检查超时时间 5 秒，失败 3 次后认为失败，成功 1 次后认为成功。
+
+```yaml
+apiVersion: v1
 kind: Pod
 metadata:
-  name: liveness-tcp
-  labels:
-    app: liveness-tcp
+name: liveness-tcp
+labels:
+app: liveness-tcp
 spec:
-  containers:
-  - name: liveness
-    image: nginx:1.9
-    ports:
-      - name: http
-        containerPort: 80
-    livenessProbe:
-      tcpSocket:
-        port: 80
-      initialDelaySeconds: 5
-      periodSeconds: 5
-      timeoutSeconds: 3
-      successThreshold: 1
-      failureThreshold: 3</code></pre>
-</li>
-</ul>
-<center>
-  <img style="border-radius: 0.3125em;box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="http://qiniu.raindrop-wl.cn/liveness-pass.png">
-  <div style="color:orange; border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;padding: 2px;">
-        liveness-pass
-    </div>
-</center>
+containers:
+        - name: liveness
+        image: nginx:1.9
+        ports:
+                - name: http
+                containerPort: 80
+                livenessProbe:
+                tcpSocket:
+                port: 80
+                initialDelaySeconds: 5
+                periodSeconds: 5
+                timeoutSeconds: 3
+                successThreshold: 1
+                failureThreshold: 3
+                ```
 
-<center>
-  <img style="border-radius: 0.3125em;box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="http://qiniu.raindrop-wl.cn/liveness-notpass.png">
-  <div style="color:orange; border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;padding: 2px;">
-        liveness-notpass
-    </div>
-</center>
+                &lt;center&gt;
+                &lt;img style=&quot;border-radius: 0.3125em;box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);&quot; 
+                src=&quot;http://qiniu.raindrop-wl.cn/liveness-pass.png&quot;&gt;
+                &lt;div style=&quot;color:orange; border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;padding: 2px;&quot;&gt;
+                liveness-pass
+                &lt;/div&gt;
+                &lt;/center&gt;
+
+                &lt;center&gt;
+                &lt;img style=&quot;border-radius: 0.3125em;box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);&quot; 
+                src=&quot;http://qiniu.raindrop-wl.cn/liveness-notpass.png&quot;&gt;
+                &lt;div style=&quot;color:orange; border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;padding: 2px;&quot;&gt;
+                liveness-notpass
+                &lt;/div&gt;
+                &lt;/center&gt;
 
 
-<h3 id="Readiness- 可用性检查"><a href="#Readiness- 可用性检查" class="headerlink" title="Readiness 可用性检查"></a>Readiness 可用性检查 </h3><p>  &ensp;&ensp;Kuberntes 会定期执行 Readiness 探针检测，在未通过检测时不会将流量发往该 Pod。在通过检测后才会将流量发往该 Pod。</p>
-<ul>
-<li><p>HTTP 方式 </p>
-<p> 启动 nginx 容器 5 秒后执行可用性检查，ping /index.html 路径，检查周期 5 秒，检查超时时间 5 秒，失败 3 次后认为失败，成功 1 次后认为成功。</p>
-<pre><code class="yaml">apiVersion: v1
+### Readiness 可用性检查
+
+&amp;ensp;&amp;ensp;Kuberntes 会定期执行 Readiness 探针检测，在未通过检测时不会将流量发往该 Pod。在通过检测后才会将流量发往该 Pod。
+
+* HTTP 方式
+
+启动 nginx 容器 5 秒后执行可用性检查，ping /index.html 路径，检查周期 5 秒，检查超时时间 5 秒，失败 3 次后认为失败，成功 1 次后认为成功。
+
+```yaml
+apiVersion: v1
 kind: Pod
 metadata:
-  name: readiness-http
-  labels:
-    app: readiness-http
+name: readiness-http
+labels:
+app: readiness-http
 spec:
-  containers:
-  - name: readiness
-    image: nginx:1.9
-    ports:
-      - name: http
-        containerPort: 80
-    readinessProbe:
-      httpGet:
-        path: /index.html
-        port: 80
-      initialDelaySeconds: 5
-      periodSeconds: 5
-      timeoutSeconds: 3
-      successThreshold: 1
-      failureThreshold: 3</code></pre>
-</li>
-<li><p>CMD 方式 </p>
-<p> 启动 busybox 容器 5 秒后执行可用性检查，cat /tmp/healthy 文件，检查周期 5 秒，检查超时时间 5 秒，失败 3 次后认为失败，成功 1 次后认为成功。</p>
-<pre><code class="yaml">apiVersion: v1
+containers:
+        - name: readiness
+        image: nginx:1.9
+        ports:
+                - name: http
+                containerPort: 80
+                readinessProbe:
+                httpGet:
+                path: /index.html
+                port: 80
+                initialDelaySeconds: 5
+                periodSeconds: 5
+                timeoutSeconds: 3
+                successThreshold: 1
+                failureThreshold: 3
+                ```
+
+* CMD 方式
+
+启动 busybox 容器 5 秒后执行可用性检查，cat /tmp/healthy 文件，检查周期 5 秒，检查超时时间 5 秒，失败 3 次后认为失败，成功 1 次后认为成功。
+
+```yaml
+apiVersion: v1
 kind: Pod
 metadata:
-  name: readiness-cmd
-  labels:
-    app: readiness-cmd
+name: readiness-cmd
+labels:
+app: readiness-cmd
 spec:
-  containers:
-  - name: nginx
-    image: nginx:1.9
-    command: [&quot;sh&quot;, &quot;-c&quot;, &quot;touch /tmp/healthy; sleep 30; rm -rf /tmp/healthy; sleep 600&quot;]
-    readinessProbe:
-      exec:
+containers:
+        - name: nginx
+        image: nginx:1.9
+        command: [&quot;sh&quot;, &quot;-c&quot;, &quot;touch /tmp/healthy; sleep 30; rm -rf /tmp/healthy; sleep 600&quot;]
+        readinessProbe:
+        exec:
         command:
-          - cat
-          - /tmp/healthy
-      initialDelaySeconds: 5
-      periodSeconds: 5
-      timeoutSeconds: 3
-      successThreshold: 1
-      failureThreshold: 3</code></pre>
-</li>
-<li><p>TCP 方式 </p>
-<p> 启动 nginx 容器 5 秒后执行可用性检查，对 80 端口建立 tcp 链接，检查周期 5 秒，检查超时时间 5 秒，失败 3 次后认为失败，成功 1 次后认为成功。</p>
-<pre><code class="yaml">apiVersion: v1
+                        - cat
+                        - /tmp/healthy
+                        initialDelaySeconds: 5
+                        periodSeconds: 5
+                        timeoutSeconds: 3
+                        successThreshold: 1
+                        failureThreshold: 3
+                        ```
+
+* TCP 方式
+
+启动 nginx 容器 5 秒后执行可用性检查，对 80 端口建立 tcp 链接，检查周期 5 秒，检查超时时间 5 秒，失败 3 次后认为失败，成功 1 次后认为成功。
+
+```yaml
+apiVersion: v1
 kind: Pod
 metadata:
-  name: readiness-tcp
-  labels:
-    app: readiness-tcp
+name: readiness-tcp
+labels:
+app: readiness-tcp
 spec:
-  containers:
-  - name: readiness
-    image: nginx:1.9
-    ports:
-      - name: http
-        containerPort: 80
-    readinessProbe:
-      tcpSocket:
-        port: 80
-      initialDelaySeconds: 5
-      periodSeconds: 5
-      timeoutSeconds: 3
-      successThreshold: 1
-      failureThreshold: 3</code></pre>
-</li>
-</ul>
-<center>
-    <img style="border-radius: 0.3125em;box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="http://qiniu.raindrop-wl.cn/readiness-notpass.png">
-    <div style="color:orange; border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;padding: 2px;">
-        readiness-notpass
-    </div>
-</center>
+containers:
+        - name: readiness
+        image: nginx:1.9
+        ports:
+                - name: http
+                containerPort: 80
+                readinessProbe:
+                tcpSocket:
+                port: 80
+                initialDelaySeconds: 5
+                periodSeconds: 5
+                timeoutSeconds: 3
+                successThreshold: 1
+                failureThreshold: 3
+                ```
 
-<center>
-  <img style="border-radius: 0.3125em;box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="http://qiniu.raindrop-wl.cn/readiness-pass.png">
-  <div style="color:orange; border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;padding: 2px;">
-        readiness-pass
-    </div>
-</center>
+                &lt;center&gt;
+                &lt;img style=&quot;border-radius: 0.3125em;box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);&quot; 
+                src=&quot;http://qiniu.raindrop-wl.cn/readiness-notpass.png&quot;&gt;
+                &lt;div style=&quot;color:orange; border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;padding: 2px;&quot;&gt;
+                readiness-notpass
+                &lt;/div&gt;
+                &lt;/center&gt;
+
+                &lt;center&gt;
+                &lt;img style=&quot;border-radius: 0.3125em;box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);&quot; 
+                src=&quot;http://qiniu.raindrop-wl.cn/readiness-pass.png&quot;&gt;
+                &lt;div style=&quot;color:orange; border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;padding: 2px;&quot;&gt;
+                readiness-pass
+                &lt;/div&gt;
+                &lt;/center&gt;
 
 
-<h3 id="注意事项"><a href="# 注意事项" class="headerlink" title="注意事项"></a> 注意事项 </h3><p>  &ensp;&ensp; 当使用 Liveness 时，需要注意 initialDelaySecons 参数设置的时间一定要大于应用启动时间，否则应用只能不断的循环重启，永远无法就绪。</p>
-<p>  &ensp;&ensp; 建议使用 P99 的启动时间作为 initialDelaySecons 参数的值。随着应用启动时间变快或变慢，确保更新该参数。</p>
+### 注意事项
+
+* 当使用 Liveness 时，需要注意 initialDelaySecons 参数设置的时间一定要大于应用启动时间，否则应用只能不断的循环重启，永远无法就绪。
+
+* 建议使用 P99 的启动时间作为 initialDelaySecons 参数的值。随着应用启动时间变快或变慢，确保更新该参数。</code></pre>
 
             <hr>
           </div>
