@@ -16,7 +16,7 @@
   <meta name="description" content="雨下不停-日记">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
-  <title>归档 ~ Raindrop Blog</title>
+  <title>Java-Memory-Code-Cache ~ Raindrop Blog</title>
 
   <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css"  >
 <link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css"  >
@@ -39,7 +39,7 @@
 
 
 <body>
-  <header style="height: 80vh;">
+  <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -138,7 +138,7 @@
   </div>
 </nav>
 
-    <div class="view intro-2" id="background" parallax=true
+    <div class="view intro-2" id="background" false
          style="background: url('/img/default.png')no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
@@ -148,6 +148,41 @@
               
             </span>
 
+            
+              <br>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  星期日, 六月 7日 2020, 10:54 晚上
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    463 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      2 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
             
           </div>
 
@@ -159,53 +194,167 @@
 
   <main>
     
-      <div class="container nopadding-md">
-        <div class="py-5 z-depth-3" id="board">
-          
-          <div class="container">
-            <div class="row">
-              <div class="col-12 col-md-10 m-auto">
-                
-
-<div class="list-group">
-  <p class="h4">共计 40 篇文章</p>
-  <hr>
-  
-    
       
-      <p class="h5">2019</p>
-    
-    <a href="/2019/01/05/Maven%20Project/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">Maven Project</span>
-      <span style="float: right;">01-05</span>
-    </a>
-  
-    
-    <a href="/2019/01/05/Git%20Command(2)/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">Git Command(2)</span>
-      <span style="float: right;">01-05</span>
-    </a>
-  
-    
-    <a href="/2019/01/05/Git%20Command(1)/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">Git Command(1)</span>
-      <span style="float: right;">01-05</span>
-    </a>
-  
-    
-    <a href="/2019/01/05/Java%20Excel%20Operator/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">Java Excel Opreator</span>
-      <span style="float: right;">01-05</span>
-    </a>
-  
-</div>
 
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <center><p style="font-size:30px;color:black"> Java Memory Code Cache </p></center>
 
-              </div>
-            </div>
+<a id="more"></a>
+
+<h3 id="作用范围"><a href="# 作用范围" class="headerlink" title="作用范围"></a> 作用范围 </h3><p>  &ensp;&ensp;Code Cache 是 JVM 中特殊的内存，用于存放 JVM 动态生成的代码，最主要是 JIT 编译后的代码，根据热点代码生成优化后的机器码，存放在 Code Cache。</p>
+<h3 id="相关参数"><a href="# 相关参数" class="headerlink" title="相关参数"></a> 相关参数 </h3><p>  &ensp;&ensp;Code Cache 主要参数有 4 个，分别介绍一下：</p>
+<ul>
+<li><p>-XX:InitialCodeCacheSize</p>
+<p>  初始化缓存大小 </p>
+</li>
+<li><p>-XX:ReservedCodeCacheSize</p>
+<p>  最大缓存大小 </p>
+</li>
+<li><p>-XX:CodeCacheMinimumFreeSpace</p>
+<p>  当缓存可用大小不足这个值时，会进行 code cache full 处理 </p>
+</li>
+<li><p>-XX:Xmaxjitcodesize</p>
+<p>  最大缓存大小 </p>
+</li>
+</ul>
+<h3 id="使用案例"><a href="# 使用案例" class="headerlink" title="使用案例"></a> 使用案例 </h3><ul>
+<li><p>-XX:InitialCodeCacheSize=512M 代表默认缓存大小为 512M。</p>
+</li>
+<li><p>-XX:ReservedCodeCacheSize=1024M 代表最大缓存大小为 1024M。</p>
+</li>
+<li><p>-XX:CodeCacheMinimumFreeSpace=50M 代表当可用缓存大小不足 50M 时，进行 code cache full 处理。</p>
+</li>
+<li><p>-Xmaxjitcodesize1024M 代表最大缓存大小为 1024M。</p>
+</li>
+</ul>
+<h3 id="参数默认值"><a href="# 参数默认值" class="headerlink" title="参数默认值"></a> 参数默认值 </h3><p>  &ensp;&ensp; 以下为默认值均为 Linux 平台下的默认值。</p>
+<table>
+<thead>
+<tr>
+<th> 参数 </th>
+<th> 默认值 </th>
+<th>JDK 版本 </th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-XX:InitialCodeCacheSize</td>
+<td>2555904</td>
+<td>jdk1.8</td>
+</tr>
+<tr>
+<td>-XX:ReservedCodeCacheSize</td>
+<td>251658240</td>
+<td>jdk1.8</td>
+</tr>
+<tr>
+<td>-XX:CodeCacheMinimumFreeSpace</td>
+<td>512000</td>
+<td>jdk1.8</td>
+</tr>
+<tr>
+<td>-XX:Xmaxjitcodesize</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody></table>
+<h3 id="注意事项"><a href="# 注意事项" class="headerlink" title="注意事项"></a> 注意事项 </h3><ul>
+<li><p>Xmaxjitcodesize 等价于 ReservedCodeCacheSize。</p>
+</li>
+<li><p>ReservedCodeCacheSize 不能大于 2G。</p>
+</li>
+<li><p>ReservedCodeCacheSize 不能小于 InitialCodeCacheSize。</p>
+</li>
+<li><p>ReservedCodeCacheSize 默认 48M，开启分层编译默认 240M。</p>
+</li>
+<li><p> 触发 code cache full 后，会且仅会打印一次 CodeCache is full 的日志。</p>
+</li>
+<li><p>InitialCodeCacheSize 里的 block 时可以复用的，不能大于 ReservedCodeCacheSize。</p>
+</li>
+</ul>
+<h3 id="实践问题"><a href="# 实践问题" class="headerlink" title="实践问题"></a> 实践问题 </h3><ul>
+<li><p>ReservedCodeCacheSize 大于 2G 会怎样？</p>
+<p> 程序报错，无法启动 JVM。</p>
+<pre><code class="bash">$ java -XX:ReservedCodeCacheSize=3G Test
+Invalid ReservedCodeCacheSize=3072M. Must be at most 2048M.
+Error: Could not create the Java Virtual Machine.
+Error: A fatal exception has occurred. Program will exit.</code></pre>
+</li>
+<li><p>ReservedCodeCacheSize 小于 InitialCodeCacheSize 会怎样？</p>
+<p> 程序报错，无法启动 JVM。</p>
+<pre><code class="bash">$ java -XX:ReservedCodeCacheSize=1024M -XX:InitialCodeCacheSize=2048M Test
+Invalid ReservedCodeCacheSize: 1048576K. Must be at least InitialCodeCacheSize=2097152K.
+Error: Could not create the Java Virtual Machine.
+Error: A fatal exception has occurred. Program will exit</code></pre>
+</li>
+<li><p> 同时设置 Xmaxjitcodesize 和 ReservedCodeCacheSize 会怎样？</p>
+<p> 谁后设置以谁为准。</p>
+<pre><code class="bash">$ java -XX:ReservedCodeCacheSize=1024M -Xmaxjitcodesize2048M Test
+
+$ jps
+14690 Test
+
+$ jinfo -flag ReservedCodeCacheSize 14690
+-XX:ReservedCodeCacheSize=2147483648</code></pre>
+<pre><code class="bash">$ java -Xmaxjitcodesize2048M -XX:ReservedCodeCacheSize=1024M Test
+
+$ jps
+14723 Test
+
+$ jinfo -flag ReservedCodeCacheSize 14723
+-XX:ReservedCodeCacheSize=1073741824</code></pre>
+</li>
+</ul>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+              <span>
+                <i class="iconfont icon-inbox"></i>
+                
+                  <a class="hover-with-bg" href="/categories/Java">Java</a>
+                  &nbsp;
+                
+              </span>&nbsp;&nbsp;
+            
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
           </div>
         </div>
       </div>
+    </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+  </div>
+</div>
+
     
   </main>
 
@@ -284,6 +433,11 @@
 
 
 
+  
+    <script src="/lib/tocbot/tocbot.min.js" ></script>
+  
+  <script src="/js/post.js" ></script>
+
 
 
   <script src="/lib/smoothscroll/SmoothScroll.min.js" ></script>
@@ -324,7 +478,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "归档&nbsp;",
+        "Java-Memory-Code-Cache&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,

@@ -4,6 +4,158 @@
   
   
   <entry>
+    <title>K8S-Building-Small-Container</title>
+    <link href="/2020/06/08/K8S-Building-Small-Container/"/>
+    <url>/2020/06/08/K8S-Building-Small-Container/</url>
+    
+    <content type="html"><![CDATA[<center><p style="font-size:30px;color:black"> K8S Building Small Container </p></center><a id="more"></a><h3 id="背景"><a href="# 背景" class="headerlink" title="背景"></a> 背景 </h3><p>  &ensp;&ensp;Pod 作为 Kubernetes 最小的运行单元，实际背后运行我们应用的都是一个个的容器。容器作为目前云原生及微服务不可获取的伙伴充当着重要的角色。</p><p>  &ensp;&ensp; 在我们使用 Docker 构建容器时，Docker 官方为我们提供了很多基础镜像 Images，当然我们也可以自己进行镜像 Images 的封装。在生产使用容器时，基础镜像的大小是一个我们不得不考虑的问题。</p><p>  &ensp;&ensp; 基础镜像过大代表内部自带的功能越多，同时也包含过多与我们应用无关的组件，这不仅对应用没有任何意义同时也会隐藏许多安全漏洞和程序 Bug。大多数镜像以 Ubuntu 或 Debian 为基础镜像，虽然这对兼容性和适应性有很多好处，但是这些基础镜像会为我们的容器多增加上百兆字节的额外开销。</p><h3 id="小镜像"><a href="# 小镜像" class="headerlink" title="小镜像"></a> 小镜像 </h3><p>  &ensp;&ensp; 基于以上大镜像的问题，在生产环境使用合适的且足够小的镜像，变得尤为重要。对于减小镜像的大小一般有两种方式：</p><ul><li><p> 使用小型基础镜像（Small Base Images）</p></li><li><p> 使用生成器模式（Builder Pattern）</p></li></ul><h3 id="Small-Base-Images"><a href="#Small-Base-Images" class="headerlink" title="Small Base Images"></a>Small Base Images</h3><p>  &ensp;&ensp; 减少容器大小最容易的方法就是选择一个小型的基础镜像。通常官方会为我们提供大部分开发语言的多个版本的基础镜像，我们这里以 Java 镜像为例，通常不同的 tag 代表不同的镜像大小。如果官方没有提供合适的基础镜像，我们可以通过使用原始的 Alpine Linux 为基础自行封装。</p><p>  &ensp;&ensp; 以下三个版本的 jdk 基础镜像的大小最高相差 6 倍。在应用服务不多时可能者对我们来说可以接受，但随着企业逐渐发展，内部管理的应用也会越来越多，渐渐的我们发现每个镜像如果都能减少 6 倍左右，那么多企业来讲会节约一笔不小的开支，同时也会降低应用被攻击的几率。</p><ul><li><p>openjdk:8u171 -&gt; ~620MB</p></li><li><p>openjdk:8u171-slim -&gt; ~240MB</p></li><li><p>Openjdk:8u171-alpine -&gt; ~103MB</p></li></ul><h3 id="Builder-Pattern"><a href="#Builder-Pattern" class="headerlink" title="Builder Pattern"></a>Builder Pattern</h3><p>  &ensp;&ensp; 使用小型的基础镜像可能足够满足我们的需求了，但是我们可以通过使用生成器模式将基础镜像更小化。对于解释性语言，源代码会被送到解释程序那二并直接运行。但对于编译性语言，源代码会首先被编译成机器码，然后在被执行。</p><p>  &ensp;&ensp; 对于编译性语言，通常编译时期会依赖一些运行时不需要的工具，所以我们将这部分运行时不需要的工具从最终的容器中完全去除。我们可以使用生成器模式来完成这个功能。</p><center>  <img style="border-radius: 0.3125em;box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="http://qiniu.raindrop-wl.cn/interpreted-compiled.png">  <div style="color:orange; border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;padding: 2px;">        解释语言、编译语言    </div></center><center>  <img style="border-radius: 0.3125em;box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="http://qiniu.raindrop-wl.cn/builder-pattern.png">  <div style="color:orange; border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;padding: 2px;">        Builder Pattern 模式    </div></center><p>  &ensp;&ensp; 我们以 golang 为例，通常容器会从一个 golang:alpine 镜像开始，接着为代码创建目录并拷贝源代码到目录，最后构建源代码并运行。</p><pre><code class="yaml">FROM golang:alpineWORKDIR /appADD . /appRUN cd /app &amp;&amp; go build -o goappEXPOSE 8080ENTRYPOINT ./goapp</code></pre><p>  &ensp;&ensp; 虽然使用了标签为 alpine 的镜像已经足够小了，但是我们还可以将编译和运行阶段进行拆分。</p><pre><code class="yaml">FROM golang:alpine AS buildWORKDIR /appADD . /appRUN cd /app &amp;&amp; go build -o goapp# 原始 alpine 镜像并没有安全证书，这回导致 HTTPS 请失败，所以需要进行手动安装 CA 证书FROM alpineRUN apk update &amp;&amp; apk add ca-cretificates &amp;&amp; rm -rf /var/cache/apk/*WORKDIR /appCOPY --from=build /app/goapp /appEXPOSE 8080ENTRYPOINT ./goapp</code></pre><p>  &ensp;&ensp; 通过两种构建镜像方式的对比，我们发现使用 Builder Pattern 方式比原来更加精简。</p><table><thead><tr><th>Image</th><th>Size</th></tr></thead><tbody><tr><td>go:alpine</td><td>~370MB</td></tr><tr><td>go:multistate</td><td>~7M</td></tr></tbody></table><h3 id="小容器优势"><a href="# 小容器优势" class="headerlink" title="小容器优势"></a> 小容器优势 </h3><p>  &ensp;&ensp; 小容器的优势有两点。一是更高的性能，包括构建、推送、拉取等阶段。二是更加安全。</p><ul><li><p>Performance</p><pre><code class="flow">st=&gt;start: startbuild=&gt;operation: buildpush=&gt;operation: pushpull=&gt;operation: pulle=&gt;end: endst-&gt;build-&gt;push-&gt;pull-&gt;e</code></pre><p>Build state</p><table><thead><tr><th></th><th>Large Machine</th><th>Small Machine</th></tr></thead><tbody><tr><td>go:onbuild</td><td>35 Seconds</td><td>54 Seconds</td></tr><tr><td>go:multistate</td><td>23 Seconds</td><td>28 Seconds</td></tr></tbody></table><p>Push state</p><table><thead><tr><th></th><th>Large Machine</th><th>Small Machine</th></tr></thead><tbody><tr><td>go:onbuild</td><td>15 Seconds</td><td>48 Seconds</td></tr><tr><td>go:multistate</td><td>14 Seconds</td><td>16 Seconds</td></tr></tbody></table><p>Pull state</p><table><thead><tr><th></th><th>Large Machine</th><th>Small Machine</th></tr></thead><tbody><tr><td>go:onbuild</td><td>26 Seconds</td><td>52 Seconds</td></tr><tr><td>go:multistate</td><td>6 Seconds</td><td>6 Seconds</td></tr></tbody></table><p><code> 注意 </code>：Large 代表高性能计算机。Small 代表普通计算机。</p></li></ul><ul><li><p>Security</p><p>&ensp;&ensp; 将不必要的组件从镜像中除，有助于减少被攻击的范围，降低安全风险。</p><p>&ensp;&ensp; 小的镜像因为可攻击的点过少，会增加攻击者的成本，所以一般不会选择这种镜像进行攻击。</p><p><code> 注意 </code>：可以通过一些容器漏洞扫描工具来证实。</p></li></ul><center>  <img style="border-radius: 0.3125em;box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="http://qiniu.raindrop-wl.cn/container-bugs.png">  <div style="color:orange; border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;padding: 2px;">        容器漏洞对比    </div></center><h3 id="注意事项"><a href="# 注意事项" class="headerlink" title="注意事项"></a> 注意事项 </h3><ul><li><p> 在镜像拉取阶段是最关注镜像大小的阶段，在 Kubernetes 中如果机器中某一节点挂掉，Kubernetes 会启动一个新的节点作为代替，但是这个节点是全新的，在它运行服务之前需要拉取相关容器，如果容器拉取耗时太久，代表影响用户的时间越长，所以将拉取时间减少到最低限度成为了关键。在新增节点、更新节点、迁移节点时都是如此。</p></li><li><p> 在生产阶段建议选择较小的基础镜像作为底层镜像，然后在上次逐个安装应用以来的工具来确保最小化镜像。</p></li><li><p> 构建较小的镜像，性能与安全的好处是真实的。</p></li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>Kubernetes</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Java-Memory-Code-Cache</title>
+    <link href="/2020/06/07/Java-Memory-Code-Cache/"/>
+    <url>/2020/06/07/Java-Memory-Code-Cache/</url>
+    
+    <content type="html"><![CDATA[<center><p style="font-size:30px;color:black"> Java Memory Code Cache </p></center><a id="more"></a><h3 id="作用范围"><a href="# 作用范围" class="headerlink" title="作用范围"></a> 作用范围 </h3><p>  &ensp;&ensp;Code Cache 是 JVM 中特殊的内存，用于存放 JVM 动态生成的代码，最主要是 JIT 编译后的代码，根据热点代码生成优化后的机器码，存放在 Code Cache。</p><h3 id="相关参数"><a href="# 相关参数" class="headerlink" title="相关参数"></a> 相关参数 </h3><p>  &ensp;&ensp;Code Cache 主要参数有 4 个，分别介绍一下：</p><ul><li><p>-XX:InitialCodeCacheSize</p><p>  初始化缓存大小 </p></li><li><p>-XX:ReservedCodeCacheSize</p><p>  最大缓存大小 </p></li><li><p>-XX:CodeCacheMinimumFreeSpace</p><p>  当缓存可用大小不足这个值时，会进行 code cache full 处理 </p></li><li><p>-XX:Xmaxjitcodesize</p><p>  最大缓存大小 </p></li></ul><h3 id="使用案例"><a href="# 使用案例" class="headerlink" title="使用案例"></a> 使用案例 </h3><ul><li><p>-XX:InitialCodeCacheSize=512M 代表默认缓存大小为 512M。</p></li><li><p>-XX:ReservedCodeCacheSize=1024M 代表最大缓存大小为 1024M。</p></li><li><p>-XX:CodeCacheMinimumFreeSpace=50M 代表当可用缓存大小不足 50M 时，进行 code cache full 处理。</p></li><li><p>-Xmaxjitcodesize1024M 代表最大缓存大小为 1024M。</p></li></ul><h3 id="参数默认值"><a href="# 参数默认值" class="headerlink" title="参数默认值"></a> 参数默认值 </h3><p>  &ensp;&ensp; 以下为默认值均为 Linux 平台下的默认值。</p><table><thead><tr><th> 参数 </th><th> 默认值 </th><th>JDK 版本 </th></tr></thead><tbody><tr><td>-XX:InitialCodeCacheSize</td><td>2555904</td><td>jdk1.8</td></tr><tr><td>-XX:ReservedCodeCacheSize</td><td>251658240</td><td>jdk1.8</td></tr><tr><td>-XX:CodeCacheMinimumFreeSpace</td><td>512000</td><td>jdk1.8</td></tr><tr><td>-XX:Xmaxjitcodesize</td><td>-</td><td>-</td></tr></tbody></table><h3 id="注意事项"><a href="# 注意事项" class="headerlink" title="注意事项"></a> 注意事项 </h3><ul><li><p>Xmaxjitcodesize 等价于 ReservedCodeCacheSize。</p></li><li><p>ReservedCodeCacheSize 不能大于 2G。</p></li><li><p>ReservedCodeCacheSize 不能小于 InitialCodeCacheSize。</p></li><li><p>ReservedCodeCacheSize 默认 48M，开启分层编译默认 240M。</p></li><li><p> 触发 code cache full 后，会且仅会打印一次 CodeCache is full 的日志。</p></li><li><p>InitialCodeCacheSize 里的 block 时可以复用的，不能大于 ReservedCodeCacheSize。</p></li></ul><h3 id="实践问题"><a href="# 实践问题" class="headerlink" title="实践问题"></a> 实践问题 </h3><ul><li><p>ReservedCodeCacheSize 大于 2G 会怎样？</p><p> 程序报错，无法启动 JVM。</p><pre><code class="bash">$ java -XX:ReservedCodeCacheSize=3G TestInvalid ReservedCodeCacheSize=3072M. Must be at most 2048M.Error: Could not create the Java Virtual Machine.Error: A fatal exception has occurred. Program will exit.</code></pre></li><li><p>ReservedCodeCacheSize 小于 InitialCodeCacheSize 会怎样？</p><p> 程序报错，无法启动 JVM。</p><pre><code class="bash">$ java -XX:ReservedCodeCacheSize=1024M -XX:InitialCodeCacheSize=2048M TestInvalid ReservedCodeCacheSize: 1048576K. Must be at least InitialCodeCacheSize=2097152K.Error: Could not create the Java Virtual Machine.Error: A fatal exception has occurred. Program will exit</code></pre></li><li><p> 同时设置 Xmaxjitcodesize 和 ReservedCodeCacheSize 会怎样？</p><p> 谁后设置以谁为准。</p><pre><code class="bash">$ java -XX:ReservedCodeCacheSize=1024M -Xmaxjitcodesize2048M Test$ jps14690 Test$ jinfo -flag ReservedCodeCacheSize 14690-XX:ReservedCodeCacheSize=2147483648</code></pre><pre><code class="bash">$ java -Xmaxjitcodesize2048M -XX:ReservedCodeCacheSize=1024M Test$ jps14723 Test$ jinfo -flag ReservedCodeCacheSize 14723-XX:ReservedCodeCacheSize=1073741824</code></pre></li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>Java</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Java-Memory-Eden-Survivor</title>
+    <link href="/2020/06/07/Java-Memory-Eden-Survivor/"/>
+    <url>/2020/06/07/Java-Memory-Eden-Survivor/</url>
+    
+    <content type="html"><![CDATA[<center><p style="font-size:30px;color:black"> Java Memory Eden Survivor </p></center><a id="more"></a><h3 id="作用范围"><a href="# 作用范围" class="headerlink" title="作用范围"></a> 作用范围 </h3><p>  &ensp;&ensp;Eden 和 Survivor 两部分代表整个年轻代。Eden 存放新创建的对象，Survivor 存放 YGC 后依然存活的对象。</p><h3 id="相关参数"><a href="# 相关参数" class="headerlink" title="相关参数"></a> 相关参数 </h3><p>  &ensp;&ensp;Eden Survivor 主要参数有 3 个，分别介绍一下：</p><ul><li><p>-XX:SurvivorRatio</p><p>  Eden/Survivor 空间比例 </p></li><li><p>-XX:MinSurvivorRatio</p><p>  新生代 /Survivor 最小比例 </p></li><li><p>-XX:InitialSurvivorRatio</p><p>  新生代 / Survivor 初始比例 </p></li></ul><h3 id="使用案例"><a href="# 使用案例" class="headerlink" title="使用案例"></a> 使用案例 </h3><ul><li><p>-XX:SurvivorRatio=8 代表 Eden 与 Survivor 比例为 8:2。</p></li><li><p>-XX:MinSurvivorRatio=3 代表最小的年轻代与 Survivor 比例为 3。</p></li><li><p>-XX:InitialSurvivorRatio=8 代表初始化的年轻代与 Survivor 比例为 8。</p></li></ul><h3 id="参数默认值"><a href="# 参数默认值" class="headerlink" title="参数默认值"></a> 参数默认值 </h3><p>  &ensp;&ensp; 以下为默认值均为 Linux 平台下的默认值。</p><table><thead><tr><th> 参数 </th><th> 默认值 </th><th>JDK 版本 </th></tr></thead><tbody><tr><td>-XX:SurvivorRatio</td><td>8</td><td>jdk1.8</td></tr><tr><td>-XX:MinSurvivorRatio</td><td>3</td><td>jdk1.8</td></tr><tr><td>-XX:InitialSurvivorRatio</td><td>8</td><td>jdk1.8</td></tr></tbody></table><h3 id="注意事项"><a href="# 注意事项" class="headerlink" title="注意事项"></a> 注意事项 </h3><ul><li><p>SurvivorRatio 默认值 8 最小值 1。</p></li><li><p>InitialSurvivorRatio 和 MinSurvivorRatio 只在 PS GC 算法下生效。</p></li><li><p> 当 MinHeapRatio 不为 0 或 MaxHeapRatio 不为 100 时，在 GC 之后就会重新计算 Survivor 的值。</p></li><li><p>InitialSurvivorRatio 默认值 8，表示新生代初始可用内存 /Survivor 的比值。默认情况表示 From 和 To 各占整个新生代 1/8，而 Eden 占（1 - 2*1/8 = 3/4），并且只在启动时有效。</p></li><li><p>MinSurvivorRatio 表示在 GC 之后，如果需要重新计算 Survivor 的值，Survivor 的值不能低于根据 MinSurvivorRatio 算出来的值。开启 UseAdaptiveSizePolicy 参数时才会计算值。</p></li><li><p>CMS GC 下如果 MaxTenuringThreshold 设置为 0 的话，相当于每次 GC 后都直接晋升到老年代，此时如果 SurvivorRatio 没有设置的话，会将 SurvivorRatio 默认设置为 1024（这是 CMS GC 的一个优化）。</p></li></ul><h3 id="实践问题"><a href="# 实践问题" class="headerlink" title="实践问题"></a> 实践问题 </h3><ul><li><p>SurvivorRatio 若为 0 会怎样？</p><p> 程序报错，无法启动 JVM。</p><pre><code class="bash">$ java -XX:SurvivorRatio=0 TestError occurred during initialization of VMInvalid young gen ratio specified</code></pre></li><li><p>InitialSurvivorRatio 小于 3 会怎样？</p><p> 会重置 InitialSurvivorRatio 值为 3。</p><pre><code class="bash">$ java -XX:InitialSurvivorRatio=2 Test$ jps86821 Test$ jinfo -flag InitialSurvivorRatio 86821-XX:InitialSurvivorRatio=3</code></pre></li><li><p>MinSurvivorRatio 小于 3 会怎样？</p><p> 会重置 MinSurvivorRatio 值为 3。</p><pre><code class="bash">$ java -XX:MinSurvivorRatio=2 Test$ jps$ 87207 Test$ jinfo -flag MinSurvivorRatio 87207-XX:MinSurvivorRatio=3</code></pre></li><li><p> 设置 SurvivorRatio 不设置 InitialSurvivorRatio 会怎样？</p><p>InitialSurvivorRatio 等于 SurvivorRatio + 2。</p><pre><code class="bash">$ java -XX:SurvivorRatio=4 Test$ jps87710 Test$ jinfo -flag InitialSurvivorRatio 87710-XX:InitialSurvivorRatio=6</code></pre><pre><code class="bash">$ java -XX:SurvivorRatio=6 Test$ jps87710 Test$ jinfo -flag InitialSurvivorRatio 87710-XX:InitialSurvivorRatio=8</code></pre></li><li><p> 设置 SurvivorRatio 不设置 MinSurvivorRatio 会怎样？</p><pre><code class="bash">$ java -XX:SurvivorRatio=4 Test$ jps88546 Test$ jinfo -flag MinSurvivorRatio 88546-XX:MinSurvivorRatio=6</code></pre><pre><code class="bash">$ java -XX:SurvivorRatio=6 Test$ jps88546 Test$ jinfo -flag MinSurvivorRatio 88546-XX:MinSurvivorRatio=8</code></pre></li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>Java</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Java-Memory-Heap-Size</title>
+    <link href="/2020/06/07/Java-Memory-Heap-Size/"/>
+    <url>/2020/06/07/Java-Memory-Heap-Size/</url>
+    
+    <content type="html"><![CDATA[<center><p style="font-size:30px;color:black"> Java Memory Heap Size </p></center><a id="more"></a><h3 id="作用范围"><a href="# 作用范围" class="headerlink" title="作用范围"></a> 作用范围 </h3><p>  &ensp;&ensp;Heap Size 相关参数主要用来控制整个 JVM 堆内存大小。</p><h3 id="相关参数"><a href="# 相关参数" class="headerlink" title="相关参数"></a> 相关参数 </h3><p>  &ensp;&ensp;Heap Size 主要参数有 4 个，分别介绍一下：</p><ul><li><p>-Xmx</p><p>  最大堆内存大小 </p></li><li><p>-Xms</p><p> 初始堆内存大小 </p></li><li><p>-XX:MaxHeapSize</p><p> 最大堆内存大小 </p></li><li><p>-XX:InitialHeapSize</p><p> 初始堆内存大小 </p></li></ul><h3 id="使用案例"><a href="# 使用案例" class="headerlink" title="使用案例"></a> 使用案例 </h3><ul><li><p>-Xmx1024M 代表整个 JVM 堆内存空间为 1024M。</p></li><li><p>-Xms512M 代表整个 JVM 堆内存初始化空间大小为 512M。</p></li><li><p>-XX:MaxHeapSize=1024M 代表整个 JVM 堆内存空间为 1024M。</p></li><li><p>-XX:InitialHeapSize=512M 代表整个 JVM 堆内存初始化空间大小为 512M。</p></li></ul><h3 id="参数默认值"><a href="# 参数默认值" class="headerlink" title="参数默认值"></a> 参数默认值 </h3><p>  &ensp;&ensp; 以下为默认值均为 Linux 平台下的默认值。</p><table><thead><tr><th> 参数 </th><th> 默认值 </th><th>JDK 版本 </th></tr></thead><tbody><tr><td>-Xmx</td><td>-</td><td>-</td></tr><tr><td>-Xms</td><td>-</td><td>-</td></tr><tr><td>-XX:MaxHeapSize</td><td>1002438656</td><td>jdk1.8</td></tr><tr><td>-XX:InitialHeapSize</td><td>62914560</td><td>Jdk1.8</td></tr></tbody></table><h3 id="注意事项"><a href="# 注意事项" class="headerlink" title="注意事项"></a> 注意事项 </h3><ul><li><p>Xmx 等价于 MaxHeapSize。</p></li><li><p>Xms 等价于 InitialHeapSize。</p></li><li><p>Xmx 不能比 Xms 小。</p></li><li><p>MaxHeapSize 不能比 InitialHeapSize 小。</p></li><li><p>Xms 或 InitialHeapSize 不能小于 1M。</p></li><li><p>HeapSize 必须是 2M (512k * page_size( 默认为 4)) 对齐的。如果设置的不是 2M 对齐的，那么将会自动设置为比我们设置的值要大的 2M 的最小公倍数。</p></li></ul><h3 id="实践问题"><a href="# 实践问题" class="headerlink" title="实践问题"></a> 实践问题 </h3><ul><li><p> 同时设置 Xmx 和 MaxHeapSize 会以谁为准？</p><p> 两个参数谁在后面以谁为准。</p><pre><code class="bash">$ java -Xmx100M -XX:MaxHeapSize=200M Test$ jps70857 Test$ jinfo -flag MaxHeapSize 7085-XX:MaxHeapSize=209715200</code></pre><pre><code class="bash">$ Java -XX:MaxHeapSize=100M -Xmx200M Test$ jps71245 Test$ jinfo -flag MaxHeapSize 71245                                                                                    [14:36:42]-XX:MaxHeapSize=209715200</code></pre></li><li><p> 同时设置 Xms 和 InitialHeapSize 会以谁为准？</p><p> 两个参数谁在后面以谁为准。</p><pre><code class="bash">$ java -Xms100M -XX:InitialHeapSize=200M Test$ jps71703 Test$ jinfo -flag InitialHeapSize 71703                                                                                [14:39:00]-XX:InitialHeapSize=209715200</code></pre><pre><code class="bash">$ java -XX:InitialHeapSize=100M -Xms200M Test$ jps71856 Test$ jinfo -flag InitialHeapSize 71856                                                                                [14:40:37]-XX:InitialHeapSize=209715200</code></pre></li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>Java</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Java-Memory-Metaspace</title>
+    <link href="/2020/06/07/Java-Memory-Metaspace-size/"/>
+    <url>/2020/06/07/Java-Memory-Metaspace-size/</url>
+    
+    <content type="html"><![CDATA[<center><p style="font-size:30px;color:black"> Java Memory Metaspace </p></center><a id="more"></a><h3 id="作用范围"><a href="# 作用范围" class="headerlink" title="作用范围"></a> 作用范围 </h3><p>  &ensp;&ensp;Metaspace 元数据区，JDK8 后出现用于替代 Perm 区。</p><h3 id="相关参数"><a href="# 相关参数" class="headerlink" title="相关参数"></a> 相关参数 </h3><p>  &ensp;&ensp;Metaspace 主要参数有 2 个，分别介绍一下：</p><ul><li><p>-XX:MetaspaceSize</p><p>  元数据空间初始大小 </p></li><li><p>-XX:MaxMetaspaceSize</p><p>  最大元数据空间大小 </p></li></ul><h3 id="使用案例"><a href="# 使用案例" class="headerlink" title="使用案例"></a> 使用案例 </h3><ul><li><p>-XX:MetaspaceSize=256M 代表元数据空间初始大小为 256M。</p></li><li><p>-XX:MaxMetaspaceSize=512M 代表元数据空大最大大小为 512M。</p></li></ul><h3 id="参数默认值"><a href="# 参数默认值" class="headerlink" title="参数默认值"></a> 参数默认值 </h3><p>  &ensp;&ensp; 以下为默认值均为 Linux 平台下的默认值。</p><table><thead><tr><th> 参数 </th><th> 默认值 </th><th>JDK 版本 </th></tr></thead><tbody><tr><td>-XX:MetaspaceSize</td><td>21807104</td><td>jdk1.8</td></tr><tr><td>-XX:MaxMetaspaceSize</td><td>18446744073709547520</td><td>jdk1.8</td></tr></tbody></table><h3 id="注意事项"><a href="# 注意事项" class="headerlink" title="注意事项"></a> 注意事项 </h3><ul><li><p>JDK8 开始，JVM 启动时会专门分配一块内存，大小是 CompressedClassSpaceSize，正常情况下会类似 Perm 一样挨着 Heap 分配，这块内存专门来存储类元数据 Klass 部分。</p></li><li><p> 如果未开启 UseCompressedClassPointers，哪怕设置了 CompressedClassSpaceSize 参数也没有效果。</p></li><li><p>InitialBootClassLoaderMetaspaceSize 主要指定 BootstrapClassLoader 的存储非 Klass 部分的数据的第一个 Metachunk 大小，64 位默下默认 4M，32 位下默认 2200K，而存储 Klass 部分的数据的第一个 Metachunk 的大小默认在 384K 左右。</p></li><li><p>Metaspace 如果类加载器很多的时候，最大的问题就是碎片化的问题。</p></li><li><p>jstat 看到的 Metaspace 内存使用率可能是不准确的，因为分母是 committed 的 size，而不是整个 Reserved 的内存。</p></li><li><p>JDK8 之前使用 Perm 来存储类信息，如果空间不足会抛出 OOM，为了解决 JDK8 使用 Metaspace 代替 Perm，通过堆外内存来解决该问题。</p></li></ul><h3 id="实践问题"><a href="# 实践问题" class="headerlink" title="实践问题"></a> 实践问题 </h3><ul><li><p> 如果 MetaspaceSize 比 MaxMetaspaceSize 大会怎么样？</p><p> 程序报错，无法启动 JVM。</p><pre><code class="bash">$ java -XX:MetapsaceSize=256M -XX:MaxMetaspaceSize=128M TestUnrecognized VM option &#39;MetapsaceSize=256M&#39;Error: Could not create the Java Virtual Machine.Error: A fatal exception has occurred. Program will exit.</code></pre></li><li><p> 如果 MaxMetaspaceSize 比 Xmx 大会怎么样？</p><p> 正常启动，因为 MetaspaceSize 使用的是堆外内存。</p><pre><code class="bash">  $ java -Xmx1000M -XX:MaxMetaspaceSize=1024M Test</code></pre></li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>Java</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Java-Memory-New-Size</title>
+    <link href="/2020/06/07/Java-Memory-New-Size/"/>
+    <url>/2020/06/07/Java-Memory-New-Size/</url>
+    
+    <content type="html"><![CDATA[<center><p style="font-size:30px;color:black"> Java Memory New Size </p></center><a id="more"></a><h3 id="作用范围"><a href="# 作用范围" class="headerlink" title="作用范围"></a> 作用范围 </h3><p>  &ensp;&ensp;New Size 相关参数主要用来控制 JVM 新生代内存大小。</p><h3 id="相关参数"><a href="# 相关参数" class="headerlink" title="相关参数"></a> 相关参数 </h3><p>  &ensp;&ensp;New Size 主要参数有 4 个，分别介绍一下：</p><ul><li><p>-Xmn__</p><p>  新生代总大小 </p></li><li><p>-XX:NewSize=__</p><p> 新生代初始大小 </p></li><li><p>-XX:MaxNewSize=__</p><p> 新生代最大大小 </p></li><li><p>-XX:NewRatio=__</p><p> 老年代 / 新生代比例 </p></li></ul><h3 id="使用案例"><a href="# 使用案例" class="headerlink" title="使用案例"></a> 使用案例 </h3><ul><li><p>-Xmn128M 代表新生代内存最大为 128M 大小。</p></li><li><p>-XX:NewSize=128M 代表新生代内存初始值为 128M，同时也表示最小内存为 128M。</p></li><li><p>-XX:MaxNewSize=128M 代表新生代内存最大值为 128M，同时也表示最大内存为 128M。</p></li><li><p>-XX:NewRatio=2 代表老年代和新生代的内存占比为 8:2</p></li></ul><h3 id="参数默认值"><a href="# 参数默认值" class="headerlink" title="参数默认值"></a> 参数默认值 </h3><p>  &ensp;&ensp; 以下为默认值均为 Linux 平台下的默认值。</p><table><thead><tr><th> 参数 </th><th> 默认值 </th><th>JDK 版本 </th></tr></thead><tbody><tr><td>-Xmn</td><td>-</td><td>-</td></tr><tr><td>-XX:NewSize</td><td>20971520</td><td>jdk1.8</td></tr><tr><td>-XX:MaxNewSize</td><td>333971456</td><td>jdk1.8</td></tr><tr><td>-XX:NewRatio</td><td>2</td><td>Jdk1.8</td></tr></tbody></table><h3 id="注意事项"><a href="# 注意事项" class="headerlink" title="注意事项"></a> 注意事项 </h3><ul><li><p>-Xmn 等价于 -XX:MaxNewSize=__ -XX:NewSize=__；例如 -Xmn=128M 等价于 -XX:MaxNewSize=128M -XX:NewSize=128M。</p></li><li><p> 在每次新生代有效内存做调整之后，新生代的几个组成部分也会调整位置，包括 Edan、From、To 三块内存的起止位置。</p></li><li><p> 设置新生代有效内存最大值，当新生代内存回收后，有效内存可能会扩容，这个参数代表了可扩容的最大值。</p></li><li><p> 设置新生代有效内存初始大小，也可以说是新生代有效内存最小值，当新生代回收后有效内存可能会缩容，这个参数舅代表了可缩容的最小值。</p></li></ul><h3 id="实践问题"><a href="# 实践问题" class="headerlink" title="实践问题"></a> 实践问题 </h3><ul><li><p> 当 -XX:NewSize 设置的比 -XX:MaxNewSize 大时，会发生什么？</p><p>JVM 会发出警告，使用 NewSize 作为新的 MaxNewSize 值。</p><pre><code class="bash">$ java -XX:NewSize=256M -XX:MaxNewSize=128M TestJava HotSpot(TM) 64-Bit Server VM warning: NewSize (262144k) is greater than the MaxNewSize (131072k). A new max generation size of 262144k will be used.Hello Java</code></pre></li><li><p> 当 -XX:NewSize 设置的比 -Xmn 大时，会发生什么？</p><p>JVM 会发出警告，使用 NewSize 作为新的 -Xmn 值。</p><pre><code class="bash">$ java -Xmn128M -XX:NewSize=256M TestJava HotSpot(TM) 64-Bit Server VM warning: NewSize (262144k) is greater than the MaxNewSize (131072k). A new max generation size of 262144k will be used.Hello Java</code></pre></li><li><p> 当 -XX:MaxNewSize 设置的比 -Xmn 大时，会发生什么？</p><p> 正常执行。</p><pre><code class="bash">$ java -Xmn128M -XX:MaxNewSize=256M TestHello Java</code></pre></li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>Java</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Java-Memory-Perm-Size</title>
+    <link href="/2020/06/07/Java-Memory-Perm-Size/"/>
+    <url>/2020/06/07/Java-Memory-Perm-Size/</url>
+    
+    <content type="html"><![CDATA[<center><p style="font-size:30px;color:black"> Java Memory Perm Size </p></center><a id="more"></a><h3 id="作用范围"><a href="# 作用范围" class="headerlink" title="作用范围"></a> 作用范围 </h3><p>  &ensp;&ensp;Perm Size 相关参数主要用来控制永久代（JDK8 开始转为 Metaspace）内存大小。</p><h3 id="相关参数"><a href="# 相关参数" class="headerlink" title="相关参数"></a> 相关参数 </h3><p>  &ensp;&ensp;Perm Size 主要参数有 2 个，分别介绍一下：</p><ul><li><p>-XX:PermSize</p><p>  永久代最小值，也是初始化值 </p></li><li><p>-MaxPermSize</p><p> 永久代最大值 </p></li></ul><h3 id="使用案例"><a href="# 使用案例" class="headerlink" title="使用案例"></a> 使用案例 </h3><ul><li><p>-XX:PermSize=100M 代表永久代初始大小为 100M，最小大小为 100M。</p></li><li><p>-XX:MaxPermSize=200M 代表永久代最大大小为 200M。</p></li></ul><h3 id="参数默认值"><a href="# 参数默认值" class="headerlink" title="参数默认值"></a> 参数默认值 </h3><p>  &ensp;&ensp; 以下为默认值均为 Linux 平台下的默认值。</p><table><thead><tr><th> 参数 </th><th> 默认值 </th><th>JDK 版本 </th></tr></thead><tbody><tr><td>-XX:PermSize</td><td>21757952</td><td>jdk1.8</td></tr><tr><td>-XX:MaxPermSize</td><td>85983232</td><td>jdk1.8</td></tr></tbody></table><h3 id="注意事项"><a href="# 注意事项" class="headerlink" title="注意事项"></a> 注意事项 </h3><ul><li><p>JDK8 开始不再支持 PermSize 和 MaxPermSize 参数。</p></li><li><p>PermSize 不能小于 1M。</p></li><li><p>MaxPermSize 按照 2M 对齐。</p></li><li><p>PerSize 按照 64K 对齐，PS GC 下按照 512K 对齐。</p></li><li><p>Perm 空间大小会在 PermSize 和 MaxPermSize 之间动态调整。</p></li><li><p>PermSize 如果比 MaxPermSize 大，那么将会使用 PermSize 的值作为 MaxPermSize 的值。</p></li><li><p>Class 对象默认准在堆里，在 JDK8 前如果设置了 -XX:+UnlockDiagnosticVMOptions -XX:+JavaObjectsInPerm 这两个参数，将分配在 Perm 里。</p></li><li><p>CMS 算法下，其实 Perm 达到一定使用率，也时会触发 CMS GC 的。</p></li><li><p> 有时候老生代使用很少，但是不断在做 Full GC，可能是 Perm 空间满了导致的。</p></li><li><p> 持久代最大的 size 达到后会触发 Full GC。</p></li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>Java</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Java-Memory-Thread-Size</title>
+    <link href="/2020/06/07/Java-Memory-Thread-Size/"/>
+    <url>/2020/06/07/Java-Memory-Thread-Size/</url>
+    
+    <content type="html"><![CDATA[<center><p style="font-size:30px;color:black"> Java Memory Thread Size </p></center><a id="more"></a><h3 id="作用范围"><a href="# 作用范围" class="headerlink" title="作用范围"></a> 作用范围 </h3><p>  &ensp;&ensp;Thread Size 主要用来控制 JVM 线程栈的大小。</p><h3 id="相关参数"><a href="# 相关参数" class="headerlink" title="相关参数"></a> 相关参数 </h3><p>  &ensp;&ensp;Thread Size 主要参数有 4 个，分别介绍一下：</p><ul><li><p>-Xss</p><p>  线程栈大小，单位 KB</p></li><li><p>-XX:ThreadStackSize</p><p>  线程栈大小，单位 KB</p></li><li><p>-XX:VMThreadStackSize</p><p>  VMThread 范围内线程栈大小 </p></li><li><p>-XX:CompilerThreadStackSize</p><p>  编译线程栈大小 </p></li></ul><h3 id="使用案例"><a href="# 使用案例" class="headerlink" title="使用案例"></a> 使用案例 </h3><ul><li><p>-Xss256k 代表线程栈大小为 256k。</p></li><li><p>-XX:ThreadStackSize=256k 代表线程栈大小为 256k。</p></li><li><p>-XX:VMThreadStackSize=256k 代表 VMThread 线程栈大小为 256k。</p></li><li><p>-XX:CompilerThreadStackSize=256k 代表编译线程栈大小为 256k。</p></li></ul><h3 id="参数默认值"><a href="# 参数默认值" class="headerlink" title="参数默认值"></a> 参数默认值 </h3><p>  &ensp;&ensp; 以下为默认值均为 Linux 平台下的默认值。</p><table><thead><tr><th> 参数 </th><th> 默认值 </th><th>JDK 版本 </th></tr></thead><tbody><tr><td>-XX:Xss</td><td>-</td><td>-</td></tr><tr><td>-XX:ThreadStackSize</td><td>1024K</td><td>jdk1.8</td></tr><tr><td>-XX:VMThreadStackSize</td><td>1024K</td><td>jdk1.8</td></tr><tr><td>-XX:CompilerThreadStackSize</td><td>0</td><td>jdk1.8</td></tr></tbody></table><h3 id="注意事项"><a href="# 注意事项" class="headerlink" title="注意事项"></a> 注意事项 </h3><ul><li><p>Linux 下 Xss 线程栈最小值为 228K。</p></li><li><p>MacOS 下 Xss 线程栈最小值为 160K。</p></li><li><p>Xss 与 ThreadStackSize 等价。</p></li><li><p>Xss 会按照 page_size(默认为 4) 对齐。</p></li><li><p>ThreadStackSize 64 位 OS 下默认值为 1M，32 位 OS 下默认值为 512K。</p></li><li><p>VMThreadStackSize 64 位 OS 下默认值为 1M，32 位 OS 下默认值为 512K。</p></li><li><p>CompilerThreadStackSize 64 位 OS 下默认值为 4M，32 位 OS 下默认值为 2M。</p></li><li><p>Java 线程 new Thread(); 非 Java 线程 GC 线程、VMThread 线程。</p></li></ul><h3 id="实践问题"><a href="# 实践问题" class="headerlink" title="实践问题"></a> 实践问题 </h3><ul><li><p>Xss 设置的比 228K 小会怎样？</p><p> 程序报错，无法启动 JVM。</p><pre><code class="bash">$ java -Xss128k TestThe stack size specified is too small, Specify at least 228kError: Could not create the Java Virtual Machine.Error: A fatal exception has occurred. Program will exit.</code></pre></li><li><p> 同时设置 Xss 和 ThreadStackSize 会怎样？</p><p> 谁后设置以谁为准。</p><pre><code class="bash">$ java -Xss512k -XX:ThreadStackSize=256k Test$ jps6964 Test$ jinfo -flag ThreadStackSize 6964-XX:ThreadStackSize=256</code></pre><pre><code class="bash">$ java -XX:ThreadStackSize=256k -Xss512k Test$ jps6978 Test$ jinfo -flag ThreadStackSize 6978-XX:ThreadStackSize=512</code></pre></li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>Java</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>K8S-External-Service</title>
     <link href="/2020/06/07/K8S-External-Service/"/>
     <url>/2020/06/07/K8S-External-Service/</url>

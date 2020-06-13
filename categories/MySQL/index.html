@@ -16,7 +16,7 @@
   <meta name="description" content="雨下不停-日记">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
-  <title>分类 - MySQL ~ Raindrop Blog</title>
+  <title>分类 - Mysql ~ Raindrop Blog</title>
 
   <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css"  >
 <link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css"  >
@@ -168,52 +168,16 @@
                 
 
 <div class="list-group">
-<!--  <p class="h4">共计 7 篇文章</p>-->
+<!--  <p class="h4">共计 1 篇文章</p>-->
   <hr>
   
     
       
       <p class="h5">2020</p>
     
-    <a href="/2020/03/21/MySQL-Lock/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">MySQL 表锁</span>
-      <span style="float: right;">03-21</span>
-    </a>
-  
-    
-    <a href="/2020/03/18/MySQL-%E4%BC%98%E5%8C%96/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">MySQL- 优化</span>
-      <span style="float: right;">03-18</span>
-    </a>
-  
-    
-    <a href="/2020/03/18/MySQL-%E8%AE%BE%E8%AE%A1%E8%8C%83%E5%BC%8F/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">MySQL- 设计范式</span>
-      <span style="float: right;">03-18</span>
-    </a>
-  
-    
-    <a href="/2020/03/17/MySQL-Slow-Query/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">MySQL-Slow-Query</span>
-      <span style="float: right;">03-17</span>
-    </a>
-  
-    
-    <a href="/2020/03/13/MySQL-Command/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">MySQL-Command</span>
+    <a href="/2020/03/13/Mysql%20High%20Availability/" class="list-group-item list-group-item-action">
+      <span class="archive-post-title">Mysql High Availability</span>
       <span style="float: right;">03-13</span>
-    </a>
-  
-    
-    <a href="/2020/03/11/MySQL-%E6%95%85%E9%9A%9C%E6%81%A2%E5%A4%8D%EF%BC%88%E4%BA%8C%EF%BC%89/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">MySQL- 故障恢复（二）</span>
-      <span style="float: right;">03-11</span>
-    </a>
-  
-    
-    <a href="/2020/03/11/MySQL-%E6%95%85%E9%9A%9C%E6%81%A2%E5%A4%8D%EF%BC%88%E4%B8%80%EF%BC%89/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">MySQL- 故障恢复（一）</span>
-      <span style="float: right;">03-11</span>
     </a>
   
 </div>
@@ -332,6 +296,87 @@
   <script>
     $(document).ready(function () {
       $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="/lib/typed/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "分类 - Mysql&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="/lib/anchor/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="/lib/fancybox/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
+  linenums');
       prettyPrint();
     })
   </script>

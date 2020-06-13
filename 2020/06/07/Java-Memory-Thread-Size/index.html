@@ -16,7 +16,7 @@
   <meta name="description" content="雨下不停-日记">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
-  <title>归档 ~ Raindrop Blog</title>
+  <title>Java-Memory-Thread-Size ~ Raindrop Blog</title>
 
   <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css"  >
 <link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css"  >
@@ -39,7 +39,7 @@
 
 
 <body>
-  <header style="height: 80vh;">
+  <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -138,7 +138,7 @@
   </div>
 </nav>
 
-    <div class="view intro-2" id="background" parallax=true
+    <div class="view intro-2" id="background" false
          style="background: url('/img/default.png')no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
@@ -148,6 +148,41 @@
               
             </span>
 
+            
+              <br>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  星期日, 六月 7日 2020, 10:53 晚上
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    404 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      1 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
             
           </div>
 
@@ -159,53 +194,164 @@
 
   <main>
     
-      <div class="container nopadding-md">
-        <div class="py-5 z-depth-3" id="board">
-          
-          <div class="container">
-            <div class="row">
-              <div class="col-12 col-md-10 m-auto">
-                
-
-<div class="list-group">
-  <p class="h4">共计 40 篇文章</p>
-  <hr>
-  
-    
       
-      <p class="h5">2019</p>
-    
-    <a href="/2019/01/05/Maven%20Project/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">Maven Project</span>
-      <span style="float: right;">01-05</span>
-    </a>
-  
-    
-    <a href="/2019/01/05/Git%20Command(2)/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">Git Command(2)</span>
-      <span style="float: right;">01-05</span>
-    </a>
-  
-    
-    <a href="/2019/01/05/Git%20Command(1)/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">Git Command(1)</span>
-      <span style="float: right;">01-05</span>
-    </a>
-  
-    
-    <a href="/2019/01/05/Java%20Excel%20Operator/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">Java Excel Opreator</span>
-      <span style="float: right;">01-05</span>
-    </a>
-  
-</div>
 
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <center><p style="font-size:30px;color:black"> Java Memory Thread Size </p></center>
 
-              </div>
-            </div>
+<a id="more"></a>
+
+<h3 id="作用范围"><a href="# 作用范围" class="headerlink" title="作用范围"></a> 作用范围 </h3><p>  &ensp;&ensp;Thread Size 主要用来控制 JVM 线程栈的大小。</p>
+<h3 id="相关参数"><a href="# 相关参数" class="headerlink" title="相关参数"></a> 相关参数 </h3><p>  &ensp;&ensp;Thread Size 主要参数有 4 个，分别介绍一下：</p>
+<ul>
+<li><p>-Xss</p>
+<p>  线程栈大小，单位 KB</p>
+</li>
+<li><p>-XX:ThreadStackSize</p>
+<p>  线程栈大小，单位 KB</p>
+</li>
+<li><p>-XX:VMThreadStackSize</p>
+<p>  VMThread 范围内线程栈大小 </p>
+</li>
+<li><p>-XX:CompilerThreadStackSize</p>
+<p>  编译线程栈大小 </p>
+</li>
+</ul>
+<h3 id="使用案例"><a href="# 使用案例" class="headerlink" title="使用案例"></a> 使用案例 </h3><ul>
+<li><p>-Xss256k 代表线程栈大小为 256k。</p>
+</li>
+<li><p>-XX:ThreadStackSize=256k 代表线程栈大小为 256k。</p>
+</li>
+<li><p>-XX:VMThreadStackSize=256k 代表 VMThread 线程栈大小为 256k。</p>
+</li>
+<li><p>-XX:CompilerThreadStackSize=256k 代表编译线程栈大小为 256k。</p>
+</li>
+</ul>
+<h3 id="参数默认值"><a href="# 参数默认值" class="headerlink" title="参数默认值"></a> 参数默认值 </h3><p>  &ensp;&ensp; 以下为默认值均为 Linux 平台下的默认值。</p>
+<table>
+<thead>
+<tr>
+<th> 参数 </th>
+<th> 默认值 </th>
+<th>JDK 版本 </th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-XX:Xss</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>-XX:ThreadStackSize</td>
+<td>1024K</td>
+<td>jdk1.8</td>
+</tr>
+<tr>
+<td>-XX:VMThreadStackSize</td>
+<td>1024K</td>
+<td>jdk1.8</td>
+</tr>
+<tr>
+<td>-XX:CompilerThreadStackSize</td>
+<td>0</td>
+<td>jdk1.8</td>
+</tr>
+</tbody></table>
+<h3 id="注意事项"><a href="# 注意事项" class="headerlink" title="注意事项"></a> 注意事项 </h3><ul>
+<li><p>Linux 下 Xss 线程栈最小值为 228K。</p>
+</li>
+<li><p>MacOS 下 Xss 线程栈最小值为 160K。</p>
+</li>
+<li><p>Xss 与 ThreadStackSize 等价。</p>
+</li>
+<li><p>Xss 会按照 page_size(默认为 4) 对齐。</p>
+</li>
+<li><p>ThreadStackSize 64 位 OS 下默认值为 1M，32 位 OS 下默认值为 512K。</p>
+</li>
+<li><p>VMThreadStackSize 64 位 OS 下默认值为 1M，32 位 OS 下默认值为 512K。</p>
+</li>
+<li><p>CompilerThreadStackSize 64 位 OS 下默认值为 4M，32 位 OS 下默认值为 2M。</p>
+</li>
+<li><p>Java 线程 new Thread(); 非 Java 线程 GC 线程、VMThread 线程。</p>
+</li>
+</ul>
+<h3 id="实践问题"><a href="# 实践问题" class="headerlink" title="实践问题"></a> 实践问题 </h3><ul>
+<li><p>Xss 设置的比 228K 小会怎样？</p>
+<p> 程序报错，无法启动 JVM。</p>
+<pre><code class="bash">$ java -Xss128k Test
+The stack size specified is too small, Specify at least 228k
+Error: Could not create the Java Virtual Machine.
+Error: A fatal exception has occurred. Program will exit.</code></pre>
+</li>
+<li><p> 同时设置 Xss 和 ThreadStackSize 会怎样？</p>
+<p> 谁后设置以谁为准。</p>
+<pre><code class="bash">$ java -Xss512k -XX:ThreadStackSize=256k Test
+
+$ jps
+6964 Test
+
+$ jinfo -flag ThreadStackSize 6964
+-XX:ThreadStackSize=256</code></pre>
+<pre><code class="bash">$ java -XX:ThreadStackSize=256k -Xss512k Test
+
+$ jps
+6978 Test
+
+$ jinfo -flag ThreadStackSize 6978
+-XX:ThreadStackSize=512</code></pre>
+</li>
+</ul>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+              <span>
+                <i class="iconfont icon-inbox"></i>
+                
+                  <a class="hover-with-bg" href="/categories/Java">Java</a>
+                  &nbsp;
+                
+              </span>&nbsp;&nbsp;
+            
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
           </div>
         </div>
       </div>
+    </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+  </div>
+</div>
+
     
   </main>
 
@@ -284,6 +430,11 @@
 
 
 
+  
+    <script src="/lib/tocbot/tocbot.min.js" ></script>
+  
+  <script src="/js/post.js" ></script>
+
 
 
   <script src="/lib/smoothscroll/SmoothScroll.min.js" ></script>
@@ -324,7 +475,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "归档&nbsp;",
+        "Java-Memory-Thread-Size&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,
