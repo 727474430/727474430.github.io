@@ -16,7 +16,7 @@
   <meta name="description" content="雨下不停-日记">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
-  <title>归档 ~ Raindrop Blog</title>
+  <title>HomeBrew 加速 ~ Raindrop Blog</title>
 
   <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css"  >
 <link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css"  >
@@ -39,7 +39,7 @@
 
 
 <body>
-  <header style="height: 80vh;">
+  <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -138,7 +138,7 @@
   </div>
 </nav>
 
-    <div class="view intro-2" id="background" parallax=true
+    <div class="view intro-2" id="background" false
          style="background: url('/img/default.png')no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
@@ -148,6 +148,41 @@
               
             </span>
 
+            
+              <br>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  星期三, 十月 28日 2020, 10:58 晚上
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    226 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      1 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
             
           </div>
 
@@ -159,65 +194,74 @@
 
   <main>
     
-      <div class="container nopadding-md">
-        <div class="py-5 z-depth-3" id="board">
-          
-          <div class="container">
-            <div class="row">
-              <div class="col-12 col-md-10 m-auto">
-                
-
-<div class="list-group">
-  <p class="h4">共计 41 篇文章</p>
-  <hr>
-  
-    
       
-      <p class="h5">2020</p>
-    
-    <a href="/2020/04/14/MemoryLeaker/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">MemoryLeaker</span>
-      <span style="float: right;">04-14</span>
-    </a>
-  
-    
-    <a href="/2020/04/12/Nginx%20Ftp/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">Nginx Ftp</span>
-      <span style="float: right;">04-12</span>
-    </a>
-  
-    
-    <a href="/2020/04/12/CAS/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">CAS</span>
-      <span style="float: right;">04-12</span>
-    </a>
-  
-    
-    <a href="/2020/04/12/Dockerfile/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">Dockerfile 使用</span>
-      <span style="float: right;">04-12</span>
-    </a>
-  
-    
-    <a href="/2020/04/12/Curl/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">Curl 常用命令</span>
-      <span style="float: right;">04-12</span>
-    </a>
-  
-    
-    <a href="/2020/04/09/Idea%20Plugin/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">Idea Plugin</span>
-      <span style="float: right;">04-09</span>
-    </a>
-  
-</div>
 
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <p><strong>HomeBrew</strong> 执行加速</p>
+<a id="more"></a>
 
-              </div>
-            </div>
+<h5 id="背景"><a href="# 背景" class="headerlink" title="背景"></a>背景 </h5><p> 日常使用 brew install 相关软件时，真的是感觉蜗牛一般的速度，哪怕挂了代理依然也很慢，今天记录下在网上 <br> 网友提供的加速方案，配置之后速度快乐很多，心情也愉悦了！</p>
+<h5 id="更新源"><a href="# 更新源" class="headerlink" title="更新源"></a>更新源</h5><pre><code class="bash">$ git -C &quot;$(brew --repo)&quot; remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git
+$ git -C &quot;$(brew --repo homebrew/core)&quot; remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git
+$ git -C &quot;$(brew --repo homebrew/cask)&quot; remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-cask.git</code></pre>
+<h5 id="修改环境变量"><a href="# 修改环境变量" class="headerlink" title="修改环境变量"></a>修改环境变量</h5><pre><code class="bash">$ vim ~/.zshrc
+export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles</code></pre>
+<h5 id="测试更新"><a href="# 测试更新" class="headerlink" title="测试更新"></a>测试更新</h5><pre><code class="bash">$ brew update</code></pre>
+<h5 id="还原源"><a href="# 还原源" class="headerlink" title="还原源"></a>还原源</h5><pre><code class="bash">$ git -C &quot;$(brew --repo)&quot; remote set-url origin https://github.com/Homebrew/brew.git
+$ git -C &quot;$(brew --repo homebrew/core)&quot; remote set-url origin https://github.com/Homebrew/homebrew-core.git
+$ git -C &quot;$(brew --repo homebrew/cask)&quot; remote set-url origin https://github.com/Homebrew/homebrew-cask.git
+$ brew update</code></pre>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+              <span>
+                <i class="iconfont icon-inbox"></i>
+                
+                  <a class="hover-with-bg" href="/categories/mac">mac</a>
+                  &nbsp;
+                
+              </span>&nbsp;&nbsp;
+            
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
           </div>
         </div>
       </div>
+    </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+  </div>
+</div>
+
     
   </main>
 
@@ -296,6 +340,11 @@
 
 
 
+  
+    <script src="/lib/tocbot/tocbot.min.js" ></script>
+  
+  <script src="/js/post.js" ></script>
+
 
 
   <script src="/lib/smoothscroll/SmoothScroll.min.js" ></script>
@@ -336,7 +385,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "归档&nbsp;",
+        "HomeBrew 加速&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,
