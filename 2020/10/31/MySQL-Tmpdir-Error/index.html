@@ -16,7 +16,7 @@
   <meta name="description" content="雨下不停-日记">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
-  <title>归档 ~ Raindrop Blog</title>
+  <title>MySQL-Tmpdir-Error ~ Raindrop Blog</title>
 
   <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css"  >
 <link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css"  >
@@ -39,7 +39,7 @@
 
 
 <body>
-  <header style="height: 80vh;">
+  <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -138,7 +138,7 @@
   </div>
 </nav>
 
-    <div class="view intro-2" id="background" parallax=true
+    <div class="view intro-2" id="background" false
          style="background: url('/img/default.png')no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
@@ -148,6 +148,41 @@
               
             </span>
 
+            
+              <br>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  星期六, 十月 31日 2020, 8:39 晚上
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    417 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      2 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
             
           </div>
 
@@ -159,101 +194,92 @@
 
   <main>
     
-      <div class="container nopadding-md">
-        <div class="py-5 z-depth-3" id="board">
-          
-          <div class="container">
-            <div class="row">
-              <div class="col-12 col-md-10 m-auto">
-                
-
-<div class="list-group">
-  <p class="h4">共计 42 篇文章</p>
-  <hr>
-  
-    
       
-      <p class="h5">2020</p>
-    
-    <a href="/2020/10/31/MySQL-Tmpdir-Error/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">MySQL-Tmpdir-Error</span>
-      <span style="float: right;">10-31</span>
-    </a>
-  
-    
-    <a href="/2020/10/28/HomeBrew%E5%8A%A0%E9%80%9F/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">HomeBrew 加速</span>
-      <span style="float: right;">10-28</span>
-    </a>
-  
-    
-    <a href="/2020/06/08/K8S-Building-Small-Container/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">K8S-Building-Small-Container</span>
-      <span style="float: right;">06-08</span>
-    </a>
-  
-    
-    <a href="/2020/06/07/Java-Memory-Code-Cache/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">Java-Memory-Code-Cache</span>
-      <span style="float: right;">06-07</span>
-    </a>
-  
-    
-    <a href="/2020/06/07/Java-Memory-Eden-Survivor/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">Java-Memory-Eden-Survivor</span>
-      <span style="float: right;">06-07</span>
-    </a>
-  
-    
-    <a href="/2020/06/07/Java-Memory-Heap-Size/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">Java-Memory-Heap-Size</span>
-      <span style="float: right;">06-07</span>
-    </a>
-  
-    
-    <a href="/2020/06/07/Java-Memory-Metaspace-size/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">Java-Memory-Metaspace</span>
-      <span style="float: right;">06-07</span>
-    </a>
-  
-    
-    <a href="/2020/06/07/Java-Memory-New-Size/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">Java-Memory-New-Size</span>
-      <span style="float: right;">06-07</span>
-    </a>
-  
-    
-    <a href="/2020/06/07/Java-Memory-Perm-Size/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">Java-Memory-Perm-Size</span>
-      <span style="float: right;">06-07</span>
-    </a>
-  
-    
-    <a href="/2020/06/07/Java-Memory-Thread-Size/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">Java-Memory-Thread-Size</span>
-      <span style="float: right;">06-07</span>
-    </a>
-  
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <p><strong>MySQL No Space Error</strong></p>
+<a id="more"></a>
+
+<h5 id="背景"><a href="# 背景" class="headerlink" title="背景"></a>背景 </h5><p> 临时接到开发人员反馈，mysql 在执行 sql 语句的时候出现如下错误 从错误日志上来看，是说 /tmp 目录的空间不足，<br>于是在服务器查看 /tmp 目录磁盘空间，果然不足。<br><code>[Err] 3 - Error writing file &#39;/tmp/MYfd=36&#39; (OS errno 28 - No space left on device)</code></p>
+<div aligh="center">
+    <img src="http://qiniu.raindrop-wl.cn/disk-space.png" srcset="/img/loading.gif" width="100%">
 </div>
 
-  <nav aria-label="index posts navigation">
-    <span class="pagination pg-blue justify-content-center mt-5" id="pagination">
-      <span class="page-number current">1</span><a class="page-number" href="/archives/2020/page/2/">2</a><a class="page-number" href="/archives/2020/page/3/">3</a><a class="page-number" href="/archives/2020/page/4/">4</a><a class="extend next" rel="next" href="/archives/2020/page/2/"><i class="fas fa-angle-double-right"></i></a>
-    </span>
-  </nav>
-  
-  <script>
-    for (ele of document.getElementById("pagination").getElementsByClassName("page-number")) {
-      ele.href += '#board';
-    }
-  </script>
+<h5 id="参数"><a href="# 参数" class="headerlink" title="参数"></a>参数 </h5><p>mysql 在执行 sql 语句时，会将数据保存在临时表中用于排序，那么临时表时占用磁盘空间的，在 mysql 中通过 tmpdir<br> 参数指定临时空间所在地磁盘位置默认为 /tmp 目录，所以上面的错误会报 /tmp 下的磁盘空间不足。<br>下面是 mysql 官方对 tempdir 参数对解释:</p>
+<blockquote>
+<p>The path of the directory to use for creating temporary files. It might be useful if your default /tmp directory resides on a partition<br>that is too small to hold temporary tables. This option accepts several paths that are used in round-robin fashion. Paths should be<br>separated by colon characters (:) on Unix and semicolon characters (;) on Windows. If the MySQL server is acting as a replication slave,<br>you should not set –tmpdir to point to a directory on a memory-based file system or to a directory that is cleared when the server host<br>restarts. For more information about the storage location of temporary files, see Section B.5.3.5, “Where MySQL Stores Temporary Files”.<br>A replication slave needs some of its temporary files to survive a machine restart so that it can replicate temporary tables or LOAD DATA<br> INFILE operations. If files in the temporary file directory are lost when the server restarts, replication fails.</p>
+</blockquote>
+<h5 id="解决"><a href="# 解决" class="headerlink" title="解决"></a>解决 </h5><p> 先登陆 mysql 查看以下 tmpdir 参数的配置</p>
+<pre><code class="bash">$ mysql -uroot -p
+mysql&gt; show variables like &#39;tmpdir&#39;;
++---------------+-------+
+| Variable_name | Value |
++---------------+-------+
+| tmpdir        | /tmp  |
++---------------+-------+</code></pre>
+<p>修改 my.cnf 配置，添加 tmpdir 参数到 /db/tmp 目录下</p>
+<pre><code class="bash">$ vim /etc/my.cnf
+tmpdir = /db/tmp</code></pre>
+<p>重启 mysql 验证</p>
+<pre><code class="bash">$ service msyqld restart
+$ mysql -uroot -p
+mysql&gt; show variables like &#39;tmpdir&#39;;
++---------------+----------+
+| Variable_name |   Value  |
++---------------+----------+
+| tmpdir        |  /db/tmp |
++---------------+----------+</code></pre>
 
-
-              </div>
-            </div>
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+              <span>
+                <i class="iconfont icon-inbox"></i>
+                
+                  <a class="hover-with-bg" href="/categories/mysql">mysql</a>
+                  &nbsp;
+                
+              </span>&nbsp;&nbsp;
+            
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
           </div>
         </div>
       </div>
+    </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+  </div>
+</div>
+
     
   </main>
 
@@ -332,6 +358,11 @@
 
 
 
+  
+    <script src="/lib/tocbot/tocbot.min.js" ></script>
+  
+  <script src="/js/post.js" ></script>
+
 
 
   <script src="/lib/smoothscroll/SmoothScroll.min.js" ></script>
@@ -372,7 +403,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "归档&nbsp;",
+        "MySQL-Tmpdir-Error&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,
