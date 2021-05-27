@@ -207,9 +207,9 @@
 
 <a id="more"></a>
 
-<h3 id="Kubernetes- 资源管理"><a href="#Kubernetes- 资源管理" class="headerlink" title="Kubernetes 资源管理"></a>Kubernetes 资源管理 </h3><p>  &ensp;&ensp; 在 Kubernetes 调度 Pod 时，节点有足够的资源用来运行容器非常重要。如果想将一个大的应用调度到一个资源受限的节点，节点可能会耗尽 Memory 或 CPU，导致无法正常工作。</p>
-<p>  &ensp;&ensp; 在 Kubernetes 中提供了 requests 和 limits 来解决调度时选择合适资源的问题。requests 和 limits 是用于控制资源的机制，例如 CPU 和 Memory。</p>
-<p>  &ensp;&ensp; 在 Kubernetes 中 scheduler 使用 CPU 和 Memory 的值来确定在哪里运行 Pod。Pod 中的每个容器都可以设置自己的 requests 和 limits，这些都是附加值。CPU 资源使用 millicores 定义，Memory 使用 million 定义。</p>
+<h3 id="Kubernetes- 资源管理"><a href="#Kubernetes- 资源管理" class="headerlink" title="Kubernetes 资源管理"></a>Kubernetes 资源管理 </h3><p>&ensp;&ensp; 在 Kubernetes 调度 Pod 时，节点有足够的资源用来运行容器非常重要。如果想将一个大的应用调度到一个资源受限的节点，节点可能会耗尽 Memory 或 CPU，导致无法正常工作。</p>
+<p>&ensp;&ensp; 在 Kubernetes 中提供了 requests 和 limits 来解决调度时选择合适资源的问题。requests 和 limits 是用于控制资源的机制，例如 CPU 和 Memory。</p>
+<p>&ensp;&ensp; 在 Kubernetes 中 scheduler 使用 CPU 和 Memory 的值来确定在哪里运行 Pod。Pod 中的每个容器都可以设置自己的 requests 和 limits，这些都是附加值。CPU 资源使用 millicores 定义，Memory 使用 million 定义。</p>
 <center>
   <img style="border-radius: 0.3125em;box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="http://qiniu.raindrop-wl.cn/requests.png">
   <div style="color:orange; border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;padding: 2px;">
@@ -224,9 +224,8 @@
     </div>
 </center>
 
-
-<h3 id="Kubernetes-Requests"><a href="#Kubernetes-Requests" class="headerlink" title="Kubernetes Requests"></a>Kubernetes Requests</h3><p>  &ensp;&ensp;requests 代表一定能获取到的资源，如果一个容器设置了 requests 属性，Kubernetes 会将其调度到能够提供这些资源的节点上。</p>
-<p>  &ensp;&ensp;requests 有两种类型的资源：</p>
+<h3 id="Kubernetes-Requests"><a href="#Kubernetes-Requests" class="headerlink" title="Kubernetes Requests"></a>Kubernetes Requests</h3><p>&ensp;&ensp;requests 代表一定能获取到的资源，如果一个容器设置了 requests 属性，Kubernetes 会将其调度到能够提供这些资源的节点上。</p>
+<p>&ensp;&ensp;requests 有两种类型的资源：</p>
 <ul>
 <li><p>CPU：需要使用 CPU 的核数，单位是 millicores。如：1/4 核设置为 250m，1 核设置为 1000m。</p>
 </li>
@@ -239,19 +238,19 @@ metadata:
     app: resource-demo
 spec:
   containers:
-  - name: resource-demo
-    image: nginx:1.9
-    ports:
-      - name: http
-        containerPort: 80
-    resources:
-      requests:
-        memory: &quot;32Mi&quot;
-        cpu: &quot;200m&quot;</code></pre>
+    - name: resource-demo
+      image: nginx:1.9
+      ports:
+        - name: http
+          containerPort: 80
+      resources:
+        requests:
+          memory: &quot;32Mi&quot;
+          cpu: &quot;200m&quot;</code></pre>
 </li>
 </ul>
-<h3 id="Kubernetes-Limits"><a href="#Kubernetes-Limits" class="headerlink" title="Kubernetes Limits"></a>Kubernetes Limits</h3><p>  &ensp;&ensp;limits 代表容器能获取的资源上限，如果一个容器设置了 limits 属性，Kubernetes 只允许容器上升到 limits，然后被限制住。</p>
-<p>  &ensp;&ensp;limits 有两种类型的资源：</p>
+<h3 id="Kubernetes-Limits"><a href="#Kubernetes-Limits" class="headerlink" title="Kubernetes Limits"></a>Kubernetes Limits</h3><p>&ensp;&ensp;limits 代表容器能获取的资源上限，如果一个容器设置了 limits 属性，Kubernetes 只允许容器上升到 limits，然后被限制住。</p>
+<p>&ensp;&ensp;limits 有两种类型的资源：</p>
 <ul>
 <li><p>CPU：需要使用 CPU 的核数，单位是 millicores。如：1/4 核设置为 250m，1 核设置为 1000m。</p>
 </li>
@@ -264,18 +263,18 @@ metadata:
     app: resource-demo
 spec:
   containers:
-  - name: resource-demo
-    image: nginx:1.9
-    ports:
-      - name: http
-        containerPort: 80
-    resources:
-      limites:
-        memory: &quot;64Mi&quot;
-        cpu: &quot;300m&quot;</code></pre>
+    - name: resource-demo
+      image: nginx:1.9
+      ports:
+        - name: http
+          containerPort: 80
+      resources:
+        limites:
+          memory: &quot;64Mi&quot;
+          cpu: &quot;300m&quot;</code></pre>
 </li>
 </ul>
-<h3 id="Kubernetes-ResourceQuotas"><a href="#Kubernetes-ResourceQuotas" class="headerlink" title="Kubernetes ResourceQuotas"></a>Kubernetes ResourceQuotas</h3><p>  &ensp;&ensp; 为了防止运维人员未限制资源使用或者使用过大的资源，Kubernetes 提供了 ResourceQuotas 资源配额来限制 Namespace 命名空间中所有容器所能使用的资源之合。</p>
+<h3 id="Kubernetes-ResourceQuotas"><a href="#Kubernetes-ResourceQuotas" class="headerlink" title="Kubernetes ResourceQuotas"></a>Kubernetes ResourceQuotas</h3><p>&ensp;&ensp; 为了防止运维人员未限制资源使用或者使用过大的资源，Kubernetes 提供了 ResourceQuotas 资源配额来限制 Namespace 命名空间中所有容器所能使用的资源之合。</p>
 <ul>
 <li><p>requests.cpu：命名空间中所有容器所能达到的合计 CPU requests 的最大值。例如：50 个 10m requests 的容器。</p>
 </li>
@@ -314,7 +313,7 @@ spec:
     replicationcontrollers: 10</code></pre>
 </li>
 </ul>
-<h3 id="Kubernetes-LimitRange"><a href="#Kubernetes-LimitRange" class="headerlink" title="Kubernetes LimitRange"></a>Kubernetes LimitRange</h3><p>  &ensp;&ensp; 通过 LimitRange 可以有效的防止我们在命名空间内创建超小型或超大型的容器。它与针对每个命名空间的 ResourceQuotas 不同，LimitRange 会加强到每个容器上。LimitRange 是对 Pod 和 Container 级别的资源进行限制。</p>
+<h3 id="Kubernetes-LimitRange"><a href="#Kubernetes-LimitRange" class="headerlink" title="Kubernetes LimitRange"></a>Kubernetes LimitRange</h3><p>&ensp;&ensp; 通过 LimitRange 可以有效的防止我们在命名空间内创建超小型或超大型的容器。它与针对每个命名空间的 ResourceQuotas 不同，LimitRange 会加强到每个容器上。LimitRange 是对 Pod 和 Container 级别的资源进行限制。</p>
 <ul>
 <li><p>default：Pod 中容器默认 limits，任何没有明确设置 limits 的容器，都将使用这个默认值。</p>
 </li>
@@ -331,35 +330,35 @@ metadata:
   name: limit-range-demo
 sepc:
   limits:
-  - max:
-      cpu: &quot;4&quot;
-      memory: 2Gi
-    min:
-      cpu: 200m
-      memory: 6Mi
-    maxLimitRequestRatio: # max value for limit / request 限制值与请求值的比例
-      cpu: 3
-      memory: 2
-    type: Pod
-  - default:
-      cpu: 600m
-      memory: 100Mi
-    defaultRequest:
-      cpu: 100m
-      memory: 50Mi
-    max:
-      cpu: 1000m
-      memory: 200Mi
-    min: # min request
-      cpu: 10m
-      memory: 10Mi
-    maxLimitRequestRatio: # max value for limit / request 限制值与请求值的比例
-      cpu: 2
-      memory: 2
-    type: Container</code></pre>
+    - max:
+        cpu: &quot;4&quot;
+        memory: 2Gi
+      min:
+        cpu: 200m
+        memory: 6Mi
+      maxLimitRequestRatio: # max value for limit / request 限制值与请求值的比例
+        cpu: 3
+        memory: 2
+      type: Pod
+    - default:
+        cpu: 600m
+        memory: 100Mi
+      defaultRequest:
+        cpu: 100m
+        memory: 50Mi
+      max:
+        cpu: 1000m
+        memory: 200Mi
+      min: # min request
+        cpu: 10m
+        memory: 10Mi
+      maxLimitRequestRatio: # max value for limit / request 限制值与请求值的比例
+        cpu: 2
+        memory: 2
+      type: Container</code></pre>
 </li>
 </ul>
-<h3 id="Kubernets- 资源超出"><a href="#Kubernets- 资源超出" class="headerlink" title="Kubernets 资源超出"></a>Kubernets 资源超出 </h3><p>  &ensp;&ensp; 当 CPU 超过负载时，Kubernetes 会限制每个 Pod 可用 CPU 的资源，但会确保每个 Pod 都有可用的 CPU 资源。</p>
+<h3 id="Kubernets- 资源超出"><a href="#Kubernets- 资源超出" class="headerlink" title="Kubernets 资源超出"></a>Kubernets 资源超出 </h3><p>&ensp;&ensp; 当 CPU 超过负载时，Kubernetes 会限制每个 Pod 可用 CPU 的资源，但会确保每个 Pod 都有可用的 CPU 资源。</p>
 <center>
   <img style="border-radius: 0.3125em;box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="http://qiniu.raindrop-wl.cn/cpu-allocation.png">
   <div style="color:orange; border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;padding: 2px;">
@@ -367,7 +366,7 @@ sepc:
     </div>
 </center>
 
-<p>  &ensp;&ensp; 当 Memory 超过负载时，首先 Kubernetes 会将资源超出 requests 的 Pods 终止运行，如果某个 Pod 没有配置 requests 那么这个 Pod 就满足资源超出 requests 的条件，所以这个 Pod 是终止运行的最佳候选。</p>
+<p>&ensp;&ensp; 当 Memory 超过负载时，首先 Kubernetes 会将资源超出 requests 的 Pods 终止运行，如果某个 Pod 没有配置 requests 那么这个 Pod 就满足资源超出 requests 的条件，所以这个 Pod 是终止运行的最佳候选。</p>
 <center>
   <img style="border-radius: 0.3125em;box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="http://qiniu.raindrop-wl.cn/kill-requests.png">
   <div style="color:orange; border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;padding: 2px;">
@@ -375,7 +374,7 @@ sepc:
     </div>
 </center>
 
-<p>  &ensp;&ensp; 其次 Kubernetes 会将资源超出 requests 但仍低于 limits 的 Pod 终止运行，如果 Kubernetes 找出了多个符合条件的 Pod 会对这些 Pods 进行优先级（Priority）排序，然后终止运行。</p>
+<p>&ensp;&ensp; 其次 Kubernetes 会将资源超出 requests 但仍低于 limits 的 Pod 终止运行，如果 Kubernetes 找出了多个符合条件的 Pod 会对这些 Pods 进行优先级（Priority）排序，然后终止运行。</p>
 <center>
   <img style="border-radius: 0.3125em;box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="http://qiniu.raindrop-wl.cn/kill-priority.png">
   <div style="color:orange; border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;padding: 2px;">
@@ -383,14 +382,13 @@ sepc:
     </div>
 </center>
 
-<p>  &ensp;&ensp; 最后如果所有 Pods 优先级一致，那么 Kubernets 会终止运行超出 requests 最多的 Pod。</p>
+<p>&ensp;&ensp; 最后如果所有 Pods 优先级一致，那么 Kubernets 会终止运行超出 requests 最多的 Pod。</p>
 <center>
   <img style="border-radius: 0.3125em;box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="http://qiniu.raindrop-wl.cn/kill-big-requests.png">
   <div style="color:orange; border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;padding: 2px;">
         将超出 requests 最多的终止运行
     </div>
 </center>
-
 
 <h3 id="注意事项"><a href="# 注意事项" class="headerlink" title="注意事项"></a> 注意事项 </h3><ul>
 <li><p> 如果设置 CPU 核数大于最大节点的核数，那么这个 Pod 将永远无法得到调度。如果应用不是以计算为主，那么 requests 最好设置为 1 或 以下，然后通过更多副本来扩展。这样可以给系统更大的灵活性。</p>

@@ -16,7 +16,7 @@
   <meta name="description" content="雨下不停-日记">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
-  <title>归档 ~ Raindrop Blog</title>
+  <title>Arthas 系列 [一] ~ Raindrop Blog</title>
 
   <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css"  >
 <link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css"  >
@@ -39,7 +39,7 @@
 
 
 <body>
-  <header style="height: 80vh;">
+  <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -138,7 +138,7 @@
   </div>
 </nav>
 
-    <div class="view intro-2" id="background" parallax=true
+    <div class="view intro-2" id="background" false
          style="background: url('/img/default.png')no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
@@ -148,6 +148,41 @@
               
             </span>
 
+            
+              <br>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  星期四, 五月 27日 2021, 9:25 晚上
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    472 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      2 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
             
           </div>
 
@@ -159,35 +194,125 @@
 
   <main>
     
-      <div class="container nopadding-md">
-        <div class="py-5 z-depth-3" id="board">
-          
-          <div class="container">
-            <div class="row">
-              <div class="col-12 col-md-10 m-auto">
-                
-
-<div class="list-group">
-  <p class="h4">共计 46 篇文章</p>
-  <hr>
-  
-    
       
-      <p class="h5">2019</p>
-    
-    <a href="/2019/12/25/Docker%20Jenkins%20Develop%20Springboot/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">Docker Jenkins Develop Springboot</span>
-      <span style="float: right;">12-25</span>
-    </a>
-  
-</div>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <center><p style="font-size:30px;color:black"> Arthas 系列[一]  Dashboard </p></center>
+
+<a id="more"></a>
+
+<h3 id="介绍"><a href="# 介绍" class="headerlink" title="介绍"></a>介绍</h3><p>dashboard 作为 arthas 最基础的功能，为我们提供了丰富的客户化界面，简单直观的展示了我们最为关注的常用信息：</p>
+<ul>
+<li>thread: 线程信息</li>
+<li>memory: 内存信息</li>
+<li>runtime: 运行时信息</li>
+</ul>
+<h3 id="使用"><a href="# 使用" class="headerlink" title="使用"></a>使用 </h3><p> 启动 arthas</p>
+<pre><code class="bash">$ java -jar arthas-boot.jar
+[INFO] arthas-boot version: 3.5.1
+[INFO] Found existing java process, please choose one and input the serial number of the process, eg : 1. Then hit ENTER.
+* [1]: 168 math-game.jar
+1
+^[[INFO] arthas home: /root/.arthas/lib/3.5.1/arthas
+[INFO] Try to attach process 168
+[INFO] Attach process 168 success.
+[INFO] arthas-client connect 127.0.0.1 3658
+  ,---.  ,------. ,--------.,--.  ,--.  ,---.   ,---.
+ /  O  \ |  .--. &#39;&#39;--.  .--&#39;|  &#39;--&#39;  | /  O  \ &#39;   .-&#39;
+|  .-.  ||  &#39;--&#39;.&#39;   |  |   |  .--.  ||  .-.  |`.  `-.
+|  | |  ||  |\  \    |  |   |  |  |  ||  | |  |.-&#39;    |
+`--&#39; `--&#39;`--&#39; &#39;--&#39;   `--&#39;   `--&#39;  `--&#39;`--&#39; `--&#39;`-----&#39;
 
 
-              </div>
-            </div>
+wiki       https://arthas.aliyun.com/doc
+tutorials  https://arthas.aliyun.com/doc/arthas-tutorials.html
+version    3.5.1
+main_class
+pid        168
+time       2021-05-27 13:34:53</code></pre>
+<p>开启 dashboard</p>
+<pre><code class="bash">[arthas@168]$ dashboard
+## 线程信息
+ID  NAME                     GROUP        PRIORIT STATE   %CPU     DELTA_T TIME    INTERRUP DAEMON
+-1  C1 CompilerThread0       -            -1      -       0.0      0.000   0:1.274 false    true
+-1  C2 CompilerThread0       -            -1      -       0.0      0.000   0:1.228 false    true
+23  arthas-NettyHttpTelnetBo system       5       RUNNABL 0.0      0.000   0:0.267 false    true
+1   main                     main         5       TIMED_W 0.0      0.000   0:0.220 false    false
+-1  VM Periodic Task Thread  -            -1      -       0.0      0.000   0:0.213 false    true
+-1  VM Thread                -            -1      -       0.0      0.000   0:0.157 false    true
+11  Attach Listener          system       9       RUNNABL 0.0      0.000   0:0.043 false    true
+16  arthas-NettyHttpTelnetBo system       5       RUNNABL 0.0      0.000   0:0.039 false    true
+28  arthas-NettyHttpTelnetBo system       5       RUNNABL 0.0      0.000   0:0.023 false    true
+27  arthas-NettyHttpTelnetBo system       5       RUNNABL 0.0      0.000   0:0.022 false    true
+24  arthas-command-execute   system       5       TIMED_W 0.0      0.000   0:0.015 false    true
+
+## 内存信息
+Memory               used    total  max    usage  GC
+heap                 17M     37M    177M   10.01% gc.copy.count            16
+tenured_gen          15M     25M    122M   12.65% gc.copy.time(ms)         86
+eden_space           1M      10M    49M    2.58%                           2
+survivor_space       1M      1M     6M     16.46% gc.marksweepcompact.time 40
+nonheap              28M     32M    -1     87.93% (ms)
+codeheap_&#39;non-nmetho 1M      2M     5M     21.84%
+ds&#39;
+
+## 运行时信息
+Runtime
+os.name                                           Linux
+os.version                                        4.15.0-70-generic
+java.version                                      15-ea</code></pre>
+<p>输入<code>Q</code> 或者 Ctrl+C 可以退出 dashboard 命令。</p>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+              <span>
+                <i class="iconfont icon-inbox"></i>
+                
+                  <a class="hover-with-bg" href="/categories/Java">Java</a>
+                  &nbsp;
+                
+              </span>&nbsp;&nbsp;
+            
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
           </div>
         </div>
       </div>
+    </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+  </div>
+</div>
+
     
   </main>
 
@@ -266,6 +391,11 @@
 
 
 
+  
+    <script src="/lib/tocbot/tocbot.min.js" ></script>
+  
+  <script src="/js/post.js" ></script>
+
 
 
   <script src="/lib/smoothscroll/SmoothScroll.min.js" ></script>
@@ -306,7 +436,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "归档&nbsp;",
+        "Arthas 系列 [一]&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,

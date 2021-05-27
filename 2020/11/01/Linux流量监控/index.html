@@ -16,7 +16,7 @@
   <meta name="description" content="雨下不停-日记">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
-  <title>MySQL-Tmpdir-Error ~ Raindrop Blog</title>
+  <title>Linux 流量监控 ~ Raindrop Blog</title>
 
   <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css"  >
 <link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css"  >
@@ -153,7 +153,7 @@
               
                 <p class="mt-3">
                   <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
-                  星期六, 十月 31日 2020, 8:39 晚上
+                  星期日, 十一月 1日 2020, 11:50 中午
                 </p>
               
 
@@ -162,7 +162,7 @@
                   
                   &nbsp;<i class="far fa-chart-bar"></i>
                   <span class="post-count">
-                    417 字
+                    848 字
                   </span>&nbsp;
                 
 
@@ -170,7 +170,7 @@
                   
                   &nbsp;<i class="far fa-clock"></i>
                   <span class="post-count">
-                      2 分钟
+                      3 分钟
                   </span>&nbsp;
                 
 
@@ -203,38 +203,102 @@
       <div class="py-5 z-depth-3" id="board">
         <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
-            <p><strong>MySQL No Space Error</strong></p>
+            <p><strong>Linux</strong> 网络流量监控</p>
 <a id="more"></a>
 
-<h5 id="背景"><a href="# 背景" class="headerlink" title="背景"></a>背景 </h5><p><code>[Err] 3 - Error writing file &#39;/tmp/MYfd=36&#39; (OS errno 28 - No space left on device)</code><br> 临时接到开发人员反馈，mysql 在执行 sql 语句的时候出现如上错误 从错误日志上来看，是说 /tmp 目录的空间不足，于是在服务器查看 /tmp 目录磁盘空间，果然不足。</p>
+<p>在日常运维中有时会有监控某个应用或网卡流量的需求，在 Linux<br>环境下有很多工具可以达到此目的，在此记录几个比较常用的工具。</p>
+<h5 id="iftop- 流量监控工具"><a href="#iftop- 流量监控工具" class="headerlink" title="iftop 流量监控工具"></a>iftop 流量监控工具 </h5><p> 安装</p>
+<pre><code class="bash">yum install -y iftop</code></pre>
+<p>使用</p>
+<ul>
+<li>显示本机所有进程的进出流量<br>iftop</li>
+</ul>
 <div aligh="center">
-    <img src="http://qiniu.raindrop-wl.cn/disk-space.png" srcset="/img/loading.gif" width="100%">
+    <img src="http://qiniu.raindrop-wl.cn/iftop.png" srcset="/img/loading.gif" width="100%">
 </div>
 
-<h5 id="参数"><a href="# 参数" class="headerlink" title="参数"></a>参数</h5><p>mysql 在执行 sql 语句时，会将数据保存在临时表中用于排序，那么临时表时占用磁盘空间的，在 mysql 中通过 tmpdir 参数指定临时空间所在地磁盘位置默认为 /tmp 目录，所以上面的错误会报 /tmp 下的磁盘空间不足。下面是 mysql 官方对 tempdir 参数对解释:</p>
-<blockquote>
-<p>The path of the directory to use for creating temporary files. It might be useful if your default /tmp directory resides on a partition<br>that is too small to hold temporary tables. This option accepts several paths that are used in round-robin fashion. Paths should be<br>separated by colon characters (:) on Unix and semicolon characters (;) on Windows. If the MySQL server is acting as a replication slave,<br>you should not set –tmpdir to point to a directory on a memory-based file system or to a directory that is cleared when the server host<br>restarts. For more information about the storage location of temporary files, see Section B.5.3.5, “Where MySQL Stores Temporary Files”.<br>A replication slave needs some of its temporary files to survive a machine restart so that it can replicate temporary tables or LOAD DATA<br> INFILE operations. If files in the temporary file directory are lost when the server restarts, replication fails.</p>
+<ul>
+<li>显示本机指定网卡所有进程的进出流量<br>iftop -i eth0</li>
+</ul>
+<div aligh="center">
+    <img src="http://qiniu.raindrop-wl.cn/iftop-eth0.png" srcset="/img/loading.gif" width="100%">
+</div>
+
+<ul>
+<li>显示端口信息<br>iftop -i eth0 -P</li>
+</ul>
+<div aligh="center">
+    <img src="http://qiniu.raindrop-wl.cn/iftop-port.png" srcset="/img/loading.gif" width="100%">
+</div>
+
+<ul>
+<li>参数解释：<blockquote>
+<p>-i: 指定监控网卡<br>-B: 以 bytes 为单位显示流量(默认是 bits)<br>-n: 使 host 信息默认直接都显示 IP<br>-N: 使端口信息默认直接都显示端口号<br>-F: 显示特定网段的进出流量，如# iftop -F 10.10.1.0/24 或# iftop -F 10.10.1.0/255.255.255.0<br>-p: 使用这个参数后，中间的列表显示的本地主机信息，出现了本机以外的 IP 信息<br>-b: 使流量图形条默认就显示<br>-P: 使 host 信息及端口信息默认就都显示<br>-m: 设置界面最上边的刻度的最大值，刻度分五个大段显示，例：# iftop -m 100M</p>
 </blockquote>
-<h5 id="解决"><a href="# 解决" class="headerlink" title="解决"></a>解决 </h5><p> 先登陆 mysql 查看以下 tmpdir 参数的配置</p>
-<pre><code class="bash">$ mysql -uroot -p
-mysql&gt; show variables like &#39;tmpdir&#39;;
-+---------------+-------+
-| Variable_name | Value |
-+---------------+-------+
-| tmpdir        | /tmp  |
-+---------------+-------+</code></pre>
-<p>修改 my.cnf 配置，添加 tmpdir 参数到 /db/tmp 目录下</p>
-<pre><code class="bash">$ vim /etc/my.cnf
-tmpdir = /db/tmp</code></pre>
-<p>重启 mysql 验证</p>
-<pre><code class="bash">$ service msyqld restart
-$ mysql -uroot -p
-mysql&gt; show variables like &#39;tmpdir&#39;;
-+---------------+----------+
-| Variable_name |   Value  |
-+---------------+----------+
-| tmpdir        |  /db/tmp |
-+---------------+----------+</code></pre>
+</li>
+</ul>
+<h5 id="nload- 流量监控工具"><a href="#nload- 流量监控工具" class="headerlink" title="nload 流量监控工具"></a>nload 流量监控工具 </h5><p> 安装</p>
+<pre><code class="bash">yum install -y nload</code></pre>
+<p>使用</p>
+<ul>
+<li><p>显示本机所有进程的进出流量<br>nload</p>
+<div aligh="center">
+  <img src="http://qiniu.raindrop-wl.cn/nload.png" srcset="/img/loading.gif" width="100%">
+</div>
+</li>
+<li><p>显示本机指定网卡所有进程的进出流量<br>nload eth0</p>
+<div aligh="center">
+  <img src="http://qiniu.raindrop-wl.cn/nload-eth0.png" srcset="/img/loading.gif" width="100%">
+</div>
+</li>
+<li><p>显示上行、下行带宽流量图<br>nload eth0 -t 200 -i 1024 -o 128 -U M</p>
+<div aligh="center">
+  <img src="http://qiniu.raindrop-wl.cn/nload-i-o.png" srcset="/img/loading.gif" width="100%">
+</div>
+
+</li>
+</ul>
+<h5 id="nethogs- 按进程统计网络带宽使用率"><a href="#nethogs- 按进程统计网络带宽使用率" class="headerlink" title="nethogs 按进程统计网络带宽使用率"></a>nethogs 按进程统计网络带宽使用率 </h5><p> 安装</p>
+<pre><code class="bash">$ yum install -y nethogs</code></pre>
+<p>使用</p>
+<ul>
+<li><p>显示本机所有进程的进出流量<br>nethogs</p>
+<div aligh="center">
+  <img src="http://qiniu.raindrop-wl.cn/nethogs.png" srcset="/img/loading.gif" width="100%">
+</div>
+</li>
+<li><p>显示版本，按指定频率刷新，指定检测次数，检测所有设备<br>nethogs -d 2 -v 3 -c 5 -a</p>
+<div aligh="center">
+  <img src="http://qiniu.raindrop-wl.cn/nethogs-flags.png" srcset="/img/loading.gif" width="100%">
+</div>
+</li>
+<li><p>参数解释：</p>
+<blockquote>
+<p>交互命令:<br>m : 修改单位<br>r : 按流量排序<br>s : 按发送流量排序<br>q : 退出命令提示符</p>
+<p>启动参数:<br>-V : 显示版本信息，注意是大写字母<br>-v：切换显示单位，默认是默认是 KB/s（0 表示 KB/s，1 表示 KB，2 表示 B，3 表示 MB）<br>-c：检测次数（后面直接跟数字）<br>-a：检测所有的设备<br>-d : 延迟更新刷新速率，以秒为单位。默认值为 1.<br>-t : 跟踪模式.<br>-b : bug 狩猎模式 — — 意味着跟踪模式.<br>-p : 混合模式（不推荐）.<br>device: 要监视的设备名称. 默认为 eth0</p>
+</blockquote>
+</li>
+</ul>
+<h5 id="dstat- 是一个可以取代 -vmstat，iostat，netstat- 和 -ifstat- 这些命令的多功能产品"><a href="#dstat- 是一个可以取代 -vmstat，iostat，netstat- 和 -ifstat- 这些命令的多功能产品" class="headerlink" title="dstat 是一个可以取代 vmstat，iostat，netstat 和 ifstat 这些命令的多功能产品"></a>dstat 是一个可以取代 vmstat，iostat，netstat 和 ifstat 这些命令的多功能产品 </h5><p> 安装</p>
+<pre><code class="bash">$ yum install -y dstat</code></pre>
+<p>使用</p>
+<ul>
+<li><p>显示基本信息<br>dstat</p>
+<div aligh="center">
+  <img src="http://qiniu.raindrop-wl.cn/dstat.png" srcset="/img/loading.gif" width="100%">
+</div>
+</li>
+<li><p>参数解释：</p>
+<blockquote>
+<p>-m ：显示内存使用率（包括 used，buffer，cache，free 值）<br>-r ：显示 I/O 统计<br>-s ：显示交换分区使用情况<br>-t ：将当前时间显示在第一行<br>–fs ：显示文件系统统计数据（包括文件总数量和 inodes 值）<br>–nocolor ：不显示颜色（有时候有用）<br>–socket ：显示网络统计数据<br>–tcp ：显示常用的 TCP 统计<br>–udp ：显示监听的 UDP 接口及其当前用量的一些动态数据</p>
+</blockquote>
+</li>
+<li><p>自带插件：</p>
+<blockquote>
+<p>–disk-util ：显示某一时间磁盘的忙碌状况<br>–freespace ：显示当前磁盘空间使用率<br>–proc-count ：显示正在运行的程序数量<br>–top-bio ：指出块 I/O 最大的进程<br>–top-cpu ：图形化显示 CPU 占用最大的进程<br>–top-io ：显示正常 I/O 最大的进程<br>–top-mem ：显示占用最多内存的进程</p>
+</blockquote>
+</li>
+</ul>
 
             <hr>
           </div>
@@ -245,7 +309,7 @@ mysql&gt; show variables like &#39;tmpdir&#39;;
               <span>
                 <i class="iconfont icon-inbox"></i>
                 
-                  <a class="hover-with-bg" href="/categories/mysql">mysql</a>
+                  <a class="hover-with-bg" href="/categories/linux">linux</a>
                   &nbsp;
                 
               </span>&nbsp;&nbsp;
@@ -403,7 +467,7 @@ mysql&gt; show variables like &#39;tmpdir&#39;;
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "MySQL-Tmpdir-Error&nbsp;",
+        "Linux 流量监控&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,
