@@ -16,7 +16,7 @@
   <meta name="description" content="雨下不停-日记">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
-  <title>K8S-Resources-Priority ~ Raindrop Blog</title>
+  <title>K8S-QoS ~ Raindrop Blog</title>
 
   <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css"  >
 <link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css"  >
@@ -162,7 +162,7 @@
                   
                   &nbsp;<i class="far fa-chart-bar"></i>
                   <span class="post-count">
-                    11 字
+                    822 字
                   </span>&nbsp;
                 
 
@@ -170,7 +170,7 @@
                   
                   &nbsp;<i class="far fa-clock"></i>
                   <span class="post-count">
-                      1 分钟
+                      3 分钟
                   </span>&nbsp;
                 
 
@@ -203,11 +203,124 @@
       <div class="py-5 z-depth-3" id="board">
         <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
-            <center><p style="font-size:30px;color:black"> K8S Resources Priority </p></center>
+            <center><p style="font-size:30px;color:black"> K8S QoS </p></center>
 
 <a id="more"></a>
 
-<h3 id="Kubernetes- 资源管理优先级"><a href="#Kubernetes- 资源管理优先级" class="headerlink" title="Kubernetes 资源管理优先级"></a>Kubernetes 资源管理优先级 </h3>
+<h3 id="Kubernetes-QoS- 介绍"><a href="#Kubernetes-QoS- 介绍" class="headerlink" title="Kubernetes QoS 介绍"></a>Kubernetes QoS 介绍 </h3><p>QoS 指<strong> 服务质量保证</strong>，k8s 提供了 requests 和 limits 两种类型对资源进行分配和使用限制。对于一个 pod 来说，服务质量体现在两个为 2 个具体的指标，<br>Cpu 与 Memory。实际过程中，当某个 Node 节点上内存资源紧张时，k8s 会根据预先设置的不同 QoS 类别进行相应处理。</p>
+<h3 id="Kubernetes-Qos- 分类"><a href="#Kubernetes-Qos- 分类" class="headerlink" title="Kubernetes Qos 分类"></a>Kubernetes Qos 分类</h3><ul>
+<li><p>Guarantee<br>Pod 中所有容器都必须对 cpu 和 memory 同时设置 limits。如果任何一个容器设置了 requests ，则所以其他容器必须设置 requests 配置，同时需要设置与<br>requests 相同值对 limits 配置。</p>
+<pre><code class="yaml"># 例 1：只设置 limits 则 request 值等于 limits
+resources:
+  limits:
+      cpu: &quot;100m&quot;
+        memory: &quot;32Mi&quot;
+
+# 例 2：同时设置相等的 requests 与 limits
+resources:
+    requests:
+      cpu: &quot;100m&quot;
+        memory: &quot;32Mi&quot;
+  limits:
+      cpu: &quot;100m&quot;
+        memory: &quot;32Mi&quot;</code></pre>
+</li>
+<li><p>Burstable<br>Pod 中有任何一个容器的 requests 与 limits 不相等。</p>
+<pre><code class="yaml"># 例 1：有任何一个容器没有指定 resoureces
+containers:
+  name: c1
+    resources:
+        requests:
+          cpu: &quot;100m&quot;
+            memory: &quot;32Mi&quot;
+      limits:
+          cpu: &quot;200m&quot;
+            memory: &quot;128Mi&quot;
+---
+containers:
+  name: c2
+
+# 例 2：有任何一个容器没有指定 cpu 或 memory 的 requests 或 limits 的值
+containers:
+  name: c1
+    resources:
+      limits:
+          cpu: &quot;200m&quot;
+---
+containers:
+  name: c2
+    resources:
+      limits:
+            memory: &quot;128Mi&quot;
+
+# 例 3：有任何一个容器配置不匹配，c1 未设置 limits，c2 未设置 limits、requests
+containers:
+  name: c1
+    resources:
+      requests:
+          cpu: &quot;200m&quot;
+            memory: &quot;128Mi&quot;
+---
+containers:
+  name: c2</code></pre>
+</li>
+<li><p>Best-Effort<br>Pod 中所有容器都没设置 requests、limits，而使用默认值。</p>
+<pre><code class="yaml">containers:
+  name: c1
+---
+containers:
+  name: c2
+---
+containers:
+  name: c3</code></pre>
+</li>
+</ul>
+<center>
+  <img style="border-radius: 0.3125em;box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="http://qiniu.raindrop-wl.cn/qos-species.png">
+  <div style="color:orange; border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;padding: 2px;">
+        QoS 分类
+    </div>
+</center>
+
+<h3 id="Kubernetes-QoS- 优先级"><a href="#Kubernetes-QoS- 优先级" class="headerlink" title="Kubernetes QoS 优先级"></a>Kubernetes QoS 优先级</h3><ul>
+<li>qos 三种类型的优先级如下：</li>
+</ul>
+<center>
+  <img style="border-radius: 0.3125em;box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="http://qiniu.raindrop-wl.cn/K8S-QoS-priority-logo.png">
+  <div style="color:orange; border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;padding: 2px;">
+        QoS 优先级
+    </div>
+</center>
+
+<h3 id="Kubernetes-QoS- 终止顺序"><a href="#Kubernetes-QoS- 终止顺序" class="headerlink" title="Kubernetes QoS 终止顺序"></a>Kubernetes QoS 终止顺序 </h3><p> 当 k8s 中的 Node 节点的资源耗尽时，会对某些 Pods 进行资源回收（杀死 Pods），回收顺序根据 Qos 类型决定。</p>
+<ul>
+<li>Best-Effort: 资源耗尽时，这个类型的 Pods 会优先被杀死。</li>
+<li>Burstable: 资源耗尽时，如果没有 Best-Effort 类型的 Pods 时，这个类型的 Pods 会被杀死。</li>
+<li>Guaranteed: 资源耗尽时，如果没有 Best-Effort 或 Burstable 类型的 Pods 时，这个类型的 Pods 会被杀死。</li>
+</ul>
+<h3 id="Kubernetes-QoS- 配置建议"><a href="#Kubernetes-QoS- 配置建议" class="headerlink" title="Kubernetes QoS 配置建议"></a>Kubernetes QoS 配置建议</h3><ul>
+<li>资源充足时：建议使用 Guaranteed 类型的 QoS 配置。可以保证 Pods 中容器可以持续、稳定的获得需要的资源。</li>
+<li>资源有限时：建议使用 Burstable 类型的 Qos 配置。可以有效的保证资源利用率。</li>
+</ul>
+<blockquote>
+<p>假设场景：应对 JVM 预热问题</p>
+<ol>
+<li>JVM 在预热开始时，需要更多的 CPU（3 个）来进行预热；</li>
+<li>JVM 在预热结束后，需要少数的 CPU（1 个）来保证程序运行；<br>可以使用如下配置，保证预热和运行阶段都有充足的资源保证 pod 运行：</li>
+</ol>
+<pre><code class="yaml">resoures:
+  requests:
+    cpu: 1000m
+    memory: 1000Mi
+  limits:
+    cpu: 3000m
+    memory: 1000Mi
+由于 Kubernetes 使用 request 中指定的值来调度 Pod，它会找到具有 1000m CPU 容量的节点来调度这个 Pod。但是由于 3000m 的 limits
+要高得多，如果应用程序在任何时候都需要超过 1000m 的 CPU，并且该节点上有空闲的 CPU 容量，那么就不会在 CPU 上限制应用程序。
+如果可用，它最多可以使用 3000m。</code></pre>
+</blockquote>
+<p>参考资料：<br><a href https: www.jianshu.com p 4c0763967b3c"">Kubernetes-Qos 之 Guaranteed, Burstable，Best-Effor</a><br><a href https: club.perfma.com article 2429542"">Java 服务启动慢，JVM 预热的问题，我在 k8s 上改进了</a></p>
+
             <hr>
           </div>
           <br>
@@ -375,7 +488,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "K8S-Resources-Priority&nbsp;",
+        "K8S-QoS&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,
