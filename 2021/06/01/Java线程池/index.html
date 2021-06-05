@@ -212,7 +212,6 @@
 <li> 重复使用线程资源，减少由于代码问题，造成线程大量创建，资源耗费.</li>
 <li> 便于维护（1、维护线程状态 2、维护任务状态 3、维护线程变量）</li>
 </ul>
-<p><img src="/.com//%E7%BA%BF%E7%A8%8B%E6%B1%A0.png" srcset="/img/loading.gif" alt="为什么使用线程池？"></p>
 <center>
   <img style="border-radius: 0.3125em;box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="http://qiniu.raindrop-wl.cn/thread-pool-intruduce.png">
   <div style="color:orange; border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;padding: 2px;">
@@ -228,7 +227,6 @@ thread-pool-intruduce
 <li>TIDYING：当所有任务执行完，当前线程池已经没有工作线程，这时线程池状态为 TIDYING 状态，同时调用 TERMINATED 方法 </li>
 <li>TERMINATED：调用 TERMINATED 方法后，线程状态为 TERMINATED</li>
 </ul>
-<p><img src="/.com//%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%8A%B6%E6%80%81.png" srcset="/img/loading.gif" alt="线程状态"></p>
 <center>
   <img style="border-radius: 0.3125em;box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="http://qiniu.raindrop-wl.cn/thread-pool-state.png">
   <div style="color:orange; border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;padding: 2px;">
